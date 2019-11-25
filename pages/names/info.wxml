@@ -1,0 +1,17 @@
+<tabbar index="2"></tabbar>
+<view class="roster_nav">
+  <text>花名册</text>
+</view>
+<view class="roster_item">
+  <image mode="scaleToFill" src="{{userInfo.HeadPhotoPath}}"></image>
+  <text>{{userInfo.NickName}}</text>
+</view>
+<block wx:for="{{studentList}}" wx:key="PK_UserGuid">
+  <view class="line" wx:if="{{item.isLetter}}">
+    <text>{{item.letter}}</text>
+  </view>
+  <view class="roster_item">
+    <image mode="scaleToFill" src="{{item.HeadPhotoPath}}"></image>
+    <text>{{item.NickName}}</text>
+  </view>
+</block>

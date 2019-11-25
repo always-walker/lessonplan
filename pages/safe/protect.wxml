@@ -1,0 +1,21 @@
+<tabbar index="2"></tabbar>
+<form bindsubmit="modify">
+  <view class="edit_container mt8">
+    <block wx:for="{{protection}}" wx:key="FK_ProblemGuid">
+      <view class="edit_item">
+        <text>密保问题</text>
+        <picker name="question_{{index}}" class="input" bindchange="bindProtectionChange" data-index="{{index}}" value="{{protection[index].index}}" range="{{passwordProtection}}" range-key="Content">
+          <view class="select">
+            <text>{{passwordProtection[protection[index].index].Content}}</text>
+            <image mode="widthFix" src="/images/down-icon.svg"></image>
+          </view>
+        </picker>
+      </view>
+      <view class="edit_item">
+        <text>密保答案</text>
+        <input name="answer_{{index}}" type="text" placeholder="请输入您的密保答案" value="{{item.Answer}}"></input>
+      </view>
+    </block>
+  </view>
+  <button class="savebuttom" size="default" form-type="submit">保存修改</button>
+</form>

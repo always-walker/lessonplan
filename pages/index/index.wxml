@@ -1,0 +1,56 @@
+<tabbar index="1" back="0"></tabbar>
+<view class="topbar">
+  <view class="hanlder-item" style="margin-left:20px;" bindtap="searchClass">
+    <image mode="widthFix" src="/images/tijiao.svg"></image>
+    <text>输入邀请码</text>
+  </view>
+  <navigator wx:if="{{hasClass}}" open-type="navigate" url="/pages/names/list?classId={{currentClassGuid}}&className={{currentClassName}}" class="choose-class">
+    <text>{{currentClassName}}</text>
+    <image mode="widthFix" src="/images/down.svg"></image>
+  </navigator>
+  <view wx:if="{{hasClass == false}}" class="choose-class">
+    <text>无班级</text>
+  </view>
+  <view class="hanlder-item refresh" style="margin-right:20px;" bindtap="getClass">
+    <image mode="widthFix" src="/images/refresh.svg"></image>
+    <text>刷新列表</text>
+  </view>
+</view>
+
+<view wx:if="{{condition == false}}" style="height:50px;"></view>
+<view wx:for="{{courseList}}" wx:key="PK_MyCoursewareGuid" wx:for-index="count" wx:for-item="row" class="app" wx:if="{{hasClass}}">
+  <view class="app_title">
+    <text class="app_title_name">{{row.Title}}</text>
+    <text class="app_title_status">{{row.records.length}}个推送</text>
+  </view>
+  <view class="app_list">
+    <view class="app_item" wx:for="{{row.records}}" wx:key="Guid" data-count="{{count}}" data-index="{{index}}" bindtap="goApp">
+      <view class="app_item_icon" style="background-color: {{item.Style.labelColor}};"></view>
+      <view class="app_item_content" style="background-color: {{item.Style.bgColor}};">
+        <text class="app_item_time">{{item.CreateTime}}</text>
+        <text class="app_item_title">{{item.ProjectName}}-P{{item.PageNumber}}</text>
+      </view>
+    </view>
+  </view>
+</view>
+<view wx:if="{{hasClass}}" style="height:65px;"></view>
+
+<view wx:if="{{hasClass == false}}" class="notice">
+  <text class="notice-red">您尚未加入任何班级</text>
+  <text>1 获取班级邀请码</text>
+  <text>2 点击顶部“输入邀请码快速开始”</text>
+  <text>3 输入班级邀请码并确定</text>
+  <text>4 加入班级</text>
+</view>
+
+<form bindsubmit="joinClass" wx:if="{{condition}}">
+  <view class="class-search">
+    <view class="close">
+      <image bindtap="closeSearchClass" mode="widthFix" src="/images/close.svg"></image>
+    </view>
+    <view class="search-content">
+      <input name="Code" type="text" placeholder="输入邀请码快速开始"></input>
+      <button form-type="submit">确定</button>
+    </view>
+  </view>
+</form>

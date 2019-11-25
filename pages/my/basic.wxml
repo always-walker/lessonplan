@@ -1,0 +1,62 @@
+<tabbar index="2"></tabbar>
+<form bindsubmit="modify">
+  <view class="edit_container">
+    <view class="edit_item">
+      <text class="require"></text>
+      <text>头像</text>
+      <image style="width:32px; height:32px; margin-left:5px;" mode="scaleToFill" src="{{userInfo.HeadPhotoPath}}"></image>
+    </view>
+    <view class="edit_item">
+      <text class="require">*</text>
+      <text>姓名</text>
+      <input name="NickName" type="text" placeholder="请填写您的姓名" value="{{userInfo.NickName}}"></input>
+    </view>
+    <view class="edit_item">
+      <text class="require"></text>
+      <text>签名</text>
+      <input name="Msg" type="text" placeholder="您的个性签名" value="{{userInfo.Msg == '未填写个性签名' ? '' : userInfo.Msg}}"></input>
+    </view>
+    <view class="edit_item">
+      <text class="require"></text>
+      <text>性别</text>
+      <picker class="input" name="Sex" bindchange="bindSexChange" value="{{index}}" range="{{sexs}}">
+        <view class="select">
+          <text>{{index < 0 ? '请选择您的性别' : sexs[index]}}</text>
+          <image mode="widthFix" src="/images/down-icon.svg"></image>
+        </view>
+      </picker>
+    </view>
+    <view class="line"></view>
+    <view class="edit_item">
+      <text class="require">*</text>
+      <text>所属学校</text>
+      <input name="School" type="text" placeholder="您就读的学校名称" value="{{userInfo.School}}"></input>
+    </view>
+    <view class="edit_item">
+      <text class="require">*</text>
+      <text>学号</text>
+      <input name="StudentID" type="text" placeholder="您的学号" value="{{userInfo.StudentID}}"></input>
+    </view>
+    <view class="edit_item">
+      <text class="require">*</text>
+      <text>专业</text>
+      <input name="Major" type="text" placeholder="您的专业" value="{{userInfo.Major}}"></input>
+    </view>
+    <view class="edit_item">
+      <text class="require">*</text>
+      <text>班级</text>
+      <input name="AdministrativeClass" type="text" placeholder="您所在的班级" value="{{userInfo.AdministrativeClass}}"></input>
+    </view>
+    <view class="edit_item">
+      <text class="require">*</text>
+      <text>手机号码</text>
+      <input name="Phone" type="text" placeholder="您的手机号码" value="{{userInfo.Phone}}"></input>
+    </view>
+    <view class="edit_item">
+      <text class="require">*</text>
+      <text>电子邮箱</text>
+      <input name="Email" type="text" placeholder="您的电子邮箱" value="{{(userInfo.Email == 'null' || userInfo.Email == 'undefined') ? '' : userInfo.Email}}"></input>
+    </view>
+  </view>
+  <button class="savebuttom" size="default" form-type="submit">保存</button>
+</form>

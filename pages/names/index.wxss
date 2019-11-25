@@ -1,0 +1,12 @@
+page{background: #f6f6f6; display: flex; flex-direction: column; align-items: center; margin-bottom: 65px;}
+.roster{display: flex; flex-direction: column; width: 90%; margin-top: 15px;}
+.roster .cover{width: 100%; height: 150px;}
+.roster_bottom{display: flex; flex-direction: row; justify-content: space-between; align-items: center; background: #fff;  padding: 5px 10px;}
+.roster_bottom .name{font-size: 18px; color: #333; font-weight: 700; max-width: 60%; text-overflow: ellipsis;}
+.info{display: flex; flex-direction: row; justify-content: left; align-items: center; font-size: 14px;}
+.info image,.info text{margin-left: 3px;}
+.ren{color: #666; margin-bottom: 2px;}
+.fen{color: #e35e66; margin-bottom: 1px;}
+.no-class{display: flex; flex-direction: column; color: #999; align-items: center;}
+.no-class image{width: 100px; margin-top: 50px;}
+.no-class text{margin-top: 20px;}

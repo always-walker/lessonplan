@@ -1,0 +1,23 @@
+<form bindsubmit="bindNext">
+  <view class="container">
+    <image mode="widthFix" style="width:88px;" src="/images/logo.png"></image>
+    <view>
+      <text class="h1 c555 mt8 bold">超级教案</text>
+      <text class="h3 c555 bold ml8">端应用</text>
+    </view>
+    <text class="logo_title">你可以再你的世界里迷失，但不要忘记找回自我</text>
+    <input name="Name" class="input" type="text" placeholder="请输入手机号码 / 邮箱"></input>
+    <picker name="FK_ProblemGuid" class="input" bindchange="bindProtectionChange" value="{{index}}" range="{{passwordProtection}}" range-key="Content">
+      <view class="select">
+        <text>{{protectionText}}</text>
+        <image mode="widthFix" src="/images/down-icon.svg"></image>
+      </view>
+    </picker>
+    <input name="Answer" class="input" type="text" placeholder="密保答案"></input>
+    <button form-type="submit" class="button1">下一步</button>
+    <view class="other">
+      <text>已有账号?</text>
+      <navigator url="/pages/login/index">去登录</navigator>
+    </view>
+  </view>
+</form>

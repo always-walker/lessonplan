@@ -1,0 +1,23 @@
+<tabbar index="2"></tabbar>
+<view class="header">
+  <image mode="scaleToFill" src="{{userInfo.HeadPhotoPath}}"></image>
+  <view>
+    <text class="header_name">{{userInfo.NickName}}</text>
+    <text class="header_desc">{{userInfo.Msg}}</text>
+  </view>
+</view>
+<view class="line"></view>
+<navigator class="menu_item" url="/pages/my/basic" open-type="navigate">
+  <view>
+    <image mode="widthFix" src="/images/basic.svg"></image>
+    <text>基本信息</text>
+  </view>
+  <image mode="widthFix" src="/images/right.svg"></image>
+</navigator>
+<navigator class="menu_item" url="/pages/safe/index" open-type="navigate">
+  <view>
+    <image mode="widthFix" src="/images/safe.svg"></image>
+    <text>安全设置</text>
+  </view>
+  <image mode="widthFix" src="/images/right.svg"></image>
+</navigator>

@@ -1,0 +1,18 @@
+<tabbar index="2"></tabbar>
+<navigator class="roster" url="/pages/names/info?classId={{item.PK_ClassGuid}}" open-type="navigate" wx:for="{{classList}}" wx:key="{{PK_ClassGuid}}">
+  <image class="cover" mode="scaleToFill" src="https://static.lessonplan.cn{{item.CoverUrl}}"></image>
+  <view class="roster_bottom">
+    <text class="name">{{item.ClassName}}</text>
+    <view class="info">
+      <image style="width:34px;" mode="widthFix" src="/images/ren.svg"></image>
+      <text class="ren">{{item.Number}}人</text>
+      <image style="width:22px;" mode="widthFix" src="/images/fen.svg"></image>
+      <text class="fen">{{item.State}}</text>
+    </view>
+  </view>
+</navigator>
+<view wx:if="{{hasClass == false}}" class="no-class">
+  <image mode="widthFix" src="https://cdn.lessonplan.cn/LessonPlay/MobileLessonPlay/IMG/book.png"></image>
+  <text>您尚未加入任何花名册</text>
+  <text>请通过首页"输入邀请码 "加入</text>
+</view>

@@ -1,0 +1,5 @@
+@import "/lib/edit-common.wxss";
+.select{display: flex; flex-direction: row; align-items: center; justify-content: space-between;}
+.select text{width: auto;}
+.select image{width: 14px; margin-top: 2px;}
+.input{width: 75%;}

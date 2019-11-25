@@ -1,0 +1,27 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/index/appview",
+    "pages/names/list",
+    "pages/my/index",
+    "pages/my/info",
+    "pages/my/basic",
+    "pages/safe/index",
+    "pages/safe/password",
+    "pages/safe/protect",
+    "pages/names/info",
+    "pages/names/index",
+    "pages/login/index",
+    "pages/register/index",
+    "pages/password/find",
+    "pages/password/reset",
+    "pages/logs/logs"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "课玩",
+    "navigationBarTextStyle": "black"
+  },
+  "sitemapLocation": "sitemap.json"
+}

@@ -1,0 +1,5 @@
+page{background: #eee; margin-bottom: 110px;}
+navigator{justify-content: space-between;}
+.set_item{display: flex; font-size: 14px; flex-direction: row; background: #fff; padding: 0px 15px; align-items: center; height: 50px;}
+.set_item .text1{width: 20%;}
+.set_item image{width: 20px;}

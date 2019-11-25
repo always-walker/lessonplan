@@ -1,0 +1,13 @@
+<tabbar index="2"></tabbar>
+<view class="set_item mt8">
+  <text class="text1">账号</text>
+  <text>{{userName}}</text>
+</view>
+<navigator class="set_item mt8" url="/pages/safe/protect" open-type="navigate">
+  <text class="text1">密保设置</text>
+  <image mode="widthFix" src="/images/right.svg"></image>
+</navigator>
+<navigator class="set_item mt8" url="/pages/safe/password" open-type="navigate">
+  <text class="text1">密码设置</text>
+  <image mode="widthFix" src="/images/right.svg"></image>
+</navigator>

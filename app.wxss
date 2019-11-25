@@ -1,0 +1,9 @@
+/**app.wxss**/
+.container {display: flex; flex-direction: column; height: 100%; align-items: center; justify-content: center; box-sizing: border-box;} 
+tabbar{position: fixed; bottom:0; width:100%; height: 50px; z-index:500;}
+.mt8{margin-top: 8px;}
+.ml8{margin-left: 8px;}
+.h1{font-size: 24px;}
+.h3{font-size: 17px;}
+.c555{color: #555;}
+.bold{font-weight: bold;}

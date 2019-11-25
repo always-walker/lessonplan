@@ -1,0 +1,7 @@
+page{margin-bottom: 51px;}
+.roster_nav{display: flex; flex-direction: row; align-items: center; justify-content: center; width: 100%; height: 50px; background: #f2f2f2; border-bottom: 1px solid #ddd;}
+.roster_nav text{font-size: 16px; font-weight: 700; color: #e35f67; border-bottom: 1px solid #e35e66; line-height: 50px;}
+.roster_item{display: flex; flex-direction: row; align-items: center; padding: 15px 20px; border-bottom: 1px solid #ddd;}
+.roster_item image{width: 40px; height: 40px; border-radius: 50%;}
+.roster_item text{font-size: 18px; font-weight: 700; margin-left: 20px;}
+.line{background: #eee; height: 21px; color: #000; padding: 0px 15px; font-size: 12px;}
