@@ -1,3 +1,6 @@
 {
-  "usingComponents": {"tabbar": "/utils/tabbar/tabbar"}
+  "usingComponents": {
+    "tabbar": "/utils/tabbar/tabbar"
+  },
+  "enablePullDownRefresh": true
 }

@@ -1,21 +1,29 @@
-/**index.wxss**/
-.userinfo {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.userinfo-avatar {
-  width: 128rpx;
-  height: 128rpx;
-  margin: 20rpx;
-  border-radius: 50%;
-}
-
-.userinfo-nickname {
-  color: #aaa;
-}
-
-.usermotto {
-  margin-top: 200px;
-}
+.topbar{position: fixed; top: 0; display: flex; background: #ffffff; flex-direction: row; width: 100%; height: 50px; border-top: 1px solid #ccc; box-shadow: 0 5px 10px rgba(191,191,191,.35); align-items: center; justify-content: space-between;}
+.hanlder-item{display: flex; flex-direction: column; align-items: center;}
+.hanlder-item image{width: 28px;}
+.hanlder-item text{font-size: 12px; color: #999;}
+.choose-class{display: flex; flex-direction: row; align-items: center;}
+.choose-class text{font-size: 16px; color: #666;}
+.choose-class image{width: 20px; margin-left: 3px;}
+.app{margin: 20px 20px 0px; padding: 10px 15px 15px; background-color: #f0f0f0; border-radius: 5px;}
+.app_title{display: flex; flex-direction: row; justify-content: space-between; align-items: center;}
+.app_title_name{font-size: 15px;}
+.app_title_status{font-size: 12px; color: #999;}
+.app_list{display: flex; flex-direction: column;}
+.app_item{margin-top: 10px; display: flex; flex-direction: row;}
+.app_item_icon{width: 12px; border-radius: 7px 0 0 7px;}
+.app_item_content{display: flex; flex-direction: column; color: #fff; line-height: 1.5; width: 100%; border-radius: 0 7px 7px 0; padding: 5px 15px;}
+.app_item_time{font-size: 12px;}
+.app_item_title{font-size: 15px;}
+page{height: 100%;}
+.class-search{background: #fff; width: 100%; height: 100%; position: fixed; top: 0px; left: 0px; z-index: 100; display: flex; flex-direction: column; align-items: center;}
+.close{height: 10%; width: 95%; display: flex; flex-direction: row-reverse; align-items: center;}
+.close image{width: 30px;}
+.search-content{display: flex; flex-direction: column; height: 70%; width: 95%; align-items: center; justify-content: center;}
+.search-content input{width: 100%; font-size: 15px; border: 1px solid #eee; text-align: center; padding: 10px 0px; border-radius: 20px;}
+.search-content button{background-color:#e05c99; color: #fff; font-size: 17px; border-radius: 20px; width: 100%; margin-top: 10px;}
+.notice{display: flex; flex-direction: column; padding: 30px 30px 0px 30px; font-size: 15px; color: #999;}
+.notice-red{color: #f69; margin-bottom: 10px;}
+.notice text{margin-top: 12px;}
+/* 隐藏滚动条 */
+::-webkit-scrollbar{width: 0; height: 0; color: transparent;}
