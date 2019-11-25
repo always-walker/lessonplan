@@ -26,7 +26,7 @@ Page({
 
   goIndex: function() {
     wx.reLaunch({
-      url: '/pages/interaction/index?classId' + this.data.currentClassGuid,
+      url: '/pages/index/index?classId' + this.data.currentClassGuid,
     })
   },
 

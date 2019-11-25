@@ -33,7 +33,7 @@ Page({
         });
         wx.hideLoading();
         wx.reLaunch({
-          url: '/pages/interaction/index',
+          url: '/pages/index/index',
         });
       }
     })

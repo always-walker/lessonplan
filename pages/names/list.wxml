@@ -2,7 +2,7 @@
 <view class="topbar">
   <view class="hanlder-item" style="width:60px;">
   </view>
-  <navigator open-type="navigateBack" url="/pages/interaction/index?classId={{currentClassGuid}}" class="choose-class">
+  <navigator open-type="navigateBack" url="/pages/index/index?classId={{currentClassGuid}}" class="choose-class">
     <text>{{currentClassName}}</text>
     <image mode="widthFix" src="/images/up.svg"></image>
   </navigator>

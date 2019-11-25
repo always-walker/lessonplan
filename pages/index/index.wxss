@@ -27,3 +27,8 @@ page{height: 100%;}
 .notice text{margin-top: 12px;}
 /* 隐藏滚动条 */
 ::-webkit-scrollbar{width: 0; height: 0; color: transparent;}
+.noInfo{display: flex; flex-direction: column; justify-content: space-around; align-items: center; height: calc(100% - 60px);}
+.noinfo-tip,.noinfo-tap{display: flex; flex-direction: column;}
+.noinfo-tip text{margin-top: 10px;}
+.noinfo-tap navigator{padding: 10px 20px; background-color: #ff9898; border-radius: 8px; font-size: 16px; color: #fff;}
+.noinfo-tap text{border-bottom: 1px solid #666; font-size: 12px; padding: 20px 0px 3px;}

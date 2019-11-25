@@ -10,11 +10,18 @@ Page({
   data: {
     condition: false,
     hasClass: false,
+    isInfo: false,
     classList: [],
     currentClassName: '',
     currentClassGuid: null,
     courseList: [],
     scrollHeight: 0
+  },
+
+  redirectIn: function() {
+    this.setData({
+      isInfo: true
+    });
   },
 
   searchClass: function(e) {
@@ -190,7 +197,11 @@ Page({
       });
       return;
     }
+    var isInfo = false;
+    if (app.globalData.userInfo && app.globalData.userInfo.Msg && app.globalData.userInfo.Msg != '未填写个性签名')
+      isInfo = true;
     this.setData({
+      isInfo: isInfo,
       scrollHeight: wx.getSystemInfoSync().windowHeight - 110
     });
     if (options.classId) {
@@ -210,7 +221,14 @@ Page({
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function() {},
+  onShow: function() {
+    var isInfo = false;
+    if (app.globalData.userInfo && app.globalData.userInfo.Msg && app.globalData.userInfo.Msg != '未填写个性签名')
+      isInfo = true;
+    this.setData({
+      isInfo: isInfo
+    });
+  },
 
   /**
    * 生命周期函数--监听页面隐藏

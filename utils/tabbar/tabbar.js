@@ -31,7 +31,7 @@ Component({
         let pages = getCurrentPages().reverse();
         let myIndex = 0;
         for (var i = 0; i < pages.length; i++) {
-          if (pages[i].route == 'pages/interaction/index')
+          if (pages[i].route == 'pages/index/index')
             myIndex = i;
         }
         if (myIndex > 0) {
@@ -40,7 +40,7 @@ Component({
           })
         } else {
           wx.navigateTo({
-            url: '/pages/interaction/index'
+            url: '/pages/index/index'
           });
         }
       }
