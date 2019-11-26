@@ -1,5 +1,5 @@
 // pages/names/info.js
-
+const util = require('../../utils/util.js')
 const app = getApp()
 
 
@@ -24,7 +24,8 @@ Page({
     wx.request({
       url: 'https://clientaccountserver.lessonplan.cn/user/studentlist/letter/' + options.classId,
       success: function(res) {
-        var studentList = res.data.data.reverse();
+        var studentList = res.data.data;
+        studentList.sort(util.compare('letter'));
         var preLetter = '';
         for (var i = 0; i < studentList.length; i++) {
           if (studentList[i].letter != preLetter){

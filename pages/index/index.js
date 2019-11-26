@@ -99,11 +99,17 @@ Page({
             res.data.data[i].Style = JSON.parse(res.data.data[i].Style);
             res.data.data[i].CreateTime = util.formatDate(new Date(res.data.data[i].CreateTime * 1000));
             var courseItem = '"' + res.data.data[i].FK_MyCoursewareGuid + '"';
+            res.data.data[i]['itemName'] = res.data.data[i].Style.typeName
+            if (res.data.data[i].Title)
+              res.data.data[i]['itemName'] += '-' + res.data.data[i].Title;
+            if (res.data.data[i].PageNumber)
+              res.data.data[i]['itemName'] += '-P' + res.data.data[i].PageNumber.toString();
             records.push(res.data.data[i]);
-            if (MyCoursewareGuidList.indexOf(courseItem) == -1)
+            if (res.data.data[i].FK_MyCoursewareGuid && MyCoursewareGuidList.indexOf(courseItem) == -1)
               MyCoursewareGuidList.push(courseItem);
           }
         }
+        records.sort(util.compare('PageNumber'));
         var MyCoursewareGuidListString = MyCoursewareGuidList.join(',');
         wx.request({
           url: 'https://templateserver.lessonplan.cn/MyCourseware/MyCoursewareByGuidList',
@@ -113,13 +119,20 @@ Page({
           success: function(res2) {
             wx.hideLoading();
             var courseList = res2.data.data;
-            console.log(courseList);
             for (var n = 0; n < courseList.length; n++) {
               courseList[n]['records'] = [];
               for (var m = 0; m < records.length; m++) {
                 if (courseList[n].PK_MyCoursewareGuid == records[m].FK_MyCoursewareGuid)
                   courseList[n]['records'].push(records[m]);
               }
+            }
+            var elseRecord = [];
+            for (var m = 0; m < records.length; m++) {
+              if (!records[m].FK_MyCoursewareGuid)
+                elseRecord.push(records[m]);
+            }
+            if (elseRecord.length > 0){
+              courseList.push({ 'PK_MyCoursewareGuid': '0', 'Title': '其它推送', 'records': elseRecord});
             }
             that.setData({
               courseList: courseList,
@@ -143,7 +156,6 @@ Page({
       title: '加载中...',
     });
     var that = this;
-    console.log(that.data.currentClassGuid);
     if (that.data.currentClassGuid) {
       var classListString = '"' + that.data.currentClassGuid + '"';
       wx.request({

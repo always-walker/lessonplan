@@ -29,7 +29,7 @@
         <view class="app_item_icon" style="background-color: {{item.Style.labelColor}};"></view>
         <view class="app_item_content" style="background-color: {{item.Style.bgColor}};">
           <text class="app_item_time">{{item.CreateTime}}</text>
-          <text class="app_item_title">{{item.ProjectName}}-P{{item.PageNumber}}</text>
+          <text class="app_item_title">{{item.itemName}}</text>
         </view>
       </view>
     </view>

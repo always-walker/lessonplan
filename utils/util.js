@@ -22,7 +22,22 @@ const formatNumber = n => {
   return n[1] ? n : '0' + n
 }
 
+const compare = property => {
+  return function(a, b){
+    if (a[property] && b[property]){
+      if (typeof (a[property]) == 'number' && typeof (b[property]) == 'number')
+        return a[property] - b[property];
+      else if (typeof (a[property]) == 'string' && typeof (b[property]) == 'string')
+        return a[property].charCodeAt(0) - b[property].charCodeAt(0);
+    }
+    else{
+      return 0;
+    }
+  }
+}
+
 module.exports = {
   formatTime: formatTime,
-  formatDate: formatDate
+  formatDate: formatDate,
+  compare: compare
 }

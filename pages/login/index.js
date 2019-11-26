@@ -31,6 +31,10 @@ Page({
           key: 'userInfo',
           data: res.data.data
         });
+        wx.setStorage({
+          key: 'token',
+          data: app.globalData.token
+        });
         wx.hideLoading();
         wx.reLaunch({
           url: '/pages/index/index',
