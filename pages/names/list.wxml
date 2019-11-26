@@ -13,7 +13,7 @@
 </view>
 <view style="height:50px;"></view>
 <block wx:for="{{classList}}" wx:key="{{PK_ClassGuid}}">
-  <view class="class-item" bindtap="goIndex">
+  <view class="class-item" data-index="{{index}}" bindtap="goIndex">
     <text class="name">{{item.ClassName}}</text>
     <text class="desc">创建于{{item.CreateTime}}</text>
   </view>

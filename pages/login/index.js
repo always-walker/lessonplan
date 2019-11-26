@@ -54,7 +54,7 @@ Page({
               code: res.code
             },
             success: function(res2) {
-              //app.globalData.token = res2.data.token
+              app.globalData.token = res2.data.token
               app.globalData.userGuid = res2.data.userGuid;
               that.getInfo();
             }

@@ -24,9 +24,9 @@ Page({
     this.getClass();
   },
 
-  goIndex: function() {
+  goIndex: function(e) {
     wx.reLaunch({
-      url: '/pages/index/index?classId' + this.data.currentClassGuid,
+      url: '/pages/index/index?classId=' + this.data.classList[e.currentTarget.dataset.index].PK_ClassGuid,
     })
   },
 

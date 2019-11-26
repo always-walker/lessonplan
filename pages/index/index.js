@@ -113,6 +113,7 @@ Page({
           success: function(res2) {
             wx.hideLoading();
             var courseList = res2.data.data;
+            console.log(courseList);
             for (var n = 0; n < courseList.length; n++) {
               courseList[n]['records'] = [];
               for (var m = 0; m < records.length; m++) {
@@ -133,7 +134,7 @@ Page({
     var index = e.currentTarget.dataset.index;
     var count = e.currentTarget.dataset.count;
     wx.navigateTo({
-      url: '/pages/interaction/appview?url=' + this.data.courseList[count].records[index].address,
+      url: '/pages/index/appview?url=' + this.data.courseList[count].records[index].address,
     })
   },
 
@@ -142,6 +143,7 @@ Page({
       title: '加载中...',
     });
     var that = this;
+    console.log(that.data.currentClassGuid);
     if (that.data.currentClassGuid) {
       var classListString = '"' + that.data.currentClassGuid + '"';
       wx.request({
