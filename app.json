@@ -2,6 +2,7 @@
   "pages": [
     "pages/index/index",
     "pages/index/appview",
+    "pages/video/index",
     "pages/names/list",
     "pages/my/index",
     "pages/my/info",

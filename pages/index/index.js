@@ -23,13 +23,13 @@ Page({
     scrollHeight: 0
   },
 
-  courseOut: function(){
+  courseOut: function() {
     this.setData({
       courseType: 2
     });
   },
 
-  courseOn: function () {
+  courseOn: function() {
     this.setData({
       courseType: 1
     });
@@ -111,7 +111,7 @@ Page({
       success: function(res) {
         wx.request({
           url: 'https://templateserver.lessonplan.cn/MyPacket/substance/' + that.data.currentClassGuid,
-          success: function(res3){
+          success: function(res3) {
             var records = [];
             var MyCoursewareGuidList = [];
             for (var i = 0; i < res.data.data.length; i++) {
@@ -136,7 +136,7 @@ Page({
               data: {
                 'MyCoursewareGuidList': MyCoursewareGuidListString
               },
-              success: function (res2) {
+              success: function(res2) {
                 wx.hideLoading();
                 var courseList = res2.data.data;
                 var pushCount = 0;
@@ -159,7 +159,11 @@ Page({
                 }
                 var courseList2 = [];
                 if (elseRecord.length > 0) {
-                  courseList2.push({ 'PK_MyCoursewareGuid': '0', 'Title': '其它推送', 'records': elseRecord });
+                  courseList2.push({
+                    'PK_MyCoursewareGuid': '0',
+                    'Title': '其它推送',
+                    'records': elseRecord
+                  });
                 }
                 that.setData({
                   courseList: courseList,
@@ -169,11 +173,11 @@ Page({
                   weCourseList: res3.data.data
                 });
               }
-            })//请求3结束
+            }) //请求3结束
           }
-        })//请求2结束
+        }) //请求2结束
       }
-    })//请求1结束
+    }) //请求1结束
   },
 
   goApp: function(e) {
@@ -184,9 +188,12 @@ Page({
     })
   },
 
-  goVideo: function (e) {
+  goVideo: function(e) {
     var index = e.currentTarget.dataset.index;
-    console.log(index);
+    var obj = this.data.weCourseList[index];
+    wx.navigateTo({
+      url: '/pages/video/index?url=' + obj.VideoUrl + "&title=" + obj.Title,
+    })
   },
 
   getClass: function() {

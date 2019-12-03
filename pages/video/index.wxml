@@ -1,0 +1,5 @@
+<tabbar index="5"></tabbar>
+<view class="videoContainer">
+  <view class="videoTitle"><text>{{videoTitle}}</text></view>
+  <video autoplay="true" title="{{videoTitle}}" src="{{videoUrl}}"></video>
+</view>
