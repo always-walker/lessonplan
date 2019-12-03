@@ -12,10 +12,27 @@ Page({
     hasClass: false,
     isInfo: false,
     classList: [],
+    courseType: 1,
     currentClassName: '',
     currentClassGuid: null,
     courseList: [],
+    courseList2: [],
+    weCourseList: [],
+    pushCount: 0,
+    pushCount2: 0,
     scrollHeight: 0
+  },
+
+  courseOut: function(){
+    this.setData({
+      courseType: 2
+    });
+  },
+
+  courseOn: function () {
+    this.setData({
+      courseType: 1
+    });
   },
 
   redirectIn: function() {
@@ -90,57 +107,73 @@ Page({
   getRecord: function() {
     var that = this;
     wx.request({
-      url: 'https://codeserver.lessonplan.cn/api/record/' + this.data.currentClassGuid,
+      url: 'https://codeserver.lessonplan.cn/api/record/' + that.data.currentClassGuid,
       success: function(res) {
-        var records = [];
-        var MyCoursewareGuidList = [];
-        for (var i = 0; i < res.data.data.length; i++) {
-          if (res.data.data[i].FK_AppClassGuid != '' && res.data.data[i].Style != '') {
-            res.data.data[i].Style = JSON.parse(res.data.data[i].Style);
-            res.data.data[i].CreateTime = util.formatDate(new Date(res.data.data[i].CreateTime * 1000));
-            var courseItem = '"' + res.data.data[i].FK_MyCoursewareGuid + '"';
-            res.data.data[i]['itemName'] = res.data.data[i].Style.typeName
-            if (res.data.data[i].Title)
-              res.data.data[i]['itemName'] += '-' + res.data.data[i].Title;
-            if (res.data.data[i].PageNumber)
-              res.data.data[i]['itemName'] += '-P' + res.data.data[i].PageNumber.toString();
-            records.push(res.data.data[i]);
-            if (res.data.data[i].FK_MyCoursewareGuid && MyCoursewareGuidList.indexOf(courseItem) == -1)
-              MyCoursewareGuidList.push(courseItem);
-          }
-        }
-        records.sort(util.compare('PageNumber'));
-        var MyCoursewareGuidListString = MyCoursewareGuidList.join(',');
         wx.request({
-          url: 'https://templateserver.lessonplan.cn/MyCourseware/MyCoursewareByGuidList',
-          data: {
-            'MyCoursewareGuidList': MyCoursewareGuidListString
-          },
-          success: function(res2) {
-            wx.hideLoading();
-            var courseList = res2.data.data;
-            for (var n = 0; n < courseList.length; n++) {
-              courseList[n]['records'] = [];
-              for (var m = 0; m < records.length; m++) {
-                if (courseList[n].PK_MyCoursewareGuid == records[m].FK_MyCoursewareGuid)
-                  courseList[n]['records'].push(records[m]);
+          url: 'https://templateserver.lessonplan.cn/MyPacket/substance/' + that.data.currentClassGuid,
+          success: function(res3){
+            var records = [];
+            var MyCoursewareGuidList = [];
+            for (var i = 0; i < res.data.data.length; i++) {
+              if (res.data.data[i].FK_AppClassGuid != '' && res.data.data[i].Style != '') {
+                res.data.data[i].Style = JSON.parse(res.data.data[i].Style);
+                res.data.data[i].CreateTime = util.formatDate(new Date(res.data.data[i].CreateTime * 1000));
+                var courseItem = '"' + res.data.data[i].FK_MyCoursewareGuid + '"';
+                res.data.data[i]['itemName'] = res.data.data[i].Style.typeName
+                if (res.data.data[i].Title)
+                  res.data.data[i]['itemName'] += '-' + res.data.data[i].Title;
+                if (res.data.data[i].PageNumber)
+                  res.data.data[i]['itemName'] += '-P' + res.data.data[i].PageNumber.toString();
+                records.push(res.data.data[i]);
+                if (res.data.data[i].FK_MyCoursewareGuid && MyCoursewareGuidList.indexOf(courseItem) == -1)
+                  MyCoursewareGuidList.push(courseItem);
               }
             }
-            var elseRecord = [];
-            for (var m = 0; m < records.length; m++) {
-              if (!records[m].FK_MyCoursewareGuid)
-                elseRecord.push(records[m]);
-            }
-            if (elseRecord.length > 0){
-              courseList.push({ 'PK_MyCoursewareGuid': '0', 'Title': '其它推送', 'records': elseRecord});
-            }
-            that.setData({
-              courseList: courseList,
-            });
+            records.sort(util.compare('PageNumber'));
+            var MyCoursewareGuidListString = MyCoursewareGuidList.join(',');
+            wx.request({
+              url: 'https://templateserver.lessonplan.cn/MyCourseware/MyCoursewareByGuidList',
+              data: {
+                'MyCoursewareGuidList': MyCoursewareGuidListString
+              },
+              success: function (res2) {
+                wx.hideLoading();
+                var courseList = res2.data.data;
+                var pushCount = 0;
+                var pushCount2 = 0;
+                for (var n = 0; n < courseList.length; n++) {
+                  courseList[n]['records'] = [];
+                  for (var m = 0; m < records.length; m++) {
+                    if (courseList[n].PK_MyCoursewareGuid == records[m].FK_MyCoursewareGuid) {
+                      courseList[n]['records'].push(records[m]);
+                      pushCount++;
+                    }
+                  }
+                }
+                var elseRecord = [];
+                for (var m = 0; m < records.length; m++) {
+                  if (!records[m].FK_MyCoursewareGuid) {
+                    elseRecord.push(records[m]);
+                    pushCount2++;
+                  }
+                }
+                var courseList2 = [];
+                if (elseRecord.length > 0) {
+                  courseList2.push({ 'PK_MyCoursewareGuid': '0', 'Title': '其它推送', 'records': elseRecord });
+                }
+                that.setData({
+                  courseList: courseList,
+                  courseList2: courseList2,
+                  pushCount: pushCount,
+                  pushCount2: pushCount2,
+                  weCourseList: res3.data.data
+                });
+              }
+            })//请求3结束
           }
-        })
+        })//请求2结束
       }
-    })
+    })//请求1结束
   },
 
   goApp: function(e) {
@@ -149,6 +182,11 @@ Page({
     wx.navigateTo({
       url: '/pages/index/appview?url=' + this.data.courseList[count].records[index].address,
     })
+  },
+
+  goVideo: function (e) {
+    var index = e.currentTarget.dataset.index;
+    console.log(index);
   },
 
   getClass: function() {
