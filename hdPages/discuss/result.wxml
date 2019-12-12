@@ -4,7 +4,7 @@
   <image mode="widthFix" src="/images/left.svg"></image>
   <view class="item-content">
     <text>{{item.Content}}</text>
-    <view><image bindtap="previewImage" wx:for="{{item.images}}" wx:for-item="imageUrl" data-url="{{imageUrl}}" mode="scaleToFill" src="{{imageUrl}}"></image></view>
+    <view><image bindtap="previewImage" wx:for="{{item.images}}" wx:for-index="imageId" wx:key="imageId" wx:for-item="imageUrl" data-url="{{imageUrl}}" mode="scaleToFill" src="{{imageUrl}}"></image></view>
   </view>
 </view>
 <view style="height:65px;"></view>

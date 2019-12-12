@@ -1,35 +1,14 @@
 <tabbar index="5" back="1"></tabbar>
 <view class="question-list column">
   <scroll-view scroll-x="true" class="question-no-list row">
-    <text>Q1</text>
-    <text class="active">Q2</text>
-    <text>Q3</text>
-    <text>Q4</text>
-    <text>Q5</text>
-    <text>Q6</text>
-    <text>Q7</text>
+    <text bindtap="changeQuestion" wx:for="{{questionInfo}}" data-index="{{index}}" wx:key="ID" class="{{currentIndex == index ? 'active' : ''}}">Q{{index + 1}}</text>
   </scroll-view>
-  <text class="question-title">春节前，猪肉价格会不会下跌到原来的价格？</text>
+  <text class="question-title">{{questionInfo[currentIndex].name}}</text>
 </view>
 <view style="height:90px;"></view>
-<view class="result-item">
-  <text class="item-name">张艺兴</text>
+<view wx:for="{{answer}}" wx:key="ID" class="result-item">
+  <text class="item-name">{{item.Name}}</text>
   <image mode="widthFix" src="/images/left.svg"></image>
-  <text class="item-content">1024程序员节是中国广大程序员的共同节日.1024是2的十次方，二进制技术的基本计量单位之一。部分互联网机构一直密切关注程序员健康，针对程序员经常周末加班与工作日熬夜的情况，倡议每年的10月24日为1024程序员节，在这一天建议程序员拒绝加班。</text>
-</view>
-<view class="result-item">
-  <text class="item-name">张艺兴</text>
-  <image mode="widthFix" src="/images/left.svg"></image>
-  <text class="item-content">1024程序员节是中国广大程序员的共同节日.1024是2的十次方，二进制技术的基本计量单位之一。部分互联网机构一直密切关注程序员健康，针对程序员经常周末加班与工作日熬夜的情况，倡议每年的10月24日为1024程序员节，在这一天建议程序员拒绝加班。</text>
-</view>
-<view class="result-item">
-  <text class="item-name">张艺兴</text>
-  <image mode="widthFix" src="/images/left.svg"></image>
-  <text class="item-content">1024程序员节是中国广大程序员的共同节日.1024是2的十次方，二进制技术的基本计量单位之一。部分互联网机构一直密切关注程序员健康，针对程序员经常周末加班与工作日熬夜的情况，倡议每年的10月24日为1024程序员节，在这一天建议程序员拒绝加班。</text>
-</view>
-<view class="result-item">
-  <text class="item-name">张艺兴</text>
-  <image mode="widthFix" src="/images/left.svg"></image>
-  <text class="item-content">1024程序员节是中国广大程序员的共同节日.1024是2的十次方，二进制技术的基本计量单位之一。部分互联网机构一直密切关注程序员健康，针对程序员经常周末加班与工作日熬夜的情况，倡议每年的10月24日为1024程序员节，在这一天建议程序员拒绝加班。</text>
+  <text class="item-content">{{item.Answer}}</text>
 </view>
 <view style="height:65px;"></view>

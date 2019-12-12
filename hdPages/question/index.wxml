@@ -5,15 +5,16 @@
 </view>
 <form bindsubmit="submitForm">
   <view class="column hdForm">
-    <block wx:for="{{questionList}}">
-      <text class="question-title">Q{{index+1}}.{{item.title}}</text>
+    <block wx:for="{{questionList}}" wx:key="ID">
+      <text class="question-title">Q{{index+1}}.{{item.Question}}</text>
       <view class="column hdFormTextArea">
-        <textarea name="xiangfa" bindinput="inputChange" data-index="{{index}}" placeholder="请输入你的答案" value="{{defaultText}}">
+        <textarea name="{{item.PK_QuestionGuid}}" bindinput="inputChange" data-index="{{index}}" placeholder="请输入你的答案" value="{{defaultText}}">
         </textarea>
-        <text class="enable-input c9">{{item.inputCount}}/1000</text>
+        <text class="enable-input c9">{{item.inputCount}}/{{maxInputCount}}</text>
       </view>
     </block>
   </view>
   <button class="btnSubmit" form-type="submit">提交</button>
+  <view class="column"><text bindtap="goResult" class="btn-underline">查看结果</text></view>
 </form>
 <view style="height:65px;"></view>

@@ -1,11 +1,17 @@
 // hdPages/Discuss/index.js
+
+const app = getApp()
+
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
+    id: null,
+    obj: null,
     defaultText: '',
+    maxInputCount: 800,
     questionList: []
   },
 
@@ -13,29 +19,68 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-    var questionList = [
-      {
-        title: '春节前，猪肉价格会不会下跌到原来的价格？',
-        inputCount: 0
-      },
-      {
-        title: '你认为在当下应该学文科还是学理科？',
-        inputCount: 0
-      },
-      {
-        title: 'fluter 发布之后，还需要学习原生的android和iphone开发吗？',
-        inputCount: 0
+    var that = this;
+    var id = options.id;
+    var obj = app.globalData.hdObj[id];
+    wx.request({
+      url: 'https://qrcodeserver.lessonplan.cn/' + id + '/question',
+      success: function(res) {
+        var questionList = res.data.data;
+        for (var i = 0; i < questionList.length; i++) {
+          questionList[i]['inputCount'] = 0;
+        }
+        that.setData({
+          id: id,
+          obj: obj,
+          questionList: res.data.data
+        });
       }
-    ];
-    this.setData({
-      questionList: questionList
-    });
+    })
   },
 
   submitForm: function(e) {
-    wx.navigateTo({
-      url: 'success',
-    })
+    var that = this;
+    var questions = [];
+    var isSubmit = true;
+    for (var key in e.detail.value) {
+      questions.push('{"guid": "' + key + '", "answer": "' + e.detail.value[key] +'"}');
+      if (e.detail.value[key] == '')
+        isSubmit = false;
+    }
+    if (isSubmit) {
+      var data = {
+        'name': app.globalData.userInfo.NickName,
+        'questions': questions,
+        'creatorGuid': app.globalData.userGuid,
+        'allowResubmission': that.data.obj.AllowResubmission,
+        'verifyStatus': that.data.obj.InteractVerifyStatus
+      };
+      wx.request({
+        url: 'https://qrcodeserver.lessonplan.cn/' + that.data.id + '/QuestionAndAnswer',
+        method: 'POST',
+        data: data,
+        success: function(res) {
+          if (res.data.status == 1) {
+            wx.hideLoading();
+            wx.redirectTo({
+              url: 'success?id=' + that.data.id,
+            });
+          } else {
+            wx.showToast({
+              title: res.data.msg,
+              icon: 'none',
+              duration: 1000
+            });
+          }
+        }
+      })
+    } else {
+      wx.showToast({
+        title: '请输入你的回答',
+        icon: 'none',
+        duration: 1000
+      });
+    }
   },
 
   inputChange: function(e) {
@@ -45,6 +90,12 @@ Page({
     this.setData({
       questionList: questionList
     });
+  },
+
+  goResult: function () {
+    wx.navigateTo({
+      url: 'result?id=' + this.data.id,
+    })
   },
 
   /**

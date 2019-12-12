@@ -3,5 +3,5 @@
 <image class="tipImage" mode="widthFix" src="/images/submit-success-question.png"></image>
 <view class="column btn">
   <button bindtap="goResult" class="btn-red">查看结果</button>
-  <text bindtap="goSubmit" class="btn-underline">继续提交</text>
+  <text wx:if="{{allowResubmission == 1}}" bindtap="goSubmit" class="btn-underline">继续提交</text>
 </view>
