@@ -12,6 +12,7 @@ App({
     userInfo: null,
     userGuid: null,
     token: null,
-    isFindPasswordVerfy: false
+    isFindPasswordVerfy: false,
+    hdObj: {}
   }
 })

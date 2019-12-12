@@ -1,0 +1,19 @@
+<tabbar index="5" back="1"></tabbar>
+<view class="column hdTitle">
+  <text>{{obj.className}}</text>
+  <text>讨论-{{obj.InteractName}}</text>
+</view>
+<form bindsubmit="submitForm">
+  <view class="column hdForm">
+    <view class="column hdFormTextArea">
+      <textarea name="content" bindinput="inputChange" placeholder="请输入你的想法" value="{{defaultText}}">
+      </textarea>
+      <text class="enable-input c9">{{inputCount}}/{{maxInputCount}}</text>
+    </view>
+    <image bindtap="chooseImage" mode="scaleToFill" class="{{uploadImageClass}} mt8" src="{{imageUrl}}">
+    </image>
+  </view>
+  <button class="btnSubmit" form-type="submit">提交</button>
+  <view class="column"><text bindtap="goResult" class="btn-underline">查看结果</text></view>
+  <view style="height:60px;"></view>
+</form>

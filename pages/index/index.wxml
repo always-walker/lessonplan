@@ -29,7 +29,7 @@
         <text class="app_title_status">{{row.records.length}}个推送</text>
       </view>
       <view class="app_list">
-        <view class="app_item" wx:for="{{row.records}}" wx:key="Guid" data-count="{{count}}" data-index="{{index}}" bindtap="goApp">
+        <view class="app_item" wx:for="{{row.records}}" wx:key="Guid" data-listindex="1" data-count="{{count}}" data-index="{{index}}" bindtap="goApp">
           <view class="app_item_icon" style="background-color: {{item.Style.labelColor}};"></view>
           <view class="app_item_content" style="background-color: {{item.Style.bgColor}};">
             <text class="app_item_time">{{item.CreateTime}}</text>
@@ -38,8 +38,8 @@
         </view>
       </view>
     </view>
-    <view style="height: 100px;"></view>
-    <view class="course2">
+    <view style="height: {{courseList2.length > 0 ? '100' : '60'}}px;"></view>
+    <view wx:if="{{courseList2.length > 0}}" class="course2">
       <view class="course-btn" bindtap="courseOut">
         <text>课下</text>
         <view>
@@ -52,8 +52,8 @@
   </block>
 
   <block wx:if="{{hasClass && (courseList2.length > 0 || weCourseList.length > 0) && (courseType == 2 || courseList2.length == 0)}}">
-    <view style="height:90px;"></view>
-    <view class="course1">
+    <view style="height:{{courseList.length > 0 ? '90' : '50'}}px;"></view>
+    <view class="course1" wx:if="{{courseList.length > 0}}">
       <view class="course-btn" bindtap="courseOn">
         <text>课堂</text>
         <view>
@@ -83,7 +83,7 @@
         <text class="app_title_status">{{row.records.length}}个推送</text>
       </view>
       <view class="app_list">
-        <view class="app_item" wx:for="{{row.records}}" wx:key="Guid" data-count="{{count}}" data-index="{{index}}" bindtap="goApp">
+        <view class="app_item" wx:for="{{row.records}}" wx:key="Guid" data-listindex="2" data-count="{{count}}" data-index="{{index}}" bindtap="goApp">
           <view class="app_item_icon" style="background-color: {{item.Style.labelColor}};"></view>
           <view class="app_item_content" style="background-color: {{item.Style.bgColor}};">
             <text class="app_item_time">{{item.CreateTime}}</text>

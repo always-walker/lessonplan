@@ -1,0 +1,6 @@
+page{display: flex; flex-direction: column; padding-top: 60px; align-items: center; height: calc(100% - 170px); justify-content: space-between;}
+.tipText{font-size: 22px; color: #df5b98;}
+.tipImage{width: 60%;}
+.btn{width: 100%;}
+.btn-red{width: 60%; background: #df5b98; color: #fff; border-radius: 5px;}
+.btn-underline{margin-top: 20px; border-bottom: 1px solid #999; color: #999; line-height: 24px;} 
