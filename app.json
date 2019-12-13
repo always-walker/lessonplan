@@ -8,12 +8,15 @@
     "hdPages/discuss/anonymous",
     "hdPages/discuss/success",
 
-    
-
     "hdPages/question/result",
     "hdPages/question/success",
     "hdPages/question/index",
     "hdPages/question/anonymous",
+
+    "hdPages/survey/result",
+    "hdPages/survey/success",
+    "hdPages/survey/index",
+    "hdPages/survey/anonymous",
     
 
     "pages/index/appview",

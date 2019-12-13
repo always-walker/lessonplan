@@ -80,12 +80,14 @@ Page({
                 if (res2.data.status == 1) {
                   that.setData({
                     condition: false,
+                    hasClass: true,
                     currentClassGuid: res.data.data.FK_ClassGuid
                   });
                   that.getClass();
                 } else if (res2.data.status == 0) {
                   that.setData({
                     condition: false,
+                    hasClass: true,
                     currentClassGuid: res.data.data.FK_ClassGuid
                   });
                   that.getClass();
@@ -236,6 +238,7 @@ Page({
                 method: 'POST',
                 success: function(res) {
                   wx.hideLoading();
+                  console.log(obj['Type']);
                   if (res.data.status == -1) {
                     url = '/hdPages/' + obj['Type'] + '/result?id=' + recordItem.Guid;
                   }

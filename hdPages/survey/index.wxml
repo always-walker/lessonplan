@@ -1,0 +1,27 @@
+<tabbar index="5" back="1"></tabbar>
+<view class="column hdTitle">
+  <text>{{obj.className}}</text>
+  <text>问卷-{{obj.InteractName}}</text>
+</view>
+<form bindsubmit="submitForm">
+  <view class="column hdForm">
+    <block wx:for="{{questionList}}" wx:key="ID">
+      <text class="question-title">Q{{index+1}}.{{item.Question}}</text>
+      <radio-group name="{{item.PK_QuestionGuid}}" class="question-answer column" wx:if="{{item.QuestionType == '单选'}}">
+        <radio wx:for="{{item.AnswerList}}" wx:key="idx" wx:for-item="answer" wx:for-index="idx" value="{{idx}}">
+          <text>{{answer}}</text>
+        </radio>
+      </radio-group>
+      <checkbox-group name="{{item.PK_QuestionGuid}}" class="question-answer column" wx:if="{{item.QuestionType == '多选'}}">
+        <checkbox wx:for="{{item.AnswerList}}" wx:key="idx" wx:for-item="answer" wx:for-index="idx" value="{{idx}}">
+          <text>{{answer}}</text>
+        </checkbox>
+      </checkbox-group>
+    </block>
+  </view>
+  <button class="btnSubmit" form-type="submit">提交</button>
+  <view class="column">
+    <text bindtap="goResult" class="btn-underline">查看结果</text>
+  </view>
+</form>
+<view style="height:65px;"></view>

@@ -18,16 +18,29 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-    var that = this;
     var id = options.id;
-    var obj = app.globalData.hdObj[id];
+    //var obj = app.globalData.hdObj[id];
+    this.setData({
+      id: id
+    });
+    this.getResult();
+  },
+
+  getResult: function(){
+    var that = this;
+    wx.showLoading({
+      title: '加载中...',
+    });
     wx.request({
-      url: 'https://qrcodeserver.lessonplan.cn/' + id + '/QuestionAndAnswer',
-      success: function(res) {
+      url: 'https://qrcodeserver.lessonplan.cn/' + that.data.id + '/QuestionAndAnswer',
+      success: function (res) {
+        wx.hideLoading();
         var questionInfo = res.data.questionInfo;
-        var answer = questionInfo[0].content;
+        for (var i = 0; i < questionInfo.length; i++){
+          questionInfo[i].content.reverse();
+        }
+        var answer = questionInfo[that.data.currentIndex].content;
         that.setData({
-          id: id,
           questionInfo: questionInfo,
           answer: answer
         });
@@ -41,6 +54,11 @@ Page({
       currentIndex: index,
       answer: this.data.questionInfo[index].content
     });
+  },
+
+  onPullDownRefresh: function () {
+    this.getResult();
+    wx.stopPullDownRefresh();
   },
 
   /**
@@ -70,14 +88,6 @@ Page({
   onUnload: function() {
 
   },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function() {
-
-  },
-
   /**
    * 页面上拉触底事件的处理函数
    */

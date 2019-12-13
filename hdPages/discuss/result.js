@@ -17,33 +17,49 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    var that = this;
     var id = options.id;
-    var obj = app.globalData.hdObj[id];
+    this.setData({
+      id: id
+    });
+    this.getResult();
+  },
+
+  getResult: function(){
+    var that = this;
+    wx.showLoading({
+      title: '加载中...',
+    });
+    var obj = app.globalData.hdObj[that.data.id];
     wx.request({
-      url: 'https://qrcodeserver.lessonplan.cn/'+ id +'/' + obj.Type,
-      success: function(res){
+      url: 'https://qrcodeserver.lessonplan.cn/' + that.data.id + '/' + obj.Type,
+      success: function (res) {
+        wx.hideLoading();
         var imagesArr = [];
         var discussInfo = res.data.discussInfo;
-        for (var i = 0; i < discussInfo.length; i++){
-          if (discussInfo[i].Content.indexOf(';widthimgs;[') > -1){
+        for (var i = 0; i < discussInfo.length; i++) {
+          if (discussInfo[i].Content.indexOf(';widthimgs;[') > -1) {
             var images = JSON.parse(discussInfo[i].Content.substring(discussInfo[i].Content.lastIndexOf(';widthimgs;')).replace(';widthimgs;', ''));
             var content = discussInfo[i].Content.substring(0, discussInfo[i].Content.lastIndexOf(';widthimgs;'));
             discussInfo[i]['images'] = images;
             discussInfo[i].Content = content;
             imagesArr = imagesArr.concat(images);
           }
-          else{
+          else {
             discussInfo[i]['images'] = [];
           }
         }
+        discussInfo.reverse();
         that.setData({
-          id: id,
           discussInfo: discussInfo,
           images: imagesArr
         });
       }
     })
+  },
+
+  onPullDownRefresh: function () {
+    this.getResult();
+    wx.stopPullDownRefresh();
   },
 
   previewImage: function(e){
@@ -80,13 +96,6 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
 
   },
 

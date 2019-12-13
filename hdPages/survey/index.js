@@ -10,8 +10,6 @@ Page({
   data: {
     id: null,
     obj: null,
-    defaultText: '',
-    maxInputCount: 800,
     questionList: []
   },
 
@@ -23,11 +21,11 @@ Page({
     var id = options.id;
     var obj = app.globalData.hdObj[id];
     wx.request({
-      url: 'https://qrcodeserver.lessonplan.cn/' + id + '/question',
+      url: 'https://qrcodeserver.lessonplan.cn/' + id + '/survey',
       success: function(res) {
         var questionList = res.data.data;
         for (var i = 0; i < questionList.length; i++) {
-          questionList[i]['inputCount'] = 0;
+          questionList[i]['AnswerList'] = questionList[i].Answer.split('|||');
         }
         that.setData({
           id: id,
@@ -42,8 +40,23 @@ Page({
     var that = this;
     var questions = [];
     var isSubmit = true;
+    console.log(e.detail.value);
     for (var key in e.detail.value) {
-      questions.push('{"guid": "' + key + '", "answer": "' + e.detail.value[key] +'"}');
+      var curAnswer = [];
+      if (typeof(e.detail.value[key]) == 'string') {
+        if (e.detail.value[key] == '')
+          isSubmit = false;
+        else
+          curAnswer.push(parseInt(e.detail.value[key]) + 1);
+      } else if (typeof(e.detail.value[key]) == 'object') {
+        if (e.detail.value[key].length > 0) {
+          for (var i = 0; i < e.detail.value[key].length; i++)
+            curAnswer.push(parseInt(e.detail.value[key][i]) + 1);
+        } else {
+          isSubmit = false;
+        }
+      }
+      questions.push('{"guid": "' + key + '", "answer": ' + JSON.stringify(curAnswer) + '}');
       if (e.detail.value[key] == '')
         isSubmit = false;
     }
@@ -52,11 +65,11 @@ Page({
         'name': app.globalData.userInfo.NickName,
         'questions': questions,
         'creatorGuid': app.globalData.userGuid,
-        'allowResubmission': that.data.obj.AllowResubmission,
         'verifyStatus': that.data.obj.InteractVerifyStatus
       };
+      console.log(data);
       wx.request({
-        url: 'https://qrcodeserver.lessonplan.cn/' + that.data.id + '/QuestionAndAnswer',
+        url: 'https://qrcodeserver.lessonplan.cn/' + that.data.id + '/SurveyAndAnswer',
         method: 'POST',
         data: data,
         success: function(res) {
@@ -76,23 +89,14 @@ Page({
       })
     } else {
       wx.showToast({
-        title: '请输入你的回答',
+        title: '请答完问卷再提交',
         icon: 'none',
         duration: 1000
       });
     }
   },
 
-  inputChange: function(e) {
-    var index = e.currentTarget.dataset.index;
-    var questionList = this.data.questionList;
-    questionList[index].inputCount = e.detail.value.length;
-    this.setData({
-      questionList: questionList
-    });
-  },
-
-  goResult: function () {
+  goResult: function() {
     wx.navigateTo({
       url: 'result?id=' + this.data.id,
     })
@@ -109,10 +113,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function() {
-    this.setData({
-      inputCount: 0,
-      defaultText: ''
-    });
+
   },
 
   /**

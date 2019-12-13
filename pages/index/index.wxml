@@ -1,5 +1,6 @@
 <tabbar index="1" back="0"></tabbar>
 <block wx:if="{{isInfo}}">
+<block wx:if="{{condition == false}}">
   <view class="topbar">
     <view class="hanlder-item" style="margin-left:20px;" bindtap="searchClass">
       <image mode="widthFix" src="/images/tijiao.svg"></image>
@@ -100,6 +101,7 @@
     <text>本班级还未推送任何内容</text>
   </view>
 
+  <view wx:if="{{hasClass == false}}" style="height:51px;"></view>
   <view wx:if="{{hasClass == false}}" class="notice">
     <text class="notice-red">您尚未加入任何班级</text>
     <text>1 获取班级邀请码</text>
@@ -107,7 +109,7 @@
     <text>3 输入班级邀请码并确定</text>
     <text>4 加入班级</text>
   </view>
-
+</block>
   <form bindsubmit="joinClass" wx:if="{{condition}}">
     <view class="class-search">
       <view class="close">

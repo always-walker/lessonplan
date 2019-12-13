@@ -1,7 +1,7 @@
 <tabbar index="5" back="1"></tabbar>
 <view class="column hdTitle">
-  <text>班级创新实验班</text>
-  <text>标题讨论2019-10-24</text>
+  <text>{{obj.className}}</text>
+  <text>问答-{{obj.InteractName}}</text>
 </view>
 <form bindsubmit="submitForm">
   <view class="column hdForm">
