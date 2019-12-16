@@ -8,6 +8,11 @@
     "hdPages/discuss/anonymous",
     "hdPages/discuss/success",
 
+    "hdPages/wordCloud/index",
+    "hdPages/wordCloud/result",
+    "hdPages/wordCloud/anonymous",
+    "hdPages/wordCloud/success",
+
     "hdPages/question/result",
     "hdPages/question/success",
     "hdPages/question/index",
