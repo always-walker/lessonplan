@@ -238,7 +238,6 @@ Page({
                 method: 'POST',
                 success: function(res) {
                   wx.hideLoading();
-                  console.log(obj['Type']);
                   if (res.data.status == -1) {
                     url = '/hdPages/' + obj['Type'] + '/result?id=' + recordItem.Guid;
                   }

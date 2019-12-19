@@ -1,29 +1,30 @@
 {
   "pages": [
-
     "pages/index/index",
-    
     "hdPages/discuss/index",
     "hdPages/discuss/result",
     "hdPages/discuss/anonymous",
     "hdPages/discuss/success",
-
+    "hdPages/sign/index",
+    "hdPages/sign/result",
+    "hdPages/sign/anonymous",
+    "hdPages/sign/success",
+    "hdPages/structuredDiscuss/index",
+    "hdPages/structuredDiscuss/result",
+    "hdPages/structuredDiscuss/anonymous",
+    "hdPages/structuredDiscuss/success",
     "hdPages/wordCloud/index",
     "hdPages/wordCloud/result",
     "hdPages/wordCloud/anonymous",
     "hdPages/wordCloud/success",
-
     "hdPages/question/result",
     "hdPages/question/success",
     "hdPages/question/index",
     "hdPages/question/anonymous",
-
     "hdPages/survey/result",
     "hdPages/survey/success",
     "hdPages/survey/index",
     "hdPages/survey/anonymous",
-    
-
     "pages/index/appview",
     "pages/video/index",
     "pages/names/list",

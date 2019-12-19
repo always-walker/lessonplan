@@ -1,0 +1,20 @@
+<tabbar index="5" back="1"></tabbar>
+<view class="question-list column">
+  <scroll-view scroll-x="true" class="question-no-list row">
+    <text bindtap="changeQuestion" wx:for="{{questionInfo}}" data-index="{{index}}" wx:key="questionGuid" class="{{currentIndex == index ? 'active' : ''}}">Q{{index + 1}}</text>
+  </scroll-view>
+  <text class="question-title">{{questionInfo[currentIndex].name}}</text>
+</view>
+<view style="height:100px;"></view>
+<view class="questionlist column">
+  <block wx:for="{{answer}}" wx:key="ID">
+    <text class="answer-name">{{item.Name}}</text>
+    <view class="answer-content">
+      <view class="answer-content-item column" wx:for="{{item.Answer}}" wx:key="idx" wx:for-index="idx" wx:for-item="row">
+        <text style="color:{{row.c == '#FFFFFF' ? '#333': row.c}}">{{row.q}}</text>
+        <text class="answer-content-item-content">{{row.a}}</text>
+      </view>
+    </view>
+  </block>
+</view>
+<view style="height:65px;"></view>

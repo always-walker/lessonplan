@@ -1,0 +1,23 @@
+<tabbar index="5" back="1"></tabbar>
+<view class="column hdTitle">
+  <text>{{obj.className}}</text>
+  <text>反思-{{obj.InteractName}}</text>
+</view>
+<form bindsubmit="submitForm">
+  <view class="column hdForm">
+    <block wx:for="{{questionList}}" wx:key="ID">
+      <text class="question-title">{{index+1}}.{{item.Question}}</text>
+      <view class="column subquestion">
+        <view class="child-item column" wx:for="{{item.SubQuestionList}}" wx:key="idx" wx:for-index="idx" wx:for-item="row">
+          <text style="background-color:{{row.color}};{{row.color == '#FFFFFF' ? 'color:#333;' : ''}}">{{row.text}}</text>
+          <textarea name="q-{{index}}-{{idx}}" name= placeholder="请输入你的答案" value="{{defaultText}}"></textarea>
+        </view>
+      </view>
+    </block>
+  </view>
+  <button class="btnSubmit" form-type="submit">提交</button>
+  <view class="column">
+    <text bindtap="goResult" class="btn-underline">查看结果</text>
+  </view>
+</form>
+<view style="height:65px;"></view>

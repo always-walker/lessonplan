@@ -39,5 +39,6 @@ const compare = property => {
 module.exports = {
   formatTime: formatTime,
   formatDate: formatDate,
+  formatNumber: formatNumber,
   compare: compare
 }

@@ -1,0 +1,13 @@
+<tabbar index="5" back="1"></tabbar>
+<view class="column hdTitle">
+  <text>{{obj.className}}</text>
+  <text>签到-{{obj.InteractName}}</text>
+</view>
+<view class="canvasContainer column">
+  <text class="title">请输入签到图案</text>
+  <canvas style="width:{{width}}px; height:{{width}}px;" canvas-id="id-gesture-lock" class="gesture-lock" bindtouchstart="onTouchStart" bindtouchmove="onTouchMove" bindtouchend="onTouchEnd"></canvas>
+  <text class="tip">图案变换倒计时</text>
+  <text class="time">{{leftTimeStr}}</text>
+</view>
+<view class="address row mt8"><image mode="widthFix" src="/images/address.gif"></image><text>{{myLocation}}</text></view>
+<view style="height:60px;"></view>

@@ -1,0 +1,8 @@
+@import "/lib/hd-edit-common.wxss";
+.canvasContainer{background-color: #ffffff; font-size: 14px; margin-top: 10px; width: calc(100% - 30px);}
+.title{margin-top: 20px; font-size: 16px;}
+.tip{color: #999;}
+.time{color: #df5b98; font-size: 22px;}
+.address{padding: 10px 0px; width: calc(100% - 30px); text-align: center; background: #fff; font-size: 14px;}
+.address image{width: 12px; margin-left: 5px; margin-right: 3px;}
+.gesture-lock {background-color: #ffffff;}
