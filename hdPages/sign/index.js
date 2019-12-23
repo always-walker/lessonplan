@@ -159,7 +159,14 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function() {
-    this.recordTime();
+    wx.showLoading({
+      title: '加载中...',
+    })
+    var that = this;
+    setTimeout(function() {
+      that.recordTime();
+      wx.hideLoading();
+    }, 1000);
   },
 
   /**

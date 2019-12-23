@@ -1,4 +1,6 @@
 // hdPages/Discuss/success.js
+const qqMapWX = require('../../utils/qqmap-wx-jssdk.min.js');
+const util = require('../../utils/util.js');
 
 const app = getApp()
 
@@ -9,7 +11,9 @@ Page({
    */
   data: {
     id: null,
-    allowResubmission: null
+    myLocation: '',
+    curTime: '',
+    signTip: '已签'
   },
 
   /**
@@ -17,24 +21,45 @@ Page({
    */
   onLoad: function(options) {
     var id = options.id;
-    var obj = app.globalData.hdObj[id];
+    //签到时间
+    var date = new Date();
+    var hour = date.getHours();
+    var minute = date.getMinutes();
+    var second = date.getSeconds();
+    var curTime = [hour, minute, second].map(util.formatNumber).join(':');
     this.setData({
       id: id,
-      allowResubmission: obj.AllowResubmission
+      curTime: curTime
     });
+    var that = this;
+    var qqMap = new qqMapWX({
+      key: 'L2XBZ-2CQRD-M2Z4C-HTN4V-QDFYK-2FB7A'
+    });
+    //小程序api获取当前坐标
+    wx.getLocation({
+      success: function (res) {
+        qqMap.reverseGeocoder({
+          location: {
+            latitude: res.latitude,
+            longitude: res.longitude
+          },
+          success: function (res) {
+            that.setData({
+              myLocation: res.result.address
+            });
+          },
+          fail: function (res) {
+            console.log('获取当前地址失败');
+          }
+        });
+      },
+    })
   },
 
   goResult: function() {
     var that = this;
     wx.navigateTo({
       url: 'result?id=' + that.data.id,
-    });
-  },
-
-  goSubmit: function() {
-    var that = this;
-    wx.redirectTo({
-      url: 'index?id=' + that.data.id,
     });
   },
 

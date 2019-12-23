@@ -1,7 +1,10 @@
-page{background: #eee; padding: 0px 15px;}
-.result-item{display: flex; flex-direction: row; width: calc(100% - 30px); justify-content: left; margin-top: 15px;}
-.result-item image{width: 12px; margin-top: 15px;}
-.item-name{width: 50px; font-size: 14px; margin-top: 10px;}
-.item-content{padding: 10px; background: #fff; border-radius: 5px; width: calc(100% - 82px); font-size: 14px;}
-.item-content view{margin-top:5px;}
-.item-content image{width: 30px; height: 30px; margin-top: 0px;}
+page{padding: 0px 15px; font-size: 14px;}
+.table-title{display: flex; flex-direction: row; width: calc(100% - 30px); justify-content: space-between; 
+padding-top: 15px; border-top: 1px solid #e2e2e2;}
+.table-row{display: flex; flex-direction: row; width: calc(100% - 30px); justify-content: space-between; margin-top: 15px;}
+.table-stat{color: #999; margin-top: 8px;}
+.table-title text,.table-row text,.table-row view{text-align: center;}
+.item-no{width: 15%;}
+.item-name{width: 21%;}
+.item-status{width: 16%;}
+.item-status image{width: 18px;}

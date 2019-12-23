@@ -1,7 +1,11 @@
 <tabbar index="5" back="1"></tabbar>
-<text class="tipText">提交成功</text>
-<image class="tipImage" mode="widthFix" src="/images/submit-success.png"></image>
+<text class="tipText">您已签到</text>
+<image class="tipImage" mode="widthFix" src="/images/submit-success-sign.png"></image>
 <view class="column btn">
   <button bindtap="goResult" class="btn-red">查看结果</button>
-  <text wx:if="{{allowResubmission == 1}}" bindtap="goSubmit" class="btn-underline">继续提交</text>
+  <view class="sign-time"><text>签到时间 {{curTime}}</text><text class="sign-tip">{{signTip}}</text></view>
+  <view class="address row">
+    <image mode="widthFix" src="/images/address.gif"></image>
+    <text>{{myLocation}}</text>
+  </view>
 </view>
