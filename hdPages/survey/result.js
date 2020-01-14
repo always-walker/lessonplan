@@ -52,7 +52,7 @@ Page({
               'name': surveyInfo.questions[i].options[j-1],
               'total': total,
               'count': currentOption,
-              'percent': (Math.round(parseFloat((currentOption * 100 / total).toFixed(2)) * 100) / 100)
+              'percent': total == 0 ? 0 : (Math.round(parseFloat((currentOption * 100 / total).toFixed(2)) * 100) / 100)
             });
           }
         }

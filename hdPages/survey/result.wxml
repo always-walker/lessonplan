@@ -1,16 +1,18 @@
 <tabbar index="5" back="1"></tabbar>
 <view class="question-list column">
-  <scroll-view scroll-x="true" class="question-no-list row">
-    <text bindtap="changeQuestion" wx:for="{{surveyInfo.questions}}" data-index="{{index}}" wx:key="questionGuid" class="{{currentIndex == index ? 'active' : ''}}">Q{{index + 1}}</text>
+  <scroll-view scroll-x="true">
+    <view bindtap="changeQuestion" wx:for="{{surveyInfo.questions}}" data-index="{{index}}" wx:key="questionGuid">
+      <text class="{{currentIndex == index ? 'active' : ''}}">Q{{index + 1}}</text>
+    </view>
   </scroll-view>
   <text class="question-title">{{surveyInfo.questions[currentIndex].questionName}}</text>
 </view>
-<view style="height:100px;"></view>
+<view style="height:120px;"></view>
 <view wx:for="{{answer}}" wx:key="index" class="result-item column">
   <text class="item-name">【选项{{index + 1}}】{{item.name}}</text>
   <view class="item-percent mt8">
     <view style="width:{{item.percent}}%;"></view>
   </view>
-  <text class="item-intro mt8">{{item.count}}({{item.percent}}%)</text>
+  <text class="item-intro mt8">{{item.count}}{{item.percent == 0 ? '' : '(' + item.percent + '%)'}}</text>
 </view>
 <view style="height:65px;"></view>

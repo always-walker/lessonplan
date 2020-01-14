@@ -1,23 +1,22 @@
 // pages/video/index.js
+const app = getApp()
+
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    videoTitle: null,
-    videoUrl: null
+    videoObj: null
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function(options) {
+  onLoad: function() {
     this.setData({
-      videoTitle: options.title,
-      videoUrl: options.url
+      videoObj: app.globalData.videoObj
     });
-
   },
 
   /**

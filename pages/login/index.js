@@ -25,7 +25,7 @@ Page({
         if (!res.data.data.HeadPhotoPath)
           res.data.data.HeadPhotoPath = 'https://cdn.lessonplan.cn/Public/IMG/default-avatar.png';
         if (!res.data.data.Msg)
-          res.data.data.Msg = '未填写个性签名';
+          res.data.data.Msg = '尚未签名';
         app.globalData.userInfo = res.data.data;
         wx.setStorage({
           key: 'userInfo',

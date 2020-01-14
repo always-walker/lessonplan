@@ -1,26 +1,36 @@
 <tabbar index="5" back="1"></tabbar>
-<view class="table-title">
-  <text class="item-no">编号</text>
-  <text class="item-name">姓名</text>
-  <text class="item-status">准时</text>
-  <text class="item-status">迟到</text>
-  <text class="item-status">缺席</text>
-  <text class="item-status">请假</text>
-</view>
-<view class="table-row table-stat">
-  <text class="item-no"></text>
-  <text class="item-name"></text>
-  <text class="item-status">{{stat[0]}}</text>
-  <text class="item-status">{{stat[1]}}</text>
-  <text class="item-status">{{stat[2]}}</text>
-  <text class="item-status">{{stat[3]}}</text>
-</view>
-<view class="table-row" wx:for="{{studentList}}" wx:key="ID">
-  <text class="item-no">{{item.studentNo}}</text>
-  <text class="item-name">{{item.NickName}}</text>
-  <view class="item-status"><image src="/images/time-zs-{{item.isSign == true ? 'on' : 'off'}}.svg" mode="widthFix"></image></view>
-  <view class="item-status"><image src="/images/time-cd-off.svg" mode="widthFix"></image></view>
-  <view class="item-status"><image src="/images/time-qx-{{item.isSign == true ? 'off' : 'on'}}.svg" mode="widthFix"></image></view>
-  <view class="item-status"><image src="/images/time-qj-off.svg" mode="widthFix"></image></view>
+<view class="container">
+  <view class="table-title">
+    <text class="item-no">编号</text>
+    <text class="item-name">姓名</text>
+    <text class="item-status">准时</text>
+    <text class="item-status">迟到</text>
+    <text class="item-status">缺席</text>
+    <text class="item-status">请假</text>
+  </view>
+  <view class="table-row table-stat">
+    <text class="item-no"></text>
+    <text class="item-name"></text>
+    <text class="item-status">{{stat[0]}}</text>
+    <text class="item-status">{{stat[1]}}</text>
+    <text class="item-status">{{stat[2]}}</text>
+    <text class="item-status">{{stat[3]}}</text>
+  </view>
+  <view class="table-row" wx:for="{{studentList}}" wx:key="ID">
+    <text class="item-no">{{item.studentNo}}</text>
+    <text class="item-name">{{item.NickName}}</text>
+    <view class="item-status">
+      <image src="/images/time-zs-{{item.isSign == true ? 'on' : 'off'}}.svg" mode="widthFix"></image>
+    </view>
+    <view class="item-status">
+      <image src="/images/time-cd-off.svg" mode="widthFix"></image>
+    </view>
+    <view class="item-status">
+      <image src="/images/time-qx-{{item.isSign == true ? 'off' : 'on'}}.svg" mode="widthFix"></image>
+    </view>
+    <view class="item-status">
+      <image src="/images/time-qj-off.svg" mode="widthFix"></image>
+    </view>
+  </view>
 </view>
 <view style="height:65px;"></view>

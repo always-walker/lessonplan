@@ -1,6 +1,6 @@
 <tabbar index="5" back="1"></tabbar>
-<text class="tipText">提交成功</text>
-<image class="tipImage" mode="widthFix" src="/images/submit-success.png"></image>
+<text class="tipText">{{tipText}}</text>
+<image class="tipImage" mode="widthFix" src="https://cdn.lessonplan.cn/LessonPlay/MiniLessonplay/讨论.jpg"></image>
 <view class="column btn">
   <button bindtap="goResult" class="btn-red">查看结果</button>
   <text wx:if="{{allowResubmission == 1}}" bindtap="goSubmit" class="btn-underline">继续提交</text>

@@ -5,4 +5,4 @@ page{background: #eee; margin-bottom: 110px;}
 .edit_item text{width: 20%; padding-left: 10px; font-size: 14px; font-weight: 700;}
 .edit_item input{font-size: 14px;}
 .edit_item .require{width: 15px; color: #f5222d; padding-top: 5px; text-align: right;}
-.savebuttom{position: fixed; bottom:50px; width:100%; height: 50px; background-color: #f98a9a; color: #fff; line-height: 50px; z-index:500; font-size: 15px; font-weight: 700;}
+.savebuttom{position: fixed; border-radius: 0px; bottom:50px; width:100%; height: 50px; background-color: #f98a9a; color: #fff; line-height: 50px; z-index:500; font-size: 15px; font-weight: 700;}

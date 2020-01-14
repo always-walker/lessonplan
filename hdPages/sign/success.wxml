@@ -1,6 +1,6 @@
 <tabbar index="5" back="1"></tabbar>
 <text class="tipText">您已签到</text>
-<image class="tipImage" mode="widthFix" src="/images/submit-success-sign.png"></image>
+<image class="tipImage" mode="widthFix" src="https://cdn.lessonplan.cn/LessonPlay/MiniLessonplay/签到.jpg"></image>
 <view class="column btn">
   <button bindtap="goResult" class="btn-red">查看结果</button>
   <view class="sign-time"><text>签到时间 {{curTime}}</text><text class="sign-tip">{{signTip}}</text></view>

@@ -1,10 +1,14 @@
 <tabbar index="5" back="1"></tabbar>
-<view class="result-item" wx:for="{{discussInfo}}" wx:key="ID">
-  <text class="item-name">{{item.Name}}</text>
-  <image mode="widthFix" src="/images/left.svg"></image>
-  <view class="item-content">
-    <text>{{item.Content}}</text>
-    <view><image bindtap="previewImage" wx:for="{{item.images}}" wx:for-index="imageId" wx:key="imageId" wx:for-item="imageUrl" data-url="{{imageUrl}}" mode="scaleToFill" src="{{imageUrl}}"></image></view>
+<view class="container">
+  <view class="result-item" wx:for="{{discussInfo}}" wx:key="ID">
+    <text class="item-name">{{item.Name}}</text>
+    <image mode="widthFix" src="/images/left.svg"></image>
+    <view class="item-content">
+      <text>{{item.Content}}</text>
+      <view>
+        <image bindtap="previewImage" wx:for="{{item.images}}" wx:for-index="imageId" wx:key="imageId" wx:for-item="imageUrl" data-url="{{imageUrl}}" mode="aspectFill" src="{{imageUrl}}"></image>
+      </view>
+    </view>
   </view>
 </view>
 <view style="height:65px;"></view>

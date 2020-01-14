@@ -13,7 +13,8 @@
   <text>花名册</text>
   <image mode="widthFix" src="/images/right.svg"></image>
 </navigator>
-<view class="menu_item" bindtap="loginout">
-  <text>注销登录</text>
+<button class="logoutbuttom" bindtap="loginout" size="default">退出登录</button>
+<!-- <view class="menu_item" bindtap="loginout">
+  <text>退出登录</text>
   <image mode="widthFix" src="/images/right.svg"></image>
-</view>
+</view> -->

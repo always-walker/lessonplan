@@ -1,7 +1,9 @@
 <tabbar index="5" back="1"></tabbar>
 <view class="question-list column">
-  <scroll-view scroll-x="true" class="question-no-list row">
-    <text bindtap="changeQuestion" wx:for="{{questionInfo}}" data-index="{{index}}" wx:key="questionGuid" class="{{currentIndex == index ? 'active' : ''}}">Q{{index + 1}}</text>
+<scroll-view scroll-x="true">
+    <view bindtap="changeQuestion" wx:for="{{questionInfo}}" data-index="{{index}}" wx:key="questionGuid">
+      <text class="{{currentIndex == index ? 'active' : ''}}">Q{{index + 1}}</text>
+    </view>
   </scroll-view>
   <text class="question-title">{{questionInfo[currentIndex].name}}</text>
 </view>

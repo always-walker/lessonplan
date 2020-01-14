@@ -6,14 +6,14 @@
 <form bindsubmit="submitForm">
   <view class="column hdForm">
     <view class="column hdFormTextArea">
-      <textarea name="content" bindinput="inputChange" placeholder="请输入你的想法" value="{{defaultText}}">
+      <textarea name="content" maxlength="{{maxInputCount}}" bindinput="inputChange" placeholder="请输入你的想法" value="{{defaultText}}">
       </textarea>
       <text class="enable-input c9">{{inputCount}}/{{maxInputCount}}</text>
     </view>
-    <image bindtap="chooseImage" mode="scaleToFill" class="{{uploadImageClass}} mt8" src="{{imageUrl}}">
+    <image bindtap="chooseImage" mode="aspectFill" class="{{uploadImageClass}} mt8" src="{{imageUrl}}">
     </image>
   </view>
   <button class="btnSubmit" form-type="submit">提交</button>
   <view class="column"><text bindtap="goResult" class="btn-underline">查看结果</text></view>
-  <view style="height:60px;"></view>
 </form>
+<view style="height:65px;"></view>

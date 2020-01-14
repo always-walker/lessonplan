@@ -14,3 +14,4 @@
   </view>
   <button class="btnSubmit" form-type="submit">提交</button>
 </form>
+<view style="height:65px;"></view>

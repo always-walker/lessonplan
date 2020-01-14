@@ -1,5 +1,6 @@
 <tabbar index="5"></tabbar>
 <view class="videoContainer">
-  <view class="videoTitle"><text>{{videoTitle}}</text></view>
-  <video autoplay="true" title="{{videoTitle}}" src="{{videoUrl}}"></video>
+  <view class="videoTitle"><text>{{videoObj.Title}}</text></view>
+  <video autoplay="true" title="{{videoObj.Title}}" src="{{videoObj.VideoUrl}}"></video>
 </view>
+<view class="videoText">{{videoObj.Recommend}}</view>

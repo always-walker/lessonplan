@@ -6,7 +6,7 @@
 <form bindsubmit="submitForm">
   <view class="column hdForm">
     <block wx:for="{{questionList}}" wx:key="ID">
-      <text class="question-title">Q{{index+1}}.{{item.Question}}</text>
+      <text class="question-title">({{item.QuestionType}})Q{{index+1}}.{{item.Question}}</text>
       <radio-group name="{{item.PK_QuestionGuid}}" class="question-answer column" wx:if="{{item.QuestionType == '单选'}}">
         <radio wx:for="{{item.AnswerList}}" wx:key="idx" wx:for-item="answer" wx:for-index="idx" value="{{idx}}">
           <text>{{answer}}</text>

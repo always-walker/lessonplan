@@ -1,4 +1,4 @@
 @import "/lib/hd-edit-common.wxss";
 .question-answer{width:100%;}
-.question-answer radio,.question-answer checkbox{width:calc(100% - 10px); background: #fff; border-radius: 5px; margin-top: 5px; padding: 5px;}
+.question-answer radio,.question-answer checkbox{width:calc(100% - 20px); background-color: #fff; border-radius: 5px; margin-top: 5px; height: 44px; padding: 0px 10px; line-height: 44px;}
 .question-answer radio text,.question-answer checkbox text{font-size: 14px;}

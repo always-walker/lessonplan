@@ -1,7 +1,8 @@
-page{background: #eee; padding: 0px 15px;}
+page{background: #eee;}
+.container{padding: 0px 15px;}
 .result-item{display: flex; flex-direction: row; width: calc(100% - 30px); justify-content: left; margin-top: 15px;}
 .result-item image{width: 12px; margin-top: 15px;}
 .item-name{width: 50px; font-size: 14px; margin-top: 10px;}
 .item-content{padding: 10px; background: #fff; border-radius: 5px; width: calc(100% - 82px); font-size: 14px;}
 .item-content view{margin-top:5px;}
-.item-content image{width: 30px; height: 30px; margin-top: 0px;}
+.item-content image{width: 45px; height: 45px; margin-top: 0px;}

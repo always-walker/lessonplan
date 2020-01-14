@@ -8,7 +8,7 @@
     <block wx:for="{{questionList}}" wx:key="ID">
       <text class="question-title">Q{{index+1}}.{{item.Question}}</text>
       <view class="column hdFormTextArea">
-        <textarea name="{{item.PK_QuestionGuid}}" bindinput="inputChange" data-index="{{index}}" placeholder="请输入你的答案" value="{{defaultText}}">
+        <textarea name="{{item.PK_QuestionGuid}}" maxlength="{{maxInputCount}}" bindinput="inputChange" data-index="{{index}}" placeholder="请输入你的答案" value="{{defaultText}}">
         </textarea>
         <text class="enable-input c9">{{item.inputCount}}/{{maxInputCount}}</text>
       </view>

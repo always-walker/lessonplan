@@ -5,6 +5,9 @@
 .choose-class{display: flex; flex-direction: row; align-items: center;}
 .choose-class text{font-size: 16px; color: #666;}
 .choose-class image{width: 20px; margin-left: 3px;}
+.class-item{display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding: 15px 30px; border-bottom: 1px solid #ccc;}
+.class-item .name{font-size: 18px; color: #333;}
+.class-item .desc{font-size: 12px; color: #999;}
 .app{margin: 20px 20px 0px; padding: 10px 15px 15px; background-color: #f0f0f0; border-radius: 5px;}
 .app_title{display: flex; flex-direction: row; justify-content: space-between; align-items: center;}
 .app_title_name{font-size: 15px;}

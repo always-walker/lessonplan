@@ -9,6 +9,7 @@ Page({
    */
   data: {
     condition: false,
+    isSelectClass: false,
     hasClass: false,
     isInfo: false,
     classList: [],
@@ -53,6 +54,26 @@ Page({
     })
   },
 
+  closeSelectClass: function(){
+    this.setData({
+      isSelectClass: false
+    })
+  },
+
+  openSelectClass: function () {
+    this.setData({
+      isSelectClass: true
+    })
+  },
+
+  changeClass: function(e){
+    this.setData({
+      currentClassGuid: this.data.classList[e.currentTarget.dataset.index].PK_ClassGuid,
+      isSelectClass: false
+    });
+    this.getClass();
+  },
+
   joinClass: function(e) {
     var that = this;
     if (e.detail.value.Code == '') {
@@ -68,32 +89,36 @@ Page({
         url: 'https://codeserver.lessonplan.cn/api/search?text=' + e.detail.value.Code,
         success: function(res) {
           if (res.data.status == 1) {
-            wx.request({
-              url: 'https://rosterserver.lessonplan.cn/class/join2',
-              method: 'POST',
-              data: {
-                FK_UserGuid: app.globalData.userGuid,
-                FK_ClassGuid: res.data.data.FK_ClassGuid
-              },
-              success: function(res2) {
-                wx.hideLoading();
-                if (res2.data.status == 1) {
-                  that.setData({
-                    condition: false,
-                    hasClass: true,
-                    currentClassGuid: res.data.data.FK_ClassGuid
-                  });
-                  that.getClass();
-                } else if (res2.data.status == 0) {
-                  that.setData({
-                    condition: false,
-                    hasClass: true,
-                    currentClassGuid: res.data.data.FK_ClassGuid
-                  });
-                  that.getClass();
-                }
-              }
-            })
+            wx.hideLoading();
+            wx.redirectTo({
+              url: '/pages/names/join?classId=' + res.data.data.FK_ClassGuid,
+            });
+            // wx.request({
+            //   url: 'https://rosterserver.lessonplan.cn/class/join2',
+            //   method: 'POST',
+            //   data: {
+            //     FK_UserGuid: app.globalData.userGuid,
+            //     FK_ClassGuid: res.data.data.FK_ClassGuid
+            //   },
+            //   success: function(res2) {
+            //     wx.hideLoading();
+            //     if (res2.data.status == 1) {
+            //       that.setData({
+            //         condition: false,
+            //         hasClass: true,
+            //         currentClassGuid: res.data.data.FK_ClassGuid
+            //       });
+            //       that.getClass();
+            //     } else if (res2.data.status == 0) {
+            //       that.setData({
+            //         condition: false,
+            //         hasClass: true,
+            //         currentClassGuid: res.data.data.FK_ClassGuid
+            //       });
+            //       that.getClass();
+            //     }
+            //   }
+            // })
           } else {
             wx.hideLoading();
             wx.showToast({
@@ -227,31 +252,24 @@ Page({
             app.globalData.hdObj[recordItem.Guid] = obj;
             var url = '/hdPages/' + obj['Type'] + '/index?id=' + recordItem.Guid;
             //验证是否提交过
-            if (obj.AllowResubmission == 0) {
-              wx.request({
-                url: 'https://qrcodeserver.lessonplan.cn/submitcheck',
-                data: {
-                  'interactGuid': recordItem.Guid,
-                  'creatorGuid': app.globalData.userGuid,
-                  'type': obj.Type
-                },
-                method: 'POST',
-                success: function(res) {
-                  wx.hideLoading();
-                  if (res.data.status == -1) {
-                    url = '/hdPages/' + obj['Type'] + '/result?id=' + recordItem.Guid;
-                  }
-                  wx.navigateTo({
-                    url: url,
-                  });
+            wx.request({
+              url: 'https://qrcodeserver.lessonplan.cn/submitcheck',
+              data: {
+                'interactGuid': recordItem.Guid,
+                'creatorGuid': app.globalData.userGuid,
+                'type': obj.Type
+              },
+              method: 'POST',
+              success: function(res) {
+                wx.hideLoading();
+                if (res.data.status == -1) {
+                  url = '/hdPages/' + obj['Type'] + '/success?id=' + recordItem.Guid + '&status=1';
                 }
-              }); //不允许重复提交的话，检查是否已经提交过
-            } else {
-              wx.hideLoading();
-              wx.navigateTo({
-                url: url,
-              });
-            }
+                wx.navigateTo({
+                  url: url,
+                });
+              }
+            }); //检查是否已经提交过
           }
         }
       });
@@ -265,8 +283,9 @@ Page({
   goVideo: function(e) {
     var index = e.currentTarget.dataset.index;
     var obj = this.data.weCourseList[index];
+    app.globalData.videoObj = obj;
     wx.navigateTo({
-      url: '/pages/video/index?url=' + obj.VideoUrl + "&title=" + obj.Title,
+      url: '/pages/video/index',
     })
   },
 
@@ -275,49 +294,50 @@ Page({
       title: '加载中...',
     });
     var that = this;
-    if (that.data.currentClassGuid) {
-      var classListString = '"' + that.data.currentClassGuid + '"';
-      wx.request({
-        url: 'https://rosterserver.lessonplan.cn/class/private?classListString=' + classListString,
-        success: function(res2) {
-          that.setData({
-            classList: res2.data.data,
-            currentClassName: res2.data.data[0].ClassName,
-            currentClassGuid: res2.data.data[0].PK_ClassGuid
-          });
-          that.getRecord();
-        }
-      })
-    } else {
-      wx.request({
-        url: 'https://clientaccountserver.lessonplan.cn/user/joined/' + app.globalData.userGuid,
-        success: function(res) {
-          var hasClass = res.data.data.length > 0 ? true : false;
-          that.setData({
-            hasClass: hasClass
-          });
-          if (hasClass) {
-            var classListString = [];
-            for (var i = 0; i < res.data.data.length; i++) {
-              classListString.push('"' + res.data.data[i].FK_ClassGuid + '"');
-            }
-            wx.request({
-              url: 'https://rosterserver.lessonplan.cn/class/private?classListString=' + classListString.join(','),
-              success: function(res2) {
-                that.setData({
-                  classList: res2.data.data,
-                  currentClassName: res2.data.data[0].ClassName,
-                  currentClassGuid: res2.data.data[0].PK_ClassGuid
-                });
-                that.getRecord();
-              }
-            })
-          } else {
-            wx.hideLoading();
+    wx.request({
+      url: 'https://clientaccountserver.lessonplan.cn/user/joined/' + app.globalData.userGuid,
+      success: function (res) {
+        var hasClass = res.data.data.length > 0 ? true : false;
+        that.setData({
+          hasClass: hasClass
+        });
+        if (hasClass) {
+          var classListString = [];
+          for (var i = 0; i < res.data.data.length; i++) {
+            classListString.push('"' + res.data.data[i].FK_ClassGuid + '"');
           }
+          wx.request({
+            url: 'https://rosterserver.lessonplan.cn/class/private?classListString=' + classListString.join(','),
+            success: function (res2) {
+              let classList = res2.data.data;
+              let currentClassName = null;
+              let currentClassGuid = null;
+              if (that.data.currentClassGuid) {
+                for (let k = 0; k < classList.length; k++) {
+                  if (classList[k].PK_ClassGuid == that.data.currentClassGuid) {
+                    currentClassName = classList[k].ClassName;
+                    currentClassGuid = classList[k].PK_ClassGuid;
+                    break;
+                  }
+                }
+              }
+              if (!currentClassGuid) {
+                currentClassName = classList[0].ClassName;
+                currentClassGuid = classList[0].PK_ClassGuid;
+              }
+              that.setData({
+                classList: res2.data.data,
+                currentClassName: currentClassName,
+                currentClassGuid: currentClassGuid
+              });
+              that.getRecord();
+            }
+          })
+        } else {
+          wx.hideLoading();
         }
-      });
-    }
+      }
+    });
   },
 
   /**
@@ -331,7 +351,7 @@ Page({
       return;
     }
     var isInfo = false;
-    if (app.globalData.userInfo && app.globalData.userInfo.Msg && app.globalData.userInfo.Msg != '未填写个性签名')
+    if (app.globalData.userInfo && app.globalData.userInfo.Msg && app.globalData.userInfo.Msg != '尚未签名')
       isInfo = true;
     this.setData({
       isInfo: isInfo,
@@ -356,7 +376,7 @@ Page({
    */
   onShow: function() {
     var isInfo = false;
-    if (app.globalData.userInfo && app.globalData.userInfo.Msg && app.globalData.userInfo.Msg != '未填写个性签名')
+    if (app.globalData.userInfo && app.globalData.userInfo.Msg && app.globalData.userInfo.Msg != '尚未签名')
       isInfo = true;
     this.setData({
       isInfo: isInfo
@@ -380,7 +400,7 @@ Page({
     wx.showLoading({
       title: '加载中...',
     });
-    this.getRecord();
+    this.getClass();
     wx.stopPullDownRefresh();
   },
 

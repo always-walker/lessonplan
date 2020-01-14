@@ -1,6 +1,6 @@
-page{padding: 0px 15px; font-size: 14px;}
+.container{font-size: 14px; padding: 0px 15px; border-top: 1px solid #e2e2e2;}
 .table-title{display: flex; flex-direction: row; width: calc(100% - 30px); justify-content: space-between; 
-padding-top: 15px; border-top: 1px solid #e2e2e2;}
+padding-top: 15px;}
 .table-row{display: flex; flex-direction: row; width: calc(100% - 30px); justify-content: space-between; margin-top: 15px;}
 .table-stat{color: #999; margin-top: 8px;}
 .table-title text,.table-row text,.table-row view{text-align: center;}

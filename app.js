@@ -13,6 +13,7 @@ App({
     userGuid: null,
     token: null,
     isFindPasswordVerfy: false,
+    videoObj: null,
     hdObj: {}
   }
 })
