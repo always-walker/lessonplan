@@ -9,6 +9,7 @@ Page({
    */
   data: {
     id: null,
+    showType: 2,
     discussInfo: null,
     images: null
   },
@@ -34,6 +35,9 @@ Page({
       url: 'https://qrcodeserver.lessonplan.cn/' + that.data.id + '/' + obj.Type,
       success: function (res) {
         wx.hideLoading();
+        var showType = 1;
+        if (res.data.interactInfo.Model == 'waterfall')
+          showType = 2;
         var imagesArr = [];
         var discussInfo = res.data.discussInfo;
         for (var i = 0; i < discussInfo.length; i++) {
@@ -51,7 +55,8 @@ Page({
         discussInfo.reverse();
         that.setData({
           discussInfo: discussInfo,
-          images: imagesArr
+          images: imagesArr,
+          showType: showType
         });
       }
     })

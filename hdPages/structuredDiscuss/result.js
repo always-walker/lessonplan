@@ -9,7 +9,10 @@ Page({
    */
   data: {
     id: null,
+    showType: 2,
     currentIndex: 0,
+    childIndex: 0,
+    scrollLeft: 0,
     questionInfo: null,
     answer: null
   },
@@ -34,8 +37,10 @@ Page({
     wx.request({
       url: 'https://qrcodeserver.lessonplan.cn/' + that.data.id + '/StructuredDiscussAndAnswer',
       success: function(res) {
-        console.log(res.data);
         wx.hideLoading();
+        var showType = 1;
+        if (res.data.interactInfo.Model == 'steamroller')
+          showType = 2;
         var questionInfo = res.data.questionInfo;
         for (var i = 0; i < questionInfo.length; i++) {
           questionInfo[i].content.reverse();
@@ -43,6 +48,7 @@ Page({
         var answer = questionInfo[that.data.currentIndex].content;
         that.setData({
           questionInfo: questionInfo,
+          showType: showType,
           answer: answer
         });
       }
@@ -53,7 +59,15 @@ Page({
     var index = e.currentTarget.dataset.index;
     this.setData({
       currentIndex: index,
+      childIndex: 0,
+      scrollLeft: 0,
       answer: this.data.questionInfo[index].content
+    });
+  },
+
+  changeChildQuestion: function (e) {
+    this.setData({
+      childIndex: e.currentTarget.dataset.index
     });
   },
 

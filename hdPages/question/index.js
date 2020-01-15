@@ -60,6 +60,8 @@ Page({
         method: 'POST',
         data: data,
         success: function(res) {
+          //socket通知后台刷新
+          app.sendSocket(that.data.id);
           if (res.data.status == 1) {
             wx.hideLoading();
             wx.redirectTo({

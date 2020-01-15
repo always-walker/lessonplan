@@ -1,4 +1,5 @@
 //app.js
+const io = require('utils/weapp.socket.io.js');
 App({
   onLaunch: function () {
     //wx.clearStorageSync()
@@ -15,5 +16,9 @@ App({
     isFindPasswordVerfy: false,
     videoObj: null,
     hdObj: {}
+  },
+  sendSocket: function (interactGuid){
+    const socket = io('wss://io.lessonplan.cn/');
+    socket.emit('interact', { interactGuid });
   }
 })

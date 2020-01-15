@@ -58,6 +58,8 @@ Page({
           'content-type': 'application/x-www-form-urlencoded'
         },
         success: function(res) {
+          //成功之后发送socket更新后台显示
+          app.sendSocket(that.data.id);
           if (res.data.status == 1) {
             wx.hideLoading();
             wx.redirectTo({

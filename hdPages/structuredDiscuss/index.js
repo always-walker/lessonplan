@@ -20,6 +20,7 @@ Page({
   onLoad: function(options) {
     var that = this;
     var id = options.id;
+    console.log(id);
     var obj = app.globalData.hdObj[id];
     wx.request({
       url: 'https://qrcodeserver.lessonplan.cn/' + id + '/structuredDiscuss',
@@ -64,6 +65,8 @@ Page({
         method: 'POST',
         data: data,
         success: function(res) {
+          //socket通知后台刷新
+          app.sendSocket(that.data.id);
           if (res.data.status == 1) {
             wx.hideLoading();
             wx.redirectTo({

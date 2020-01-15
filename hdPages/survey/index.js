@@ -67,12 +67,13 @@ Page({
         'creatorGuid': app.globalData.userGuid,
         'verifyStatus': that.data.obj.InteractVerifyStatus
       };
-      console.log(data);
       wx.request({
         url: 'https://qrcodeserver.lessonplan.cn/' + that.data.id + '/SurveyAndAnswer',
         method: 'POST',
         data: data,
         success: function(res) {
+          //socket通知后台刷新
+          app.sendSocket(that.data.id);
           if (res.data.status == 1) {
             wx.hideLoading();
             wx.redirectTo({

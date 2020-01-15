@@ -1,22 +1,42 @@
 <tabbar index="5" back="1"></tabbar>
 <view class="question-list column">
-<scroll-view scroll-x="true">
+  <scroll-view scroll-x="true">
     <view bindtap="changeQuestion" wx:for="{{questionInfo}}" data-index="{{index}}" wx:key="questionGuid">
       <text class="{{currentIndex == index ? 'active' : ''}}">Q{{index + 1}}</text>
     </view>
   </scroll-view>
   <text class="question-title">{{questionInfo[currentIndex].name}}</text>
 </view>
-<view style="height:100px;"></view>
-<view class="questionlist column">
-  <block wx:for="{{answer}}" wx:key="ID">
-    <text class="answer-name">{{item.Name}}</text>
-    <view class="answer-content">
-      <view class="answer-content-item column" wx:for="{{item.Answer}}" wx:key="idx" wx:for-index="idx" wx:for-item="row">
-        <text style="color:{{row.c == '#FFFFFF' ? '#333': row.c}}">{{row.q}}</text>
-        <text class="answer-content-item-content">{{row.a}}</text>
+<block wx:if="{{showType == 1}}">
+  <view style="height:100px;"></view>
+  <view class="questionlist column">
+    <block wx:for="{{answer}}" wx:key="ID">
+      <text class="answer-name">{{item.Name}}</text>
+      <view class="answer-content">
+        <view class="answer-content-item column" wx:for="{{item.Answer}}" wx:key="idx" wx:for-index="idx" wx:for-item="row">
+          <text style="color:{{row.c == '#FFFFFF' ? '#333': row.c}}">{{row.q}}</text>
+          <text class="answer-content-item-content">{{row.a}}</text>
+        </view>
+      </view>
+    </block>
+  </view>
+  <view style="height:65px;"></view>
+</block>
+<block wx:if="{{showType == 2 && answer.length > 0}}">
+  <view style="height:100px; width:100%; background:#fff"></view>
+  <scroll-view scroll-left="{{scrollLeft}}" class="question-child" scroll-x="true">
+    <view data-index="{{index}}" bindtap="changeChildQuestion" class="{{childIndex == index ? 'active' : ''}}" wx:for="{{answer[0].Answer}}" wx:key="index">
+      <text>{{item.q}}</text>
+    </view>
+  </scroll-view>
+  <view class="question-list-2">
+    <view class="question-list-2-title">{{answer[0].Answer[childIndex].q}}</view>
+    <view class="question-list-2-item-content">
+      <view class="question-list-2-item" wx:for="{{answer}}" wx:key="ID">
+        <text class="question-list-2-item-name">{{item.Name}}：</text>
+        <text class="question-list-2-item-text">{{item.Answer[childIndex].a}}</text>
       </view>
     </view>
-  </block>
-</view>
-<view style="height:65px;"></view>
+  </view>
+  <view style="height:50px;"></view>
+</block>
