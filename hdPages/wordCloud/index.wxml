@@ -6,7 +6,7 @@
 <form bindsubmit="submitForm">
   <view class="column hdForm">
     <view class="column hdFormTextArea" style="height:60px;">
-      <textarea name="content" bindinput="inputChange" placeholder="请输入你的关键词" value="{{defaultText}}">
+      <textarea maxlength="{{maxInputCount}}" name="content" bindinput="inputChange" placeholder="请输入你的关键词" value="{{defaultText}}">
       </textarea>
       <text class="enable-input c9">{{inputCount}}/{{maxInputCount}}</text>
     </view>

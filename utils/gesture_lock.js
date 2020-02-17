@@ -17,7 +17,7 @@ module.exports = class {
     this.cycleNum = opt && opt.cycleNum || 3;
     this.radius = 0; //触摸点半径
     this.isParamOk = false;
-    this.marge = this.margeCircle = 25; //触摸点及触摸点和画布边界间隔
+    this.marge = this.margeCircle = 40; //触摸点及触摸点和画布边界间隔
     this.initColor = opt && opt.initColor || '#C5C5C3';
     this.checkColor = opt && opt.checkColor || '#5AA9EC';
     this.errorColor = opt && opt.errorColor || '#e19984';
@@ -55,8 +55,8 @@ module.exports = class {
       for (let j = 0; j < n; j++) {
         count++;
         let touchPoint = {
-          x: this.marge + i * (this.radius * 2 + this.margeCircle) + this.radius,
-          y: this.marge + j * (this.radius * 2 + this.margeCircle) + this.radius,
+          x: this.marge + j * (this.radius * 2 + this.margeCircle) + this.radius,
+          y: this.marge + i * (this.radius * 2 + this.margeCircle) + this.radius,
           index: count,
           check: "uncheck",
         }
@@ -73,8 +73,8 @@ module.exports = class {
       for (let j = 0; j < n; j++) {
         count++;
         let point = {
-          x: this.marge + i * (this.radius * 2 + this.margeCircle) + this.radius,
-          y: this.marge + j * (this.radius * 2 + this.margeCircle) + this.radius,
+          x: this.marge + j * (this.radius * 2 + this.margeCircle) + this.radius,
+          y: this.marge + i * (this.radius * 2 + this.margeCircle) + this.radius,
           index: count,
           check: "uncheck",
         }
@@ -109,31 +109,7 @@ module.exports = class {
     if (this.lastCheckPoint && point) {
       this.drawLine(this.lastCheckPoint, point, color);
     }
-    this.ctx.draw(true);
-  }
-
-  initDrawCanvas(color, points, ckPoints) {
-    //每次更新之前先清空画布
-    this.ctx.clearRect(0, 0, this.width, this.height);
-    //使用不同颜色和形式绘制已触发和未触发的锁
-    for (let i = 0; i < points.length; i++) {
-      let point = points[i];
-      if (point.check === "check") {
-        this.drawCircle(point.x, point.y, this.radius, color);
-        this.drawCircleCentre(point.x, point.y, color);
-      } else {
-        this.drawCircle(point.x, point.y, this.radius, this.initColor)
-      }
-    }
-    //绘制已识别锁之间的线段
-    if (ckPoints.length > 1) {
-      let lastPoint = ckPoints[0];
-      for (let i = 1; i < ckPoints.length; i++) {
-        this.drawLine(lastPoint, ckPoints[i], color);
-        lastPoint = ckPoints[i];
-      }
-    }
-    this.ctx.draw(true);
+    this.ctx.draw(false);
   }
 
   drawCircle(centreX, centreY, radius, color) {
@@ -148,7 +124,7 @@ module.exports = class {
     this.ctx.beginPath();
     this.ctx.setStrokeStyle(color);
     this.ctx.setLineWidth(1);
-    this.ctx.arc(centreX, centreY, 9, 0, Math.PI * 2, true);
+    this.ctx.arc(centreX, centreY, 5, 0, Math.PI * 2, true);
     this.ctx.stroke();
   }
 
@@ -176,21 +152,6 @@ module.exports = class {
     this.checkPoints = [];
     this.lastCheckPoint = null;
     this.drawCanvas(this.initColor);
-  }
-
-  init(color, checked) {
-    for (let i = 0; i < this.touchPoints.length; i++) {
-      this.touchPoints[i].check = 'uncheck';
-    }
-    this.checkPoints = [];
-    this.lastCheckPoint = null;
-    var points = this.getCircleParams();
-    var ckPoints = [];
-    for (let i = 0; i < checked.length; i++) {
-      points[checked[i] - 1].check = 'check';
-      ckPoints.push(points[checked[i] - 1]);
-    }
-    this.initDrawCanvas(color, points, ckPoints);
   }
 
   checkTouch(e) {
@@ -230,12 +191,27 @@ module.exports = class {
       this.touchState = "unTouch";
       return;
     }
-    this.checkTouch(e);
-    let point = {
-      x: e.touches[0].x,
-      y: e.touches[0].y
-    };
-    this.drawCanvas(this.checkColor, point);
+    let checkIndex = -1;
+    for (let i = 0; i < this.touchPoints.length; i++) {
+      let point = this.touchPoints[i];
+      if (isPointInCycle(e.touches[0].x, e.touches[0].y, point.x, point.y, this.radius)) {
+        if (point.check === 'uncheck') {
+          this.checkPoints.push(point);
+          this.lastCheckPoint = point;
+        }
+        point.check = "check"
+        checkIndex = i;
+        break;
+      }
+    }
+    //this.checkTouch(e);
+    if (checkIndex > -1) {
+      let point = {
+        x: e.touches[0].x,
+        y: e.touches[0].y
+      };
+      this.drawCanvas(this.checkColor, point);
+    }
   }
 
   onTouchEnd(e) {

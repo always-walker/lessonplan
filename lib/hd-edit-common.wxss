@@ -2,7 +2,7 @@ page{background: #eee; display: flex; flex-direction: column; align-items: cente
 form{width: calc(100% - 30px);}
 .btn-underline{margin-top: 20px; border-bottom: 1px solid #999; color: #999; line-height: 24px;} 
 .hdTitle{border-radius: 5px; width: calc(100% - 30px); margin-top: 15px; background: #fff;}
-.hdTitle text{width: 100%; text-align: center; border-bottom: 1px solid #eee; font-size: 16px; line-height: 44px;}
+.hdTitle text{width: calc(100% - 20px); padding: 0px 10px; text-align: center; border-bottom: 1px solid #eee; font-size: 16px; line-height: 44px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;}
 .hdForm{width: 100%; align-items: flex-start; font-size: 16px;}
 .hdForm input{width: calc(100% - 20px); padding: 10px; border-radius: 5px; background: #fff; margin-bottom: 10px;}
 .hdFormTextArea{border-radius: 5px; padding: 10px; width: calc(100% - 20px); background: #fff;}

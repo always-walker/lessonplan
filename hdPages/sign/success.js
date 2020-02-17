@@ -21,34 +21,38 @@ Page({
    */
   onLoad: function(options) {
     var id = options.id;
-    //签到时间
-    var date = new Date();
-    var hour = date.getHours();
-    var minute = date.getMinutes();
-    var second = date.getSeconds();
-    var curTime = [hour, minute, second].map(util.formatNumber).join(':');
-    this.setData({
-      id: id,
-      curTime: curTime
-    });
+    var obj = app.globalData.hdObj[id];
     var that = this;
+    wx.request({
+      url: 'https://signinserver.lessonplan.cn/signinResult/' + id,
+      success: function (res) {
+        var meSign = res.data['signinResultList'].find(item => {
+          return item.FK_StudentGuid == app.globalData.userGuid
+        });
+        let signTime = util.formatTime2(new Date(meSign['SubmitTime']));
+        that.setData({
+          id: id,
+          curTime: signTime
+        });
+      }
+    })
     var qqMap = new qqMapWX({
       key: 'L2XBZ-2CQRD-M2Z4C-HTN4V-QDFYK-2FB7A'
     });
     //小程序api获取当前坐标
     wx.getLocation({
-      success: function (res) {
+      success: function(res) {
         qqMap.reverseGeocoder({
           location: {
             latitude: res.latitude,
             longitude: res.longitude
           },
-          success: function (res) {
+          success: function(res) {
             that.setData({
               myLocation: res.result.address
             });
           },
-          fail: function (res) {
+          fail: function(res) {
             console.log('获取当前地址失败');
           }
         });

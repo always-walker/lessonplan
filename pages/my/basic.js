@@ -67,6 +67,8 @@ Page({
             success: function(res) {
               if (!res.data.data.HeadPhotoPath)
                 res.data.data.HeadPhotoPath = 'https://cdn.lessonplan.cn/Public/IMG/default-avatar.png';
+              if (res.data.data.HeadPhotoPath.indexOf('http') == -1)
+                res.data.data.HeadPhotoPath = 'https://static.lessonplan.cn' + res.data.data.HeadPhotoPath;
               if (!res.data.data.Msg)
                 res.data.data.Msg = '尚未签名';
               app.globalData.userInfo = res.data.data;

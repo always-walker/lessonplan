@@ -1,6 +1,6 @@
 <tabbar index="2"></tabbar>
 <navigator class="roster" url="/pages/names/info?classId={{item.PK_ClassGuid}}" open-type="navigate" wx:for="{{classList}}" wx:key="{{PK_ClassGuid}}">
-  <image class="cover" mode="scaleToFill" src="https://static.lessonplan.cn{{item.CoverUrl}}"></image>
+  <image class="cover" mode="aspectFill" src="https://static.lessonplan.cn{{item.CoverUrl}}"></image>
   <view class="roster_bottom">
     <text class="name">{{item.ClassName}}</text>
     <view class="info">

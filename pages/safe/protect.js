@@ -49,7 +49,7 @@ Page({
         success: function(res){
           wx.hideLoading();
           wx.showToast({
-            title: '密保设置修改成功',
+            title: '密保修改成功',
           });
         }
       })

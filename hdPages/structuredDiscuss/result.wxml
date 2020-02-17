@@ -7,6 +7,7 @@
   </scroll-view>
   <text class="question-title">{{questionInfo[currentIndex].name}}</text>
 </view>
+
 <block wx:if="{{showType == 1}}">
   <view style="height:100px;"></view>
   <view class="questionlist column">
@@ -26,14 +27,14 @@
   <view style="height:100px; width:100%; background:#fff"></view>
   <scroll-view scroll-left="{{scrollLeft}}" class="question-child" scroll-x="true">
     <view data-index="{{index}}" bindtap="changeChildQuestion" class="{{childIndex == index ? 'active' : ''}}" wx:for="{{answer[0].Answer}}" wx:key="index">
-      <text>{{item.q}}</text>
+      <text style="{{childIndex == index ? ('color:' + (item.c == '#FFFFFF' ? '#333': item.c)) : ''}}">{{item.q}}</text>
     </view>
   </scroll-view>
   <view class="question-list-2">
-    <view class="question-list-2-title">{{answer[0].Answer[childIndex].q}}</view>
+    <view class="question-list-2-title" style="background-color:{{answer[0].Answer[childIndex].c == '#FFFFFF' ? '#333': answer[0].Answer[childIndex].c}}">{{answer[0].Answer[childIndex].q}}</view>
     <view class="question-list-2-item-content">
       <view class="question-list-2-item" wx:for="{{answer}}" wx:key="ID">
-        <text class="question-list-2-item-name">{{item.Name}}：</text>
+        <text class="question-list-2-item-name" style="color:{{item.Answer[childIndex].c == '#FFFFFF' ? '#333': item.Answer[childIndex].c}}">{{item.Name}}：</text>
         <text class="question-list-2-item-text">{{item.Answer[childIndex].a}}</text>
       </view>
     </view>

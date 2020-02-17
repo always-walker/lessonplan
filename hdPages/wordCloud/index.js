@@ -62,7 +62,7 @@ Page({
             });
           } else {
             wx.showToast({
-              title: res.data.msg,
+              title: '提交成功',
               icon: 'none',
               duration: 1000
             });

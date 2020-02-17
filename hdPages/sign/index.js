@@ -8,53 +8,7 @@ Page({
     id: null,
     obj: null,
     width: 0,
-    leftSecond: 120,
-    leftTimeStr: '00:02:00',
-    curPassword: null,
-    myLocation: '',
-    passwords: [
-      [1, 2, 3],
-      [1, 4, 7],
-      [1, 2, 5],
-      [1, 2, 4],
-      [1, 4, 5],
-      [1, 4, 2],
-      [1, 4, 8],
-      [1, 5, 6],
-      [1, 5, 7],
-      [1, 4, 8]
-    ]
-  },
-
-  recordTime: function() {
-    var that = this;
-    var n = Math.floor(Math.random() * 10);
-    that.lock.init('#DF5B98', that.data.passwords[n]);
-    that.setData({
-      curPassword: that.data.passwords[n].join('')
-    });
-    that.intervalSet = setInterval(function() {
-      let leftSecond = that.data.leftSecond - 1;
-      if (leftSecond < 0) {
-        var n = Math.floor(Math.random() * 10);
-        that.lock.init('#DF5B98', that.data.passwords[n]);
-        that.setData({
-          leftSecond: 120,
-          leftTimeStr: '00:02:00',
-          curPassword: that.data.passwords[n].join('')
-        });
-      } else {
-        var leftTimeStr = '00:02:00';
-        if (leftSecond < 60)
-          leftTimeStr = '00:00:' + util.formatNumber(leftSecond);
-        else if (leftSecond < 120)
-          leftTimeStr = '00:01:' + util.formatNumber(leftSecond - 60);
-        that.setData({
-          leftSecond: leftSecond,
-          leftTimeStr: leftTimeStr
-        });
-      }
-    }, 1000);
+    myLocation: ''
   },
 
   onLoad: function(options) {
@@ -75,48 +29,48 @@ Page({
         for (var i = 0; i < checkPoints.length; i++) {
           passwords.push(checkPoints[i].index);
         }
-        if (that.data.curPassword == passwords.join('')) {
-          var data = {
-            'name': app.globalData.userInfo.NickName,
-            'creatorGuid': app.globalData.userGuid,
-            'verifyStatus': that.data.obj.InteractVerifyStatus
-          };
-          wx.showLoading({
-            title: '签到中...',
-          });
-          wx.request({
-            url: 'https://qrcodeserver.lessonplan.cn/' + that.data.id + '/sign',
-            data: data,
-            method: 'POST',
-            success: function(res) {
-              //socket通知后台刷新
+        //console.log(passwords);
+        var data = {
+          'signinGuid': that.data.id,
+          'studentName': app.globalData.userInfo.NickName,
+          'studentGuid': app.globalData.userGuid,
+          'gestureCode': passwords.join('')
+        };
+        wx.showLoading({
+          title: '签到中...',
+        });
+        wx.request({
+          url: 'https://signinserver.lessonplan.cn/signinResult',
+          data: data,
+          method: 'POST',
+          success: function(res) {
+            //console.log(res.data);
+            //socket通知后台刷新
+            wx.hideLoading();
+            if (res.data.status == 1) {
               app.sendSocket(that.data.id);
-              if (res.data.status == 1) {
-                wx.hideLoading();
-                wx.redirectTo({
-                  url: 'success?id=' + that.data.id,
-                });
-              } else {
-                wx.showToast({
-                  title: res.data.msg,
-                  icon: 'none',
-                  duration: 1000
-                });
-              }
+              wx.redirectTo({
+                url: 'success?id=' + that.data.id,
+              });
+            } else {
+              wx.showToast({
+                title: '手势密码输入错误',
+                icon: 'none',
+                duration: 1000
+              });
+              that.lock.gestureError();
+              setTimeout(function() {
+                that.lock.reset();
+              }, 500);
             }
-          });
-        } else {
-          that.lock.gestureError();
-          setTimeout(function() {
-            that.lock.reset();
-          }, 2000);
-        }
+          }
+        });
       }, {
         width: width,
         height: width,
 
       });
-    //this.lock.drawGestureLock();
+    this.lock.drawGestureLock();
     var qqMap = new qqMapWX({
       key: 'L2XBZ-2CQRD-M2Z4C-HTN4V-QDFYK-2FB7A'
     });
@@ -160,16 +114,7 @@ Page({
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function() {
-    wx.showLoading({
-      title: '加载中...',
-    })
-    var that = this;
-    setTimeout(function() {
-      that.recordTime();
-      wx.hideLoading();
-    }, 1000);
-  },
+  onReady: function() {},
 
   /**
    * 生命周期函数--监听页面显示
@@ -184,28 +129,20 @@ Page({
   /**
    * 生命周期函数--监听页面卸载
    */
-  onUnload: function() {
-    clearInterval(this.intervalSet);
-  },
+  onUnload: function() {},
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function() {
-
-  },
+  onPullDownRefresh: function() {},
 
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function() {
-
-  },
+  onReachBottom: function() {},
 
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function() {
-
-  }
+  onShareAppMessage: function() {}
 })

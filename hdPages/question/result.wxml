@@ -5,7 +5,7 @@
   </scroll-view>
   <text class="question-title">{{questionInfo[currentIndex].name}}</text>
 </view>
-<view style="height:90px;"></view>
+<view style="height:100px;"></view>
 <view wx:for="{{answer}}" wx:key="ID" class="result-item">
   <text class="item-name">{{item.Name}}</text>
   <image mode="widthFix" src="/images/left.svg"></image>

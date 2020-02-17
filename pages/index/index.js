@@ -54,21 +54,22 @@ Page({
     })
   },
 
-  closeSelectClass: function(){
+  closeSelectClass: function() {
     this.setData({
       isSelectClass: false
     })
   },
 
-  openSelectClass: function () {
+  openSelectClass: function() {
     this.setData({
       isSelectClass: true
     })
   },
 
-  changeClass: function(e){
+  changeClass: function(e) {
     this.setData({
       currentClassGuid: this.data.classList[e.currentTarget.dataset.index].PK_ClassGuid,
+      courseType: 1,
       isSelectClass: false
     });
     this.getClass();
@@ -79,6 +80,11 @@ Page({
     if (e.detail.value.Code == '') {
       wx.showToast({
         title: '请输入班级邀请码',
+        icon: 'none'
+      })
+    } else if (e.detail.value.Code.length < 8) {
+      wx.showToast({
+        title: '班级邀请码为8位',
         icon: 'none'
       })
     } else {
@@ -143,6 +149,9 @@ Page({
             var MyCoursewareGuidList = [];
             for (var i = 0; i < res.data.data.length; i++) {
               if (res.data.data[i].FK_AppClassGuid != '' && res.data.data[i].Style != '') {
+                //过滤老的签到
+                if (res.data.data[i].Type == 'signIn' && res.data.data[i].ClientAddress.indexOf('https://clientqrcode.lessonplan.cn') > -1)
+                  continue;
                 res.data.data[i].Style = JSON.parse(res.data.data[i].Style);
                 res.data.data[i].CreateTime = util.formatDate(new Date(res.data.data[i].CreateTime * 1000));
                 var courseItem = '"' + res.data.data[i].FK_MyCoursewareGuid + '"';
@@ -239,37 +248,57 @@ Page({
     var count = e.currentTarget.dataset.count;
     var listIndex = e.currentTarget.dataset.listindex;
     var recordItem = listIndex == 2 ? this.data.courseList2[count].records[index] : this.data.courseList[count].records[index];
-    if (recordItem.ClientAddress.indexOf('https://clientqrcode.lessonplan.cn') > -1) {
+    if (recordItem.ClientAddress.indexOf('https://clientqrcode.lessonplan.cn') > -1 || recordItem.ClientAddress.indexOf('https://clientsignin.lessonplan.cn') > -1) {
       wx.showLoading({
         title: '加载中...',
       });
+      var detailUrl = 'https://qrcodeserver.lessonplan.cn/';
+      if (recordItem['Type'] == 'signIn')
+        detailUrl = 'https://signinserver.lessonplan.cn/signin/';
       wx.request({
-        url: 'https://qrcodeserver.lessonplan.cn/' + recordItem.Guid,
+        url: detailUrl + recordItem.Guid,
         success: function(res) {
           if (res.data.status == 1) {
-            var obj = res.data.data;
+            var obj = recordItem['Type'] == 'signIn' ? res.data.signinInfo : res.data.data;
             obj['className'] = that.data.currentClassName;
             app.globalData.hdObj[recordItem.Guid] = obj;
-            var url = '/hdPages/' + obj['Type'] + '/index?id=' + recordItem.Guid;
+            var url = '/hdPages/sign/index?id=' + recordItem.Guid;
+            if (recordItem['Type'] != 'signIn')
+              url = '/hdPages/' + obj['Type'] + '/index?id=' + recordItem.Guid
             //验证是否提交过
-            wx.request({
-              url: 'https://qrcodeserver.lessonplan.cn/submitcheck',
-              data: {
-                'interactGuid': recordItem.Guid,
-                'creatorGuid': app.globalData.userGuid,
-                'type': obj.Type
-              },
-              method: 'POST',
-              success: function(res) {
-                wx.hideLoading();
-                if (res.data.status == -1) {
-                  url = '/hdPages/' + obj['Type'] + '/success?id=' + recordItem.Guid + '&status=1';
+            if (recordItem['Type'] == 'signIn') {
+              wx.request({
+                url: 'https://signinserver.lessonplan.cn/submitState?signinGuid=' + recordItem.Guid + '&studentGuid=' + app.globalData.userGuid,
+                success: function(signRes) {
+                  wx.hideLoading();
+                  if (signRes.data.status == 0) {
+                    url = '/hdPages/sign/success?id=' + recordItem.Guid + '&status=1';
+                  }
+                  wx.navigateTo({
+                    url: url,
+                  });
                 }
-                wx.navigateTo({
-                  url: url,
-                });
-              }
-            }); //检查是否已经提交过
+              });
+            } else {
+              wx.request({
+                url: 'https://qrcodeserver.lessonplan.cn/submitcheck',
+                data: {
+                  'interactGuid': recordItem.Guid,
+                  'creatorGuid': app.globalData.userGuid,
+                  'type': obj.Type
+                },
+                method: 'POST',
+                success: function(res) {
+                  wx.hideLoading();
+                  if (res.data.status == -1) {
+                    url = '/hdPages/' + obj['Type'] + '/success?id=' + recordItem.Guid + '&status=1';
+                  }
+                  wx.navigateTo({
+                    url: url,
+                  });
+                }
+              });
+            } //检查是否已经提交过
           }
         }
       });
@@ -296,7 +325,7 @@ Page({
     var that = this;
     wx.request({
       url: 'https://clientaccountserver.lessonplan.cn/user/joined/' + app.globalData.userGuid,
-      success: function (res) {
+      success: function(res) {
         var hasClass = res.data.data.length > 0 ? true : false;
         that.setData({
           hasClass: hasClass
@@ -308,7 +337,7 @@ Page({
           }
           wx.request({
             url: 'https://rosterserver.lessonplan.cn/class/private?classListString=' + classListString.join(','),
-            success: function (res2) {
+            success: function(res2) {
               let classList = res2.data.data;
               let currentClassName = null;
               let currentClassGuid = null;
@@ -340,6 +369,13 @@ Page({
     });
   },
 
+  checkInfo() {
+    if (app.globalData.userInfo && app.globalData.userInfo.Msg && app.globalData.userInfo.NickName && app.globalData.userInfo.School && app.globalData.userInfo.StudentID && app.globalData.userInfo.Major && app.globalData.userInfo.AdministrativeClass && app.globalData.userInfo.Phone && app.globalData.userInfo.Email && app.globalData.userInfo.Msg != '' && app.globalData.userInfo.NickName != '' && app.globalData.userInfo.School != '' && app.globalData.userInfo.StudentID != '' && app.globalData.userInfo.Major != '' && app.globalData.userInfo.AdministrativeClass != '' && app.globalData.userInfo.Phone != '' && app.globalData.userInfo.Email != '')
+      return true;
+    else
+      return false;
+  },
+
   /**
    * 生命周期函数--监听页面加载
    */
@@ -350,9 +386,7 @@ Page({
       });
       return;
     }
-    var isInfo = false;
-    if (app.globalData.userInfo && app.globalData.userInfo.Msg && app.globalData.userInfo.Msg != '尚未签名')
-      isInfo = true;
+    var isInfo = this.checkInfo();
     this.setData({
       isInfo: isInfo,
       scrollHeight: wx.getSystemInfoSync().windowHeight - 110
@@ -375,9 +409,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function() {
-    var isInfo = false;
-    if (app.globalData.userInfo && app.globalData.userInfo.Msg && app.globalData.userInfo.Msg != '尚未签名')
-      isInfo = true;
+    var isInfo = this.checkInfo();
     this.setData({
       isInfo: isInfo
     });

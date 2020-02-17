@@ -20,16 +20,16 @@
     <text class="item-no">{{item.studentNo}}</text>
     <text class="item-name">{{item.NickName}}</text>
     <view class="item-status">
-      <image src="/images/time-zs-{{item.isSign == true ? 'on' : 'off'}}.svg" mode="widthFix"></image>
+      <image src="/images/time-zs-{{item.state == 'ontime' ? 'on' : 'off'}}.svg" mode="widthFix"></image>
     </view>
     <view class="item-status">
-      <image src="/images/time-cd-off.svg" mode="widthFix"></image>
+      <image src="/images/time-cd-{{item.state == 'late' ? 'on' : 'off'}}.svg" mode="widthFix"></image>
     </view>
     <view class="item-status">
-      <image src="/images/time-qx-{{item.isSign == true ? 'off' : 'on'}}.svg" mode="widthFix"></image>
+      <image src="/images/time-qx-{{item.state == 'absent' ? 'on' : 'off'}}.svg" mode="widthFix"></image>
     </view>
     <view class="item-status">
-      <image src="/images/time-qj-off.svg" mode="widthFix"></image>
+      <image src="/images/time-qj-{{item.state == 'leave' ? 'on' : 'off'}}.svg" mode="widthFix"></image>
     </view>
   </view>
 </view>

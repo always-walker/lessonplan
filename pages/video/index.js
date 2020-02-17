@@ -14,8 +14,11 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function() {
+    var videoObj = app.globalData.videoObj;
+    if (!videoObj.Recommend)
+      videoObj.Recommend ='暂无微课介绍';
     this.setData({
-      videoObj: app.globalData.videoObj
+      videoObj: videoObj
     });
   },
 

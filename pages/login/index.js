@@ -15,7 +15,6 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-
   },
 
   getInfo: function() {
@@ -24,17 +23,20 @@ Page({
       success: function(res) {
         if (!res.data.data.HeadPhotoPath)
           res.data.data.HeadPhotoPath = 'https://cdn.lessonplan.cn/Public/IMG/default-avatar.png';
-        if (!res.data.data.Msg)
-          res.data.data.Msg = '尚未签名';
+        
+        if (res.data.data.HeadPhotoPath.indexOf('http') == -1)
+          res.data.data.HeadPhotoPath = 'https://static.lessonplan.cn' + res.data.data.HeadPhotoPath;
+        //if (!res.data.data.Msg)
+        //  res.data.data.Msg = '尚未签名';
         app.globalData.userInfo = res.data.data;
-        wx.setStorage({
+        /*wx.setStorage({
           key: 'userInfo',
           data: res.data.data
         });
         wx.setStorage({
           key: 'token',
           data: app.globalData.token
-        });
+        });*/
         wx.hideLoading();
         wx.reLaunch({
           url: '/pages/index/index',

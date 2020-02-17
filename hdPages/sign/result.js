@@ -29,35 +29,38 @@ Page({
       title: '加载中...',
     });
     wx.request({
-      url: 'https://qrcodeserver.lessonplan.cn/' + that.data.id + '/sign',
+      url: 'https://signinserver.lessonplan.cn/signinResult/' + that.data.id,
       success: function(res) {
-        var signInfo = res.data.signInfo;
+        var signInfo = res.data.signinResultList;
         wx.request({
-          url: 'https://clientaccountserver.lessonplan.cn/user/studentlist/letter/' + res.data.interactInfo.FK_ClassGuid,
+          url: 'https://clientaccountserver.lessonplan.cn/user/studentlist/letter/' + res.data.signinInfo.FK_ClassGuid,
           success: function(res2) {
             wx.hideLoading();
             var studentList = res2.data.data;
-            var signCount = 0;
-            var noSignCount = 0;
+            var stat = [0, 0, 0, 0];
             for (var i = 0; i < studentList.length; i++) {
-              var isSign = false;
               for (var j = 0; j < signInfo.length; j++) {
-                if (studentList[i].PK_UserGuid == signInfo[j].FK_CreatorGuid) {
-                  isSign = true;
+                if (studentList[i].PK_UserGuid == signInfo[j].FK_StudentGuid) {
+                  studentList[i]['state'] = signInfo[j]['SigninState'];
                   break;
                 }
               }
               var studentNo = (i + 1).toString();
-              studentList[i]['isSign'] = isSign;
               studentList[i]['studentNo'] = studentNo[1] ? studentNo : '0' + studentNo;
-              if (isSign)
-                signCount++;
-              else
-                noSignCount++;
+              if (!studentList[i]['state']) {
+                studentList[i]['state'] = 'absent';
+                stat[2] = stat[2] + 1;
+              }
+              else if (studentList[i]['state'] == 'ontime')
+                stat[0] = stat[0] + 1;
+              else if (studentList[i]['state'] == 'late')
+                stat[1] = stat[1] + 1;
+              else if (studentList[i]['state'] == 'leave')
+                stat[3] = stat[3] + 1;
             }
             that.setData({
               studentList: studentList,
-              stat: [signCount, 0, noSignCount, 0]
+              stat: stat
             });
           }
         });

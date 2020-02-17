@@ -26,7 +26,13 @@ Component({
    * 组件的方法列表
    */
   methods: {
-    interaction: function(e) {
+    interaction: function (e){
+      wx.switchTab({ url: '/pages/index/index' })
+    },
+    my: function (e) {
+      wx.switchTab({ url: '/pages/my/index' })
+    },
+    interaction1: function(e) {
       if (this.data.index != 1) {
         let pages = getCurrentPages().reverse();
         let myIndex = 0;
@@ -45,7 +51,7 @@ Component({
         }
       }
     },
-    my: function(e) {
+    my1: function(e) {
       if (this.data.index != 4) {
         let pages = getCurrentPages().reverse();
         let myIndex = 0;

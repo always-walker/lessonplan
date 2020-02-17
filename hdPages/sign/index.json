@@ -2,5 +2,6 @@
   "usingComponents": {
     "tabbar": "/utils/tabbar/tabbar"
   },
-  "navigationBarTitleText": "扫码互动"
+  "navigationBarTitleText": "扫码互动",
+  "disableScroll": true
 }
