@@ -97,38 +97,57 @@ Page({
         });
         var fsize = res.tempFiles[0].size;
         var fileName = res.tempFiles[0].path.substring(res.tempFiles[0].path.lastIndexOf('/') + 1);
-        var upKey = 'IMG/QRCode/' + that.data.obj.CreatorGuid + '/' + that.data.id + '/' + fileName;
-        wx.request({
-          url: 'https://templateserver.lessonplan.cn/myorderform/havespace?FK_UserGuid=' + that.data.obj.CreatorGuid + '&Fsize=' + fsize,
-          success: function(tk) {
-            if (tk.data.code == 1) {
-              qiniuUploader.upload(res.tempFilePaths[0], res2 => {
-                wx.hideLoading();
-                that.setData({
-                  //注意这中间有个"/"在这上面耽误了半个小时
-                  imageUrl: res2.imageURL
-                })
-              }, (error) => {
-                console.log('error' + error)
-              }, {
-                //这里是你所在大区的地址
-                region: 'SCN',
-                uploadURL: 'https://upload-z2.qiniup.com/',
-                domain: 'https://img.lessonplan.cn/',
-                key: upKey,
-                uptoken: tk.data.token,
-              }, (resJd) => {
-                //这里是上传进度
-                console.log('进度');
-              }) //上传七牛
-            } //成功获取token
+        //----------------------------------------------
+        //----------------------------------------------
+        wx.uploadFile({
+          url: 'https://thousanddaysupserver.lessonplan.cn/lessonplay/imgSecCheck',
+          filePath: res.tempFiles[0].path,
+          name: 'file',
+          success: function(verfyRes) {
+            console.log(verfyRes);
+            if (verfyRes.data.status == 1) {
+              //图片验证成功
+              var upKey = 'IMG/QRCode/' + that.data.obj.CreatorGuid + '/' + that.data.id + '/' + fileName;
+              wx.request({
+                url: 'https://templateserver.lessonplan.cn/myorderform/havespace?FK_UserGuid=' + that.data.obj.CreatorGuid + '&Fsize=' + fsize,
+                success: function(tk) {
+                  if (tk.data.code == 1) {
+                    qiniuUploader.upload(res.tempFilePaths[0], res2 => {
+                      wx.hideLoading();
+                      that.setData({
+                        //注意这中间有个"/"在这上面耽误了半个小时
+                        imageUrl: res2.imageURL
+                      })
+                    }, (error) => {
+                      console.log('error' + error)
+                    }, {
+                      //这里是你所在大区的地址
+                      region: 'SCN',
+                      uploadURL: 'https://upload-z2.qiniup.com/',
+                      domain: 'https://img.lessonplan.cn/',
+                      key: upKey,
+                      uptoken: tk.data.token,
+                    }, (resJd) => {
+                      //这里是上传进度
+                      console.log('进度');
+                    }) //上传七牛
+                  } //成功获取token
+                }
+              }); //请求七牛凭证完毕
+            } else {
+              wx.showToast({
+                title: '图片验证失败',
+              })
+            }
           }
-        }); //请求七牛凭证完毕
+        })
+        //----------------------------------------------
+        //----------------------------------------------
       },
     })
   },
 
-  goResult: function(){
+  goResult: function() {
     wx.navigateTo({
       url: 'result?id=' + this.data.id,
     })

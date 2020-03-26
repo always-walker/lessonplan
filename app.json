@@ -40,7 +40,7 @@
     "pages/register/index",
     "pages/password/find",
     "pages/password/reset",
-    "pages/cavas/index",
+    "pages/test/index",
     "pages/logs/logs"
   ],
   "tabBar": {

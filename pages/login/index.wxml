@@ -7,7 +7,8 @@
     <input name="username" class="input" type="text" placeholder="请输入手机号码 / 邮箱"></input>
     <input name="password" class="input" type="text" password="true" placeholder="请输入密码"></input>
     <button form-type="submit" class="button1">登录</button>
-    <button class="button2" bindtap="welogin">微信登录</button>
+    <button wx:if="{{canIUse}}" class="button2" open-type="getUserInfo" bindgetuserinfo="welogin">微信登录</button>
+    <button wx:if="{{!canIUse}}" class="button2" open-type="getUserInfo" bindtap="welogin2">微信登录</button>
     <view class="other">
       <navigator class="a" url="/pages/register/index">去注册</navigator>
       <navigator class="a" url="/pages/password/find">忘记密码</navigator>

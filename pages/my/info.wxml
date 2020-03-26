@@ -2,8 +2,8 @@
 <view class="header">
   <image mode="scaleToFill" src="{{userInfo.HeadPhotoPath}}"></image>
   <view>
-    <text class="header_name">{{userInfo.NickName}}</text>
-    <text class="header_desc">{{userInfo.Msg}}</text>
+    <text class="header_name">{{userInfo.NickName ? userInfo.NickName : '尚未填写'}}</text>
+    <text class="header_desc">{{userInfo.Msg ? userInfo.Msg : '尚未签名'}}</text>
   </view>
 </view>
 <view class="line"></view>

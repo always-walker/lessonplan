@@ -1,1 +1,0 @@
-<canvas style="width:{{width}}px; height:{{width}}px; margin:20px 15px 0px 10px;" canvas-id="id-gesture-lock" class="gesture-lock" bindtouchstart="onTouchStart" bindtouchmove="onTouchMove" bindtouchend="onTouchEnd"></canvas>

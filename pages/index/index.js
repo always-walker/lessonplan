@@ -1,5 +1,6 @@
 // pages/interaction/index.js
 const util = require('../../utils/util.js')
+const http = require('../../utils/http.js')
 const app = getApp()
 
 Page({
@@ -88,158 +89,127 @@ Page({
         icon: 'none'
       })
     } else {
-      wx.showLoading({
-        title: '加载中...',
-      });
-      wx.request({
-        url: 'https://codeserver.lessonplan.cn/api/search?text=' + e.detail.value.Code,
-        success: function(res) {
-          if (res.data.status == 1) {
-            wx.hideLoading();
-            wx.redirectTo({
-              url: '/pages/names/join?classId=' + res.data.data.FK_ClassGuid,
-            });
-            // wx.request({
-            //   url: 'https://rosterserver.lessonplan.cn/class/join2',
-            //   method: 'POST',
-            //   data: {
-            //     FK_UserGuid: app.globalData.userGuid,
-            //     FK_ClassGuid: res.data.data.FK_ClassGuid
-            //   },
-            //   success: function(res2) {
-            //     wx.hideLoading();
-            //     if (res2.data.status == 1) {
-            //       that.setData({
-            //         condition: false,
-            //         hasClass: true,
-            //         currentClassGuid: res.data.data.FK_ClassGuid
-            //       });
-            //       that.getClass();
-            //     } else if (res2.data.status == 0) {
-            //       that.setData({
-            //         condition: false,
-            //         hasClass: true,
-            //         currentClassGuid: res.data.data.FK_ClassGuid
-            //       });
-            //       that.getClass();
-            //     }
-            //   }
-            // })
-          } else {
-            wx.hideLoading();
-            wx.showToast({
-              title: res.data.err,
-              icon: 'none'
-            })
-          }
+      http.request({
+        url: 'https://codeserver.lessonplan.cn/api/search?text=' + e.detail.value.Code
+      }).then(function(res) {
+        if (res.data.status == 1) {
+          wx.redirectTo({
+            url: '/pages/names/join?classId=' + res.data.data.FK_ClassGuid,
+          });
+        } else {
+          wx.showToast({
+            title: res.data.err,
+            icon: 'none'
+          })
         }
-      })
+      });
     }
   },
 
   getRecord: function() {
     var that = this;
-    wx.request({
-      url: 'https://codeserver.lessonplan.cn/api/record/' + that.data.currentClassGuid,
-      success: function(res) {
-        wx.request({
-          url: 'https://templateserver.lessonplan.cn/MyPacket/substance/' + that.data.currentClassGuid,
-          success: function(res3) {
-            var records = [];
-            var MyCoursewareGuidList = [];
-            for (var i = 0; i < res.data.data.length; i++) {
-              if (res.data.data[i].FK_AppClassGuid != '' && res.data.data[i].Style != '') {
-                //过滤老的签到
-                if (res.data.data[i].Type == 'signIn' && res.data.data[i].ClientAddress.indexOf('https://clientqrcode.lessonplan.cn') > -1)
-                  continue;
-                res.data.data[i].Style = JSON.parse(res.data.data[i].Style);
-                res.data.data[i].CreateTime = util.formatDate(new Date(res.data.data[i].CreateTime * 1000));
-                var courseItem = '"' + res.data.data[i].FK_MyCoursewareGuid + '"';
-                res.data.data[i]['itemName'] = res.data.data[i].Style.typeName
-                if (res.data.data[i].Title)
-                  res.data.data[i]['itemName'] += '-' + res.data.data[i].Title;
-                if (res.data.data[i].PageNumber)
-                  res.data.data[i]['itemName'] += '-P' + res.data.data[i].PageNumber.toString();
-                records.push(res.data.data[i]);
-                if (res.data.data[i].FK_MyCoursewareGuid && MyCoursewareGuidList.indexOf(courseItem) == -1)
-                  MyCoursewareGuidList.push(courseItem);
+    let resCords = null;
+    http.request({
+      url: 'https://codeserver.lessonplan.cn/api/record/' + that.data.currentClassGuid
+    }).then(function(res) {
+      resCords = res.data.data;
+      return http.request({
+        url: 'https://templateserver.lessonplan.cn/MyPacket/substance/' + that.data.currentClassGuid
+      });
+    }).then(function(res3) {
+      var records = [];
+      var MyCoursewareGuidList = [];
+      for (var i = 0; i < resCords.length; i++) {
+        if (resCords[i].FK_AppClassGuid != '' && resCords[i].Style != '') {
+          //过滤老的签到
+          if (resCords[i].Type == 'signIn' && resCords[i].ClientAddress.indexOf('https://clientqrcode.lessonplan.cn') > -1)
+            continue;
+          resCords[i].Style = JSON.parse(resCords[i].Style);
+          resCords[i].CreateTime = util.formatDate(new Date(resCords[i].CreateTime * 1000));
+          var courseItem = '"' + resCords[i].FK_MyCoursewareGuid + '"';
+          resCords[i]['itemName'] = '';
+          if (resCords[i].PageNumber)
+            resCords[i]['itemName'] += 'P' + resCords[i].PageNumber.toString();
+          if (resCords[i].Style.typeName)
+            resCords[i]['itemName'] += '[' + resCords[i].Style.typeName.replace('扫码互动-', '') + ']';
+          if (resCords[i].Title)
+            resCords[i]['itemName'] += resCords[i].Title;
+          else
+            resCords[i]['itemName'] += '未命名';
+          records.push(resCords[i]);
+          if (resCords[i].FK_MyCoursewareGuid && MyCoursewareGuidList.indexOf(courseItem) == -1)
+            MyCoursewareGuidList.push(courseItem);
+        }
+      }
+      records.sort(util.compare('PageNumber'));
+      if (MyCoursewareGuidList.length > 0) {
+        var MyCoursewareGuidListString = MyCoursewareGuidList.join(',');
+        http.request({
+          url: 'https://templateserver.lessonplan.cn/MyCourseware/MyCoursewareByGuidList',
+          data: {
+            'MyCoursewareGuidList': MyCoursewareGuidListString
+          }
+        }).then(function(res2) {
+          var courseList = res2.data.data;
+          var pushCount = 0;
+          var pushCount2 = 0;
+          for (var n = 0; n < courseList.length; n++) {
+            courseList[n]['records'] = [];
+            for (var m = 0; m < records.length; m++) {
+              if (courseList[n].PK_MyCoursewareGuid == records[m].FK_MyCoursewareGuid) {
+                courseList[n]['records'].push(records[m]);
+                pushCount++;
               }
-            }
-            records.sort(util.compare('PageNumber'));
-            if (MyCoursewareGuidList.length > 0) {
-              var MyCoursewareGuidListString = MyCoursewareGuidList.join(',');
-              wx.request({
-                url: 'https://templateserver.lessonplan.cn/MyCourseware/MyCoursewareByGuidList',
-                data: {
-                  'MyCoursewareGuidList': MyCoursewareGuidListString
-                },
-                success: function(res2) {
-                  wx.hideLoading();
-                  var courseList = res2.data.data;
-                  var pushCount = 0;
-                  var pushCount2 = 0;
-                  for (var n = 0; n < courseList.length; n++) {
-                    courseList[n]['records'] = [];
-                    for (var m = 0; m < records.length; m++) {
-                      if (courseList[n].PK_MyCoursewareGuid == records[m].FK_MyCoursewareGuid) {
-                        courseList[n]['records'].push(records[m]);
-                        pushCount++;
-                      }
-                    }
-                  }
-                  var elseRecord = [];
-                  for (var m = 0; m < records.length; m++) {
-                    if (!records[m].FK_MyCoursewareGuid) {
-                      elseRecord.push(records[m]);
-                      pushCount2++;
-                    }
-                  }
-                  var courseList2 = [];
-                  if (elseRecord.length > 0) {
-                    courseList2.push({
-                      'PK_MyCoursewareGuid': '0',
-                      'Title': '其它推送',
-                      'records': elseRecord
-                    });
-                  }
-                  that.setData({
-                    courseList: courseList,
-                    courseList2: courseList2,
-                    pushCount: pushCount,
-                    pushCount2: pushCount2,
-                    weCourseList: res3.data.data
-                  });
-                }
-              }) //请求3结束
-            } else {
-              wx.hideLoading();
-              var elseRecord = [];
-              var pushCount2 = 0;
-              for (var m = 0; m < records.length; m++) {
-                if (!records[m].FK_MyCoursewareGuid) {
-                  elseRecord.push(records[m]);
-                  pushCount2++;
-                }
-              }
-              var courseList2 = [];
-              if (elseRecord.length > 0) {
-                courseList2.push({
-                  'PK_MyCoursewareGuid': '0',
-                  'Title': '其它推送',
-                  'records': elseRecord
-                });
-              }
-              that.setData({
-                courseList2: courseList2,
-                pushCount2: pushCount2,
-                courseType: 2,
-                weCourseList: res3.data.data
-              });
             }
           }
-        }) //请求2结束
+          var elseRecord = [];
+          for (var m = 0; m < records.length; m++) {
+            if (!records[m].FK_MyCoursewareGuid) {
+              elseRecord.push(records[m]);
+              pushCount2++;
+            }
+          }
+          var courseList2 = [];
+          if (elseRecord.length > 0) {
+            courseList2.push({
+              'PK_MyCoursewareGuid': '0',
+              'Title': '其它推送',
+              'records': elseRecord
+            });
+          }
+          that.setData({
+            courseList: courseList,
+            courseList2: courseList2,
+            pushCount: pushCount,
+            pushCount2: pushCount2,
+            weCourseList: res3.data.data
+          });
+        });
+      } else {
+        var elseRecord = [];
+        var pushCount2 = 0;
+        for (var m = 0; m < records.length; m++) {
+          if (!records[m].FK_MyCoursewareGuid) {
+            elseRecord.push(records[m]);
+            pushCount2++;
+          }
+        }
+        var courseList2 = [];
+        if (elseRecord.length > 0) {
+          courseList2.push({
+            'PK_MyCoursewareGuid': '0',
+            'Title': '其它推送',
+            'records': elseRecord
+          });
+        }
+        that.setData({
+          courseList2: courseList2,
+          pushCount2: pushCount2,
+          courseType: 2,
+          weCourseList: res3.data.data
+        });
       }
-    }) //请求1结束
+    });
   },
 
   goApp: function(e) {
@@ -319,52 +289,41 @@ Page({
   },
 
   getClass: function() {
-    wx.showLoading({
-      title: '加载中...',
-    });
     var that = this;
-    wx.request({
-      url: 'https://clientaccountserver.lessonplan.cn/user/joined/' + app.globalData.userGuid,
-      success: function(res) {
-        var hasClass = res.data.data.length > 0 ? true : false;
-        that.setData({
-          hasClass: hasClass
-        });
-        if (hasClass) {
-          var classListString = [];
-          for (var i = 0; i < res.data.data.length; i++) {
-            classListString.push('"' + res.data.data[i].FK_ClassGuid + '"');
-          }
-          wx.request({
-            url: 'https://rosterserver.lessonplan.cn/class/private?classListString=' + classListString.join(','),
-            success: function(res2) {
-              let classList = res2.data.data;
-              let currentClassName = null;
-              let currentClassGuid = null;
-              if (that.data.currentClassGuid) {
-                for (let k = 0; k < classList.length; k++) {
-                  if (classList[k].PK_ClassGuid == that.data.currentClassGuid) {
-                    currentClassName = classList[k].ClassName;
-                    currentClassGuid = classList[k].PK_ClassGuid;
-                    break;
-                  }
-                }
-              }
-              if (!currentClassGuid) {
-                currentClassName = classList[0].ClassName;
-                currentClassGuid = classList[0].PK_ClassGuid;
-              }
-              that.setData({
-                classList: res2.data.data,
-                currentClassName: currentClassName,
-                currentClassGuid: currentClassGuid
-              });
-              that.getRecord();
-            }
-          })
-        } else {
-          wx.hideLoading();
+    http.request({
+      url: 'https://clientaccountserver.lessonplan.cn/user/joined/' + app.globalData.userGuid
+    }).then(function(res) {
+      var hasClass = res.data.data.length > 0 ? true : false;
+      that.setData({
+        hasClass: hasClass
+      });
+      if (hasClass) {
+        var classListString = [];
+        for (var i = 0; i < res.data.data.length; i++) {
+          classListString.push('"' + res.data.data[i].FK_ClassGuid + '"');
         }
+        http.request({ url: 'https://rosterserver.lessonplan.cn/class/private?classListString=' + classListString.join(',')}).then(function(res2){
+          let classList = res2.data.data;
+          let currentClassName = null;
+          let currentClassGuid = null;
+          if (that.data.currentClassGuid) {
+            let currentClass = classList.find(item => { return item.PK_ClassGuid == that.data.currentClassGuid});
+            if (currentClass){
+              currentClassName = currentClass.ClassName;
+              currentClassGuid = currentClass.PK_ClassGuid;
+            }
+          }
+          if (!currentClassGuid) {
+            currentClassName = classList[0].ClassName;
+            currentClassGuid = classList[0].PK_ClassGuid;
+          }
+          that.setData({
+            classList: res2.data.data,
+            currentClassName: currentClassName,
+            currentClassGuid: currentClassGuid
+          });
+          that.getRecord();
+        });
       }
     });
   },

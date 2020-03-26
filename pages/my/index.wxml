@@ -1,8 +1,8 @@
-<tabbar index="4"></tabbar>
+<tabbar index="4" back="0"></tabbar>
 <view class="header">
   <image mode="scaleToFill" src="{{userInfo.HeadPhotoPath}}"></image>
-  <text class="header_name">{{userInfo.NickName}}</text>
-  <text class="header_desc">{{userInfo.Msg}}</text>
+  <text class="header_name">{{userInfo.NickName ? userInfo.NickName : '尚未填写'}}</text>
+  <text class="header_desc">{{userInfo.Msg ? userInfo.Msg : '尚未签名'}}</text>
 </view>
 <view class="line"></view>
 <navigator class="menu_item" url="/pages/my/info" open-type="navigate">
@@ -14,7 +14,3 @@
   <image mode="widthFix" src="/images/right.svg"></image>
 </navigator>
 <button class="logoutbuttom" bindtap="loginout" size="default">退出登录</button>
-<!-- <view class="menu_item" bindtap="loginout">
-  <text>退出登录</text>
-  <image mode="widthFix" src="/images/right.svg"></image>
-</view> -->
