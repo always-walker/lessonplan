@@ -1,4 +1,4 @@
-<tabbar index="5" back="1"></tabbar>
+<tabbar index="5" back="1" isinfo="{{isInfo}}"></tabbar>
 <view class="container">
   <view class="row word-title">
     <text>排名</text>

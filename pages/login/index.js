@@ -1,6 +1,6 @@
 // pages/login/index.js
-
 const app = getApp()
+const http = require('../../utils/http.js')
 
 Page({
 
@@ -15,34 +15,32 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-
+    if (!app.globalData.code) {
+      wx.login({
+        success: res => {
+          // 发送 res.code 到后台换取 openId, sessionKey, unionId
+          if (res.errMsg == "login:ok") {
+            app.globalData.code = res.code;
+          }
+        }
+      });
+    }
   },
 
   getInfo: function() {
-    wx.request({
-      url: 'https://clientaccountserver.lessonplan.cn/user/usermsg/' + app.globalData.userGuid,
-      success: function(res) {
-        if (!res.data.data.HeadPhotoPath)
-          res.data.data.HeadPhotoPath = 'https://cdn.lessonplan.cn/Public/IMG/default-avatar.png';
-        if (res.data.data.HeadPhotoPath.indexOf('http') == -1)
-          res.data.data.HeadPhotoPath = 'https://static.lessonplan.cn' + res.data.data.HeadPhotoPath;
-        //if (!res.data.data.Msg)
-        //  res.data.data.Msg = '尚未签名';
-        app.globalData.userInfo = res.data.data;
-        /*wx.setStorage({
-          key: 'userInfo',
-          data: res.data.data
-        });
-        wx.setStorage({
-          key: 'token',
-          data: app.globalData.token
-        });*/
-        wx.hideLoading();
-        wx.reLaunch({
-          url: '/pages/index/index',
-        });
-      }
-    })
+    http.request({
+      url: 'https://clientaccountserver.lessonplan.cn/user/usermsg/' + app.globalData.userGuid
+    }).then(function(res) {
+      if (!res.data.data.HeadPhotoPath)
+        res.data.data.HeadPhotoPath = 'https://cdn.lessonplan.cn/Public/IMG/default-avatar.png';
+      if (res.data.data.HeadPhotoPath.indexOf('http') == -1)
+        res.data.data.HeadPhotoPath = 'https://static.lessonplan.cn' + res.data.data.HeadPhotoPath;
+      app.globalData.userInfo = res.data.data;
+      wx.hideLoading();
+      wx.reLaunch({
+        url: '/pages/index/index',
+      });
+    });
   },
 
   infoLogin(userInfo) {
@@ -50,7 +48,7 @@ Page({
     if (!userInfo.encryptedData) {
       that.qzWeLogin();
     } else {
-      wx.request({
+      http.request({
         method: 'post',
         url: 'https://clientpassport.lessonplan.cn/wx/wxapp',
         data: {
@@ -59,39 +57,22 @@ Page({
           iv: userInfo.iv,
           nickname: userInfo.userInfo.nickName,
           headimgurl: userInfo.userInfo.avatarUrl
-        },
-        success: function(res2) {
-          app.globalData.token = res2.data.token
-          app.globalData.userGuid = res2.data.userGuid;
-          that.getInfo();
-        },
-        fail: function(){
-          wx.showToast({
-            title: '登录失败，请稍后再试',
-            icon: 'none',
-            duration: 1000
-          })
-        },
-        complete: function(){
-          app.globalData.code = null;
         }
-      })
+      }).then(function(res) {
+        app.globalData.code = null;
+        app.globalData.token = res.data.token
+        app.globalData.userGuid = res.data.userGuid;
+        that.getInfo();
+      });
     }
   },
 
   welogin: function(e) {
     var that = this;
-    wx.showLoading({
-      title: '加载中',
-    });
-    if (app.globalData.code) {
-      that.infoLogin(e.detail);
-    } else {
-      that.qzWeLogin();
-    }
+    that.infoLogin(e.detail);
   },
 
-  getUserInfo() {
+  welogin2: function() {
     var that = this;
     wx.getUserInfo({
       withCredentials: true,
@@ -110,85 +91,11 @@ Page({
       }
     });
   },
-   
-  qzWeLogin(){
-    var that = this;
-    wx.login({
-      success: res => {
-        // 发送 res.code 到后台换取 openId, sessionKey, unionId
-        if (res.errMsg == "login:ok") {
-          app.globalData.code = res.code;
-          that.getUserInfo();
-        } else {
-          wx.hideLoading()
-          wx.showToast({
-            title: '登录失败',
-            icon: 'none',
-            duration: 1000
-          })
-        }
-      }
+
+  goAccountLogin: function(){
+    wx.navigateTo({
+      url: '/pages/login/account',
     })
-  },
-
-  welogin2: function() {
-    wx.showLoading({
-      title: '加载中',
-    });
-    var that = this;
-    if (app.globalData.code) {
-      that.getUserInfo();
-    }
-    else {
-      that.qzWeLogin();
-    }
-  },
-
-  login: function(e) {
-    var that = this
-    if (e.detail.value.username == "") {
-      wx.showToast({
-        title: '请输入手机号码',
-        icon: 'none',
-        duration: 1000
-      })
-    } else if (e.detail.value.password == "") {
-      wx.showToast({
-        title: '请输入密码',
-        icon: 'none',
-        duration: 1000
-      })
-    } else {
-      wx.showLoading({
-        title: '加载中',
-      })
-      wx.request({
-        url: 'https://clientpassport.lessonplan.cn/auth',
-        data: e.detail.value,
-        success: function(res) {
-          if (res.data.status == 1) {
-            app.globalData.token = res.data.token
-            wx.request({
-              url: 'https://clientpassport.lessonplan.cn/auth/verify',
-              data: {
-                token: res.data.token
-              },
-              success: function(res2) {
-                app.globalData.userGuid = res2.data.userGuid;
-                that.getInfo();
-              }
-            })
-          } else {
-            wx.hideLoading()
-            wx.showToast({
-              title: res.data.msg,
-              icon: 'none',
-              duration: 1000
-            })
-          }
-        }
-      })
-    }
   },
 
   /**
@@ -202,7 +109,6 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function() {
-
   },
 
   /**

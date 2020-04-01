@@ -1,7 +1,8 @@
 // pages/interaction/index.js
 const util = require('../../utils/util.js')
-const http = require('../../utils/http.js')
 const app = getApp()
+const http = require('../../utils/http.js')
+const regeneratorRuntime = require('../../utils/runtime.js')
 
 Page({
 
@@ -34,12 +35,6 @@ Page({
   courseOn: function() {
     this.setData({
       courseType: 1
-    });
-  },
-
-  redirectIn: function() {
-    this.setData({
-      isInfo: true
     });
   },
 
@@ -93,7 +88,7 @@ Page({
         url: 'https://codeserver.lessonplan.cn/api/search?text=' + e.detail.value.Code
       }).then(function(res) {
         if (res.data.status == 1) {
-          wx.redirectTo({
+          wx.navigateTo({
             url: '/pages/names/join?classId=' + res.data.data.FK_ClassGuid,
           });
         } else {
@@ -106,7 +101,7 @@ Page({
     }
   },
 
-  getRecord: function() {
+  getRecord: async function() {
     var that = this;
     let resCords = null;
     http.request({
@@ -212,66 +207,55 @@ Page({
     });
   },
 
-  goApp: function(e) {
+  goApp: async function(e) {
     var that = this;
     var index = e.currentTarget.dataset.index;
     var count = e.currentTarget.dataset.count;
     var listIndex = e.currentTarget.dataset.listindex;
     var recordItem = listIndex == 2 ? this.data.courseList2[count].records[index] : this.data.courseList[count].records[index];
     if (recordItem.ClientAddress.indexOf('https://clientqrcode.lessonplan.cn') > -1 || recordItem.ClientAddress.indexOf('https://clientsignin.lessonplan.cn') > -1) {
-      wx.showLoading({
-        title: '加载中...',
-      });
       var detailUrl = 'https://qrcodeserver.lessonplan.cn/';
       if (recordItem['Type'] == 'signIn')
         detailUrl = 'https://signinserver.lessonplan.cn/signin/';
-      wx.request({
-        url: detailUrl + recordItem.Guid,
-        success: function(res) {
-          if (res.data.status == 1) {
-            var obj = recordItem['Type'] == 'signIn' ? res.data.signinInfo : res.data.data;
-            obj['className'] = that.data.currentClassName;
-            app.globalData.hdObj[recordItem.Guid] = obj;
-            var url = '/hdPages/sign/index?id=' + recordItem.Guid;
-            if (recordItem['Type'] != 'signIn')
-              url = '/hdPages/' + obj['Type'] + '/index?id=' + recordItem.Guid
-            //验证是否提交过
-            if (recordItem['Type'] == 'signIn') {
-              wx.request({
-                url: 'https://signinserver.lessonplan.cn/submitState?signinGuid=' + recordItem.Guid + '&studentGuid=' + app.globalData.userGuid,
-                success: function(signRes) {
-                  wx.hideLoading();
-                  if (signRes.data.status == 0) {
-                    url = '/hdPages/sign/success?id=' + recordItem.Guid + '&status=1';
-                  }
-                  wx.navigateTo({
-                    url: url,
-                  });
-                }
-              });
-            } else {
-              wx.request({
-                url: 'https://qrcodeserver.lessonplan.cn/submitcheck',
-                data: {
-                  'interactGuid': recordItem.Guid,
-                  'creatorGuid': app.globalData.userGuid,
-                  'type': obj.Type
-                },
-                method: 'POST',
-                success: function(res) {
-                  wx.hideLoading();
-                  if (res.data.status == -1) {
-                    url = '/hdPages/' + obj['Type'] + '/success?id=' + recordItem.Guid + '&status=1';
-                  }
-                  wx.navigateTo({
-                    url: url,
-                  });
-                }
-              });
-            } //检查是否已经提交过
-          }
-        }
+      let res = await http.request({
+        url: detailUrl + recordItem.Guid
       });
+      if (res.data.status == 1) {
+        var obj = recordItem['Type'] == 'signIn' ? res.data.signinInfo : res.data.data;
+        obj['className'] = that.data.currentClassName;
+        app.globalData.hdObj[recordItem.Guid] = obj;
+        var url = '/hdPages/sign/index?id=' + recordItem.Guid;
+        if (recordItem['Type'] != 'signIn')
+          url = '/hdPages/' + obj['Type'] + '/index?id=' + recordItem.Guid
+        //验证是否提交过
+        if (recordItem['Type'] == 'signIn') {
+          let signRes = await http.request({
+            url: 'https://signinserver.lessonplan.cn/submitState?signinGuid=' + recordItem.Guid + '&studentGuid=' + app.globalData.userGuid
+          });
+          if (signRes.data.status == 0) {
+            url = '/hdPages/sign/success?id=' + recordItem.Guid + '&status=1';
+          }
+          wx.navigateTo({
+            url: url,
+          });
+        } else {
+          let submitRes = await http.request({
+            url: 'https://qrcodeserver.lessonplan.cn/submitcheck',
+            data: {
+              'interactGuid': recordItem.Guid,
+              'creatorGuid': app.globalData.userGuid,
+              'type': obj.Type
+            },
+            method: 'POST'
+          });
+          if (submitRes.data.status == -1) {
+            url = '/hdPages/' + obj['Type'] + '/success?id=' + recordItem.Guid + '&status=1';
+          }
+          wx.navigateTo({
+            url: url,
+          });
+        } //检查是否已经提交过
+      }
     } else {
       wx.navigateTo({
         url: '/pages/index/appview?url=' + recordItem.address,
@@ -302,13 +286,17 @@ Page({
         for (var i = 0; i < res.data.data.length; i++) {
           classListString.push('"' + res.data.data[i].FK_ClassGuid + '"');
         }
-        http.request({ url: 'https://rosterserver.lessonplan.cn/class/private?classListString=' + classListString.join(',')}).then(function(res2){
+        http.request({
+          url: 'https://rosterserver.lessonplan.cn/class/private?classListString=' + classListString.join(',')
+        }).then(function(res2) {
           let classList = res2.data.data;
           let currentClassName = null;
           let currentClassGuid = null;
           if (that.data.currentClassGuid) {
-            let currentClass = classList.find(item => { return item.PK_ClassGuid == that.data.currentClassGuid});
-            if (currentClass){
+            let currentClass = classList.find(item => {
+              return item.PK_ClassGuid == that.data.currentClassGuid
+            });
+            if (currentClass) {
               currentClassName = currentClass.ClassName;
               currentClassGuid = currentClass.PK_ClassGuid;
             }
@@ -328,24 +316,12 @@ Page({
     });
   },
 
-  checkInfo() {
-    if (app.globalData.userInfo && app.globalData.userInfo.Msg && app.globalData.userInfo.NickName && app.globalData.userInfo.School && app.globalData.userInfo.StudentID && app.globalData.userInfo.Major && app.globalData.userInfo.AdministrativeClass && app.globalData.userInfo.Phone && app.globalData.userInfo.Email && app.globalData.userInfo.Msg != '' && app.globalData.userInfo.NickName != '' && app.globalData.userInfo.School != '' && app.globalData.userInfo.StudentID != '' && app.globalData.userInfo.Major != '' && app.globalData.userInfo.AdministrativeClass != '' && app.globalData.userInfo.Phone != '' && app.globalData.userInfo.Email != '')
-      return true;
-    else
-      return false;
-  },
-
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function(options) {
-    if (!app.globalData.userGuid) {
-      wx.redirectTo({
-        url: '/pages/login/index',
-      });
-      return;
-    }
-    var isInfo = this.checkInfo();
+
+  userInfoReady: function(options){
+    var isInfo = app.checkInfo();
     this.setData({
       isInfo: isInfo,
       scrollHeight: wx.getSystemInfoSync().windowHeight - 110
@@ -358,6 +334,16 @@ Page({
     }
     this.getClass();
   },
+  onLoad: function(options) {
+    var that = this;
+    if (!app.globalData.userInfo) {
+      app.userInfoReadyCallback = res => {
+        that.userInfoReady(options);
+      }
+    } else {
+      that.userInfoReady(options);
+    }
+  },
 
   /**
    * 生命周期函数--监听页面初次渲染完成
@@ -368,7 +354,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function() {
-    var isInfo = this.checkInfo();
+    var isInfo = app.checkInfo();
     this.setData({
       isInfo: isInfo
     });

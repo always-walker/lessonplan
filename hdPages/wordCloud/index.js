@@ -11,7 +11,8 @@ Page({
     obj: null,
     inputCount: 0,
     defaultText: '',
-    maxInputCount: 12
+    maxInputCount: 12,
+    isInfo: true
   },
 
   /**
@@ -19,10 +20,12 @@ Page({
    */
   onLoad: function(options) {
     var id = options.id;
+    var isInfo = app.checkInfo();
     var obj = app.globalData.hdObj[id];
     this.setData({
       id: id,
       obj: obj,
+      isInfo: isInfo
     });
   },
 

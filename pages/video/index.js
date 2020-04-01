@@ -7,18 +7,21 @@ Page({
    * 页面的初始数据
    */
   data: {
-    videoObj: null
+    videoObj: null,
+    isInfo: false
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function() {
+    var isInfo = app.checkInfo();
     var videoObj = app.globalData.videoObj;
     if (!videoObj.Recommend)
       videoObj.Recommend ='暂无微课介绍';
     this.setData({
-      videoObj: videoObj
+      videoObj: videoObj,
+      isInfo: isInfo
     });
   },
 

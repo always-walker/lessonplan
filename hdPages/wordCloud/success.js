@@ -10,7 +10,8 @@ Page({
   data: {
     id: null,
     tipText: '提交成功',
-    allowResubmission: null
+    allowResubmission: null,
+    isInfo: true
   },
 
   /**
@@ -19,6 +20,7 @@ Page({
   onLoad: function(options) {
     var id = options.id;
     var obj = app.globalData.hdObj[id];
+    var isInfo = app.checkInfo();
     var tipText = '提交成功';
     if (options.status && options.status == 1) {
       tipText = '您已经提交'
@@ -26,7 +28,8 @@ Page({
     this.setData({
       id: id,
       tipText: tipText,
-      allowResubmission: obj.AllowResubmission
+      allowResubmission: obj.AllowResubmission,
+      isInfo: isInfo
     });
   },
 

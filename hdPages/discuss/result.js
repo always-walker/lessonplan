@@ -11,7 +11,8 @@ Page({
     id: null,
     showType: 2,
     discussInfo: null,
-    images: null
+    images: null,
+    isInfo: true
   },
 
   /**
@@ -19,8 +20,10 @@ Page({
    */
   onLoad: function (options) {
     var id = options.id;
+    var isInfo = app.checkInfo();
     this.setData({
-      id: id
+      id: id,
+      isInfo: isInfo
     });
     this.getResult();
   },

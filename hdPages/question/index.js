@@ -12,7 +12,8 @@ Page({
     obj: null,
     defaultText: '',
     maxInputCount: 800,
-    questionList: []
+    questionList: [],
+    isInfo: true
   },
 
   /**
@@ -22,6 +23,7 @@ Page({
     var that = this;
     var id = options.id;
     var obj = app.globalData.hdObj[id];
+    var isInfo = app.checkInfo();
     wx.request({
       url: 'https://qrcodeserver.lessonplan.cn/' + id + '/question',
       success: function(res) {
@@ -32,7 +34,8 @@ Page({
         that.setData({
           id: id,
           obj: obj,
-          questionList: questionList
+          questionList: questionList,
+          isInfo: isInfo
         });
       }
     })

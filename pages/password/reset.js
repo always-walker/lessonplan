@@ -15,12 +15,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-    if (!app.globalData.isFindPasswordVerfy) {
-      wx.redirectTo({
-        url: '/pages/login/index',
-      });
-      return;
-    }
+    app.checkLogin();
   },
 
   resetPassword: function(e) {
@@ -59,8 +54,8 @@ Page({
           wx.showToast({
             title: '密码重置成功',
           });
-          wx.redirectTo({
-            url: '/pages/login/index',
+          wx.navigateBack({
+            delta: 2
           })
         }
       })

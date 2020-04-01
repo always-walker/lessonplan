@@ -1,0 +1,7 @@
+@import "/lib/no-login-common.wxss";
+.container input{text-align: center; border-radius: 20px;}
+.container button{border-radius: 20px; height: 40px; line-height: 40px;}
+.mt-logo{margin-top: -20px;}
+.other{display: flex; flex-direction: row; width:66%;  padding: 14px 0px; font-size: 15px; justify-content: space-between;}
+.other view{display: inline-flex}
+.other navigator{color: #666; margin-left: 5px; text-decoration: underline;}

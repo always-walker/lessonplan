@@ -1,4 +1,4 @@
-<tabbar index="5" back="1"></tabbar>
+<tabbar index="5" back="1" isinfo="{{isInfo}}"></tabbar>
 <block wx:if="{{showType == 1}}">
   <view class="container">
     <view class="result-item" wx:for="{{discussInfo}}" wx:key="ID">

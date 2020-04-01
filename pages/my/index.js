@@ -8,21 +8,19 @@ Page({
    * 页面的初始数据
    */
   data: {
-    userInfo: null
+    userInfo: null,
+    isInfo: false
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-    if (!app.globalData.userGuid) {
-      wx.redirectTo({
-        url: '/pages/login/index',
-      });
-      return;
-    }
+    app.checkLogin();
+    var isInfo = app.checkInfo();
     this.setData({
-      userInfo: app.globalData.userInfo
+      userInfo: app.globalData.userInfo,
+      isInfo: isInfo
     });
   },
 
@@ -45,8 +43,10 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function() {
+    var isInfo = app.checkInfo();
     this.setData({
-      userInfo: app.globalData.userInfo
+      userInfo: app.globalData.userInfo,
+      isInfo: isInfo
     });
   },
 

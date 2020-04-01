@@ -1,0 +1,8 @@
+<view class="container">
+  <view class="cover"><image mode="widthFix" src="https://static.lessonplan.cn{{curClass.CoverUrl}}"></image></view>
+  <text class="class-tips">您已加入</text>
+  <text class="class-name">{{curClass.ClassName}}</text>
+  <button bindtap="gostudy" size="default">开始学习</button>
+  <text wx:if="{{isInfo == false}}" class="class-tips">您还未完善个人资料</text>
+  <navigator url="/pages/my/basic" wx:if="{{isInfo == false}}" class="class-a">有时间还请点击完善哟</navigator>
+</view>

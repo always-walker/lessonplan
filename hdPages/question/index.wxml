@@ -1,4 +1,4 @@
-<tabbar index="5" back="1"></tabbar>
+<tabbar index="5" back="1" isinfo="{{isInfo}}"></tabbar>
 <view class="column hdTitle">
   <text>{{obj.className}}</text>
   <text>问答-{{obj.InteractName}}</text>

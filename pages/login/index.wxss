@@ -2,3 +2,8 @@
 .other{display: flex; flex-direction: row; width:66%;  padding: 14px 0px; font-size: 15px; justify-content: space-between;}
 .other view{display: inline-flex}
 .other navigator{color: #666; margin-left: 5px; text-decoration: underline;}
+.mt-logo{margin-top: -20px;}
+button{width: 40%; color: #fff; border-radius: 23px;}
+button.we-button{margin-top: 40px; background-color: #e05c99;}
+button.le-button{margin-top: 10px; background-color: #ccc;}
+.account-login{margin-top: 20px; color: #666;}

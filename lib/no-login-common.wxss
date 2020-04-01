@@ -2,7 +2,7 @@ page{height: 100%;}
 .logo_title{width: 66%; text-align: center; font-size: 15px; color: #777; margin-top: 10px; margin-bottom: 10px;}
 .input{width: 60%; height: 40px; line-height: 40px; font-size: 15px; border-radius: 4px; margin: 5px 0px; background-color: #ebebeb; padding: 0px 3%;}
 .button1{width: 66%; margin-top:5px; background-color:#f77f90; color: #ffffff; font-size: 15px;}
-.button2{width: 66%; margin-top:8px; background-color:#fff; border: 1px solid #1a7733; color: #1a7733; font-size: 15px;}
+.button2{width: 66%; margin-top:8px; background-color:#fff; border: 1px solid #a1cea1; color: #666; font-size: 15px;}
 .select{display: flex; flex-direction: row; justify-content: space-between;}
 .select image{width: 14px; margin-top: 13px;}
 .other{display: flex; flex-direction: row; width:66%;  padding: 25px 0px; font-size: 15px; justify-content: center;}

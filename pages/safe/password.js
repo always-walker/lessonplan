@@ -10,19 +10,19 @@ Page({
   data: {
     password: '',
     oldPassword: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    isInfo: false
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    if (!app.globalData.userGuid) {
-      wx.redirectTo({
-        url: '/pages/login/index',
-      });
-      return;
-    }
+    app.checkLogin();
+    var isInfo = app.checkInfo();
+    this.setData({
+      isInfo: isInfo
+    });
   },
 
   modify: function (e) {

@@ -1,4 +1,4 @@
-<tabbar index="2"></tabbar>
+<tabbar index="2" isinfo="{{isInfo}}"></tabbar>
 <view class="set_item mt8">
   <text class="text1">账号</text>
   <text>{{userName}}</text>

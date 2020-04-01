@@ -9,7 +9,8 @@ Page({
    */
   data: {
     classList: [],
-    hasClass: false
+    hasClass: false,
+    isInfo: false
   },
 
   /**
@@ -19,6 +20,10 @@ Page({
     wx.showLoading({
       title: '加载中...',
     })
+    var isInfo = app.checkInfo();
+    this.setData({
+      isInfo: isInfo
+    });
     var that = this;
     wx.request({
       url: 'https://clientaccountserver.lessonplan.cn/user/joined/' + app.globalData.userGuid,

@@ -1,39 +1,33 @@
 // pages/test/index.js
 const http = require('../../utils/http.js')
+const regeneratorRuntime = require('../../utils/runtime.js')
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-
+    text: ''
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-    let data1 = null;
-    http.request({
+    this.test();
+  },
+
+  test: async function(){
+    let res = await http.request({
       url: 'https://codeserver.lessonplan.cn/api/search',
       data: {
         text: '201202038'
       }
-    }).then(function(res) {
-      console.log(res.data);
-      data1 = res.data.err;
-      let text = res.data.status + '0120208';
-      console.log(text);
-      return http.request({
-        url: 'https://codeserver.lessonplan.cn/api/search',
-        data: {
-          text: text
-        }
-      })
-    }).then(function(res) {
-      console.log(data1);
-      console.log(res.data);
     });
+    this.setData({
+      text: res.data.err
+    });
+    console.log('搞定');
   },
 
   /**

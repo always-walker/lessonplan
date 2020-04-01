@@ -11,7 +11,7 @@
     <button form-type="submit" class="button1">确定</button>
     <view class="other">
       <text>已有账号?</text>
-      <navigator url="/pages/login/index">去登录</navigator>
+      <navigator open-type="navigateBack" delta="2">去登录</navigator>
     </view>
   </view>
 </form>

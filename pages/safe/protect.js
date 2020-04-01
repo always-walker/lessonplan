@@ -9,7 +9,8 @@ Page({
    */
   data: {
     protection: [],
-    passwordProtection: []
+    passwordProtection: [],
+    isInfo: false
   },
 
   bindProtectionChange: function(e) {
@@ -45,8 +46,12 @@ Page({
       wx.request({
         url: 'https://clientaccountserver.lessonplan.cn/user/putSecurity',
         method: 'PUT',
-        data: { 'PK_UserGuid': app.globalData.userGuid, 'PK_ProblemGuid': PK_ProblemGuid, 'Answer': e.detail.value.answer_0},
-        success: function(res){
+        data: {
+          'PK_UserGuid': app.globalData.userGuid,
+          'PK_ProblemGuid': PK_ProblemGuid,
+          'Answer': e.detail.value.answer_0
+        },
+        success: function(res) {
           wx.hideLoading();
           wx.showToast({
             title: '密保修改成功',
@@ -60,12 +65,11 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-    if (!app.globalData.userGuid) {
-      wx.redirectTo({
-        url: '/pages/login/index',
-      });
-      return;
-    }
+    app.checkLogin();
+    var isInfo = app.checkInfo();
+    this.setData({
+      isInfo: isInfo
+    });
     var that = this;
     wx.request({
       url: 'https://clientaccountserver.lessonplan.cn/user/info/problem?userGuid=' + app.globalData.userGuid,

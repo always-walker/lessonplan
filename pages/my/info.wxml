@@ -1,4 +1,4 @@
-<tabbar index="2"></tabbar>
+<tabbar index="2" isinfo="{{isInfo}}"></tabbar>
 <view class="header">
   <image mode="scaleToFill" src="{{userInfo.HeadPhotoPath}}"></image>
   <view>
@@ -8,7 +8,8 @@
 </view>
 <view class="line"></view>
 <navigator class="menu_item" url="/pages/my/basic" open-type="navigate">
-  <view>
+  <view class="basic-info">
+    <view wx:if="{{isInfo == false}}" class="isinfo"></view>
     <image mode="widthFix" src="/images/basic.svg"></image>
     <text>基本信息</text>
   </view>

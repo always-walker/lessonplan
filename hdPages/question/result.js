@@ -11,7 +11,8 @@ Page({
     id: null,
     currentIndex: 0,
     questionInfo: null,
-    answer: null
+    answer: null,
+    isInfo: true
   },
 
   /**
@@ -20,8 +21,10 @@ Page({
   onLoad: function(options) {
     var id = options.id;
     //var obj = app.globalData.hdObj[id];
+    var isInfo = app.checkInfo();
     this.setData({
-      id: id
+      id: id,
+      isInfo: isInfo
     });
     this.getResult();
   },

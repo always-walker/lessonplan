@@ -1,4 +1,4 @@
-<tabbar index="4" back="0"></tabbar>
+<tabbar index="4" back="0" isinfo="{{isInfo}}"></tabbar>
 <view class="header">
   <image mode="scaleToFill" src="{{userInfo.HeadPhotoPath}}"></image>
   <text class="header_name">{{userInfo.NickName ? userInfo.NickName : '尚未填写'}}</text>
@@ -6,6 +6,7 @@
 </view>
 <view class="line"></view>
 <navigator class="menu_item" url="/pages/my/info" open-type="navigate">
+  <view wx:if="{{isInfo == false}}" class="isinfo"></view>
   <text>个人资料</text>
   <image mode="widthFix" src="/images/right.svg"></image>
 </navigator>

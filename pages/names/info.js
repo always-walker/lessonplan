@@ -10,7 +10,8 @@ Page({
    */
   data: {
     userInfo: null,
-    studentList: []
+    studentList: [],
+    isInfo: false
   },
 
   /**
@@ -20,6 +21,10 @@ Page({
     this.setData({
       userInfo: app.globalData.userInfo
     });
+    var isInfo = app.checkInfo();
+    this.setData({
+      isInfo: isInfo
+    });
     var that = this;
     wx.request({
       url: 'https://clientaccountserver.lessonplan.cn/user/studentlist/letter/' + options.classId,
@@ -28,11 +33,10 @@ Page({
         studentList.sort(util.compare('letter'));
         var preLetter = '';
         for (var i = 0; i < studentList.length; i++) {
-          if (studentList[i].letter != preLetter){
+          if (studentList[i].letter != preLetter) {
             preLetter = studentList[i].letter;
             studentList[i]['isLetter'] = true;
-          }
-          else{
+          } else {
             studentList[i]['isLetter'] = false;
           }
           if (!studentList[i].HeadPhotoPath)

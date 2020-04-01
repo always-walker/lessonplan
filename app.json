@@ -41,7 +41,10 @@
     "pages/password/find",
     "pages/password/reset",
     "pages/test/index",
-    "pages/logs/logs"
+    "pages/logs/logs",
+    "pages/login/account",
+    "pages/names/joindetail",
+    "pages/my/success"
   ],
   "tabBar": {
     "custom": true,
@@ -50,6 +53,10 @@
     "borderStyle": "black",
     "backgroundColor": "#ffffff",
     "list": [
+      {
+        "pagePath": "pages/login/index",
+        "text": "登录"
+      },
       {
         "pagePath": "pages/index/index",
         "iconPath": "images/home.png",

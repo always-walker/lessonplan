@@ -8,7 +8,8 @@ Page({
     id: null,
     obj: null,
     width: 0,
-    myLocation: ''
+    myLocation: '',
+    isInfo: true
   },
 
   onLoad: function(options) {
@@ -16,10 +17,12 @@ Page({
     var obj = app.globalData.hdObj[id];
     const dRes = wx.getSystemInfoSync();
     var width = dRes.windowWidth - 30;
+    var isInfo = app.checkInfo();
     this.setData({
       id: id,
       obj: obj,
       width: width,
+      isInfo: isInfo
     });
     var that = this;
     this.lock = new Lock("id-gesture-lock",

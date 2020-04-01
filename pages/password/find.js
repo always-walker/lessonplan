@@ -61,7 +61,7 @@ Page({
                   });
                   if (res2.data.status == 1) {
                     app.globalData.isFindPasswordVerfy = true;
-                    wx.redirectTo({
+                    wx.navigateTo({
                       url: 'reset'
                     })
                   }

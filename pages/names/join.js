@@ -5,7 +5,8 @@ Page({
 
   data: {
     curClass: null,
-    isJoinClass: false
+    isJoinClass: false,
+    isInfo: false
   },
 
   /**
@@ -13,6 +14,10 @@ Page({
    */
   onLoad: function(options) {
     var that = this;
+    var isInfo = app.checkInfo();
+    this.setData({
+      isInfo: isInfo
+    });
     wx.showLoading({
       title: '加载中...',
     })
@@ -57,7 +62,7 @@ Page({
           wx.hideLoading();
           if (res.data.status == 1) {
             wx.redirectTo({
-              url: '/pages/index/index?classId=' + that.data.curClass.PK_ClassGuid,
+              url: '/pages/names/joindetail?classId=' + that.data.curClass.PK_ClassGuid,
             });
           }
         }

@@ -1,4 +1,4 @@
-<tabbar index="5" back="1"></tabbar>
+<tabbar index="5" back="1" isinfo="{{isInfo}}"></tabbar>
 <text class="tipText">{{tipText}}</text>
 <image class="tipImage" mode="widthFix" src="https://cdn.lessonplan.cn/LessonPlay/MiniLessonplay/问卷.jpg"></image>
 <view class="column btn">

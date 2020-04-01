@@ -1,4 +1,4 @@
-<tabbar index="2"></tabbar>
+<tabbar index="2" isinfo="{{isInfo}}"></tabbar>
 <view class="roster_nav">
   <text>花名册</text>
 </view>

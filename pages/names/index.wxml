@@ -1,4 +1,4 @@
-<tabbar index="2"></tabbar>
+<tabbar index="2" isinfo="{{isInfo}}"></tabbar>
 <navigator class="roster" url="/pages/names/info?classId={{item.PK_ClassGuid}}" open-type="navigate" wx:for="{{classList}}" wx:key="{{PK_ClassGuid}}">
   <image class="cover" mode="aspectFill" src="https://static.lessonplan.cn{{item.CoverUrl}}"></image>
   <view class="roster_bottom">

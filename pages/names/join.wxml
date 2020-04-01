@@ -1,7 +1,7 @@
 <tabbar index="5" back="1"></tabbar>
 <view class="container">
   <image class="cover" mode="scaleToFill" src="https://static.lessonplan.cn{{curClass.CoverUrl}}"></image>
-  <text class="clas-name">{{curClass.ClassName}}</text>
+  <text class="class-name">{{curClass.ClassName}}</text>
   <text class="class-info">创建人 : {{curClass.ClassName}}</text>
   <text class="class-info">存在时间 : {{curClass.CreateTime}} - {{curClass.EndTime}}</text>
   <text class=" class-info">当前人数 : {{curClass.Number}}人</text>

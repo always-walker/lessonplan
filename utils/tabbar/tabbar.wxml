@@ -9,6 +9,7 @@
     <text class="icon-text">互动列表</text>
   </view>
   <view class="tab-item{{(index == 2 || index == 4) ? ' active': ''}}" bindtap="my">
+    <view wx:if="{{isinfo == false}}" class="isinfo"></view>
     <image class="icons" mode="widthFix" src="/images/{{(index == 2 || index == 4) ? 'my-red': 'my'}}.svg"></image>
     <text class="icon-text">我的</text>
   </view>

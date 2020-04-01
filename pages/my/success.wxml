@@ -1,0 +1,6 @@
+<view class="container">
+  <image class="cover" mode="scaleToFill" src="{{userInfo.HeadPhotoPath}}"></image>
+  <text class="tips">已经成功修改资料</text>
+  <button bindtap="gostudy" size="default">开始学习</button>
+  <navigator open-type="navigateBack" class="class-a">我还要继续修改</navigator>
+</view>

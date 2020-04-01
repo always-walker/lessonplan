@@ -11,7 +11,8 @@ Page({
     id: null,
     obj: null,
     defaultText: '',
-    questionList: []
+    questionList: [],
+    isInfo: true
   },
 
   /**
@@ -20,7 +21,7 @@ Page({
   onLoad: function(options) {
     var that = this;
     var id = options.id;
-    console.log(id);
+    var isInfo = app.checkInfo();
     var obj = app.globalData.hdObj[id];
     wx.request({
       url: 'https://qrcodeserver.lessonplan.cn/' + id + '/structuredDiscuss',
@@ -32,7 +33,8 @@ Page({
         that.setData({
           id: id,
           obj: obj,
-          questionList: questionList
+          questionList: questionList,
+          isInfo: isInfo
         });
       }
     })

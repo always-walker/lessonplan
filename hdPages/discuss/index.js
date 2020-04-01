@@ -13,7 +13,8 @@ Page({
     uploadImageClass: 'upload-image',
     inputCount: 0,
     defaultText: '',
-    maxInputCount: 800
+    maxInputCount: 800,
+    isInfo: true
   },
 
   /**
@@ -21,10 +22,12 @@ Page({
    */
   onLoad: function(options) {
     var id = options.id;
+    var isInfo = app.checkInfo();
     var obj = app.globalData.hdObj[id];
     this.setData({
       id: id,
       obj: obj,
+      isInfo: isInfo
     });
   },
 

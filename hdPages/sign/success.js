@@ -13,7 +13,8 @@ Page({
     id: null,
     myLocation: '',
     curTime: '',
-    signTip: '已签'
+    signTip: '已签',
+    isInfo: true
   },
 
   /**
@@ -22,6 +23,7 @@ Page({
   onLoad: function(options) {
     var id = options.id;
     var obj = app.globalData.hdObj[id];
+    var isInfo = app.checkInfo();
     var that = this;
     wx.request({
       url: 'https://signinserver.lessonplan.cn/signinResult/' + id,
@@ -32,7 +34,8 @@ Page({
         let signTime = util.formatTime2(new Date(meSign['SubmitTime']));
         that.setData({
           id: id,
-          curTime: signTime
+          curTime: signTime,
+          isInfo: isInfo
         });
       }
     })

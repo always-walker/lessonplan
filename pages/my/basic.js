@@ -11,18 +11,15 @@ Page({
     userInfo: null,
     sexs: ['男', '女'],
     index: -1,
+    isInfo: false
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-    if (!app.globalData.userGuid) {
-      wx.redirectTo({
-        url: '/pages/login/index',
-      });
-      return;
-    }
+    app.checkLogin();
+    var isInfo = app.checkInfo();
     var index = -1;
     if (app.globalData.userInfo.Sex){
       for (var i = 0; i < this.data.sexs.length; i++){
@@ -34,7 +31,8 @@ Page({
     }
     this.setData({
       userInfo: app.globalData.userInfo,
-      index: index
+      index: index,
+      isInfo: isInfo
     });
   },
 
@@ -79,6 +77,9 @@ Page({
               wx.hideLoading();
               wx.showToast({
                 title: '更新成功',
+              }),
+              wx.navigateTo({
+                url: 'success',
               })
             }
           })
@@ -104,7 +105,10 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function() {
-
+    var isInfo = app.checkInfo();
+    this.setData({
+      isInfo: isInfo
+    });
   },
 
   /**

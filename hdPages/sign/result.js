@@ -9,7 +9,8 @@ Page({
   data: {
     id: null,
     studentList: null,
-    stat: null
+    stat: null,
+    isInfo: true
   },
 
   /**
@@ -17,8 +18,10 @@ Page({
    */
   onLoad: function(options) {
     var id = options.id;
+    var isInfo = app.checkInfo();
     this.setData({
-      id: id
+      id: id,
+      isInfo: isInfo
     });
     this.getResult();
   },

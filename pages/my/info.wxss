@@ -8,3 +8,5 @@ page{background-color: #eee;}
 .menu_item view{display: flex; align-items: center;}
 .menu_item view image{width: 32px; margin-right: 5px;}
 .menu_item image{width: 20px;}
+.basic-info{position: relative;}
+.isinfo{position: absolute; width: 8px; height: 8px; border-radius: 4px; background-color: #ff0000; margin: -8px 0px 0px -4px;}

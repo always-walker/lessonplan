@@ -11,6 +11,10 @@ Component({
     back: {
       type: String,
       value: 1
+    },
+    isinfo: {
+      type: Boolean,
+      value: true
     }
   },
 
@@ -19,7 +23,8 @@ Component({
    */
   data: {
     index: 1,
-    back: 1
+    back: 1,
+    isinfo: true
   },
 
   /**

@@ -8,21 +8,19 @@ Page({
    * 页面的初始数据
    */
   data: {
-    userName: null
+    userName: null,
+    isInfo: false
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    if (!app.globalData.userGuid) {
-      wx.redirectTo({
-        url: '/pages/login/index',
-      });
-      return;
-    }
+    app.checkLogin();
+    var isInfo = app.checkInfo();
     this.setData({
-      userName: app.globalData.userInfo.Name
+      userName: app.globalData.userInfo.Name,
+      isInfo: isInfo
     });
   },
 

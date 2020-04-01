@@ -83,8 +83,8 @@ Page({
             wx.showToast({
               title: "注册成功",
             });
-            wx.redirectTo({
-              url: '/pages/login/index',
+            wx.navigateBack({
+              delta: 1
             })
           }
         }
