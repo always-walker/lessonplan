@@ -1,2 +1,3 @@
 <!--pages/test/index.wxml-->
 <text>{{text}}</text>
+<button bindtap="goindex">返回首页</button>

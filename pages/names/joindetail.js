@@ -29,8 +29,9 @@ Page({
   },
 
   gostudy: function(){
+    app.globalData.classId = this.data.curClass.PK_ClassGuid;
     wx.switchTab({
-      url: '/pages/index/index?classId=' + this.data.curClass.PK_ClassGuid,
+      url: '/pages/index/index',
     });
   },
 

@@ -17,7 +17,13 @@ Page({
     this.test();
   },
 
-  test: async function(){
+  goindex: function() {
+    wx.switchTab({
+      url: '/pages/index/index',
+    })
+  },
+
+  test: async function() {
     let res = await http.request({
       url: 'https://codeserver.lessonplan.cn/api/search',
       data: {

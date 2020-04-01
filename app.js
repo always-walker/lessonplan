@@ -113,6 +113,7 @@ App({
     token: null,
     isFindPasswordVerfy: false,
     videoObj: null,
+    classId: null,
     hdObj: {}
   },
   sendSocket: function(interactGuid) {

@@ -326,12 +326,6 @@ Page({
       isInfo: isInfo,
       scrollHeight: wx.getSystemInfoSync().windowHeight - 110
     });
-    if (options.classId) {
-      this.setData({
-        currentClassGuid: options.classId,
-        hasClass: true
-      });
-    }
     this.getClass();
   },
   onLoad: function(options) {
@@ -358,6 +352,14 @@ Page({
     this.setData({
       isInfo: isInfo
     });
+    if (app.globalData.classId) {
+      this.setData({
+        currentClassGuid: app.globalData.classId,
+        hasClass: true
+      });
+      this.getClass();
+      app.globalData.classId = null;
+    }
   },
 
   /**
