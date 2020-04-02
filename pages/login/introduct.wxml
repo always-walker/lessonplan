@@ -1,0 +1,51 @@
+<text class="title1 pd20">舟道课玩</text>
+<text class="text mt20">舟道课玩是配套超级教案平台使用的学生端小程序,致力于帮助教师创建互动式的课堂,帮助学生快乐的学习。</text>
+<text class="text">通过此小程序可以接收来自教师推送的课前、课堂、课后学习任务,并进行签到、讨论、知识学习、作业、测验等活动。</text>
+<text class="title2 mt20">1 通过加入班级参与学习活动</text>
+<view class="kuang column">
+  <text class="title1 bold">请先加入一个班级</text>
+  <text class="f16">再开始快乐的学习吧</text>
+  <input class="input-code" type="text" placeholder="输入邀请码加入班级"></input>
+  <button class="button-confirm">确　　定</button>
+</view>
+<text class="title2 mt20">2 在互动清单中选择学习互动活动加入</text>
+<view class="kuang" style="border-radius:5px;">
+  <view class="row-sb">
+    <text>提问</text>
+    <text class="c9">3个推送</text>
+  </view>
+  <view class="app_item">
+    <view class="app_item_icon" style="background-color: #3aafaf;"></view>
+    <view class="app_item_content" style="background-color: #66cccc;">
+      <text class="app_item_time">2019-8-22</text>
+      <text class="app_item_title">签到-P1-签到</text>
+    </view>
+  </view>
+  <view class="app_item">
+    <view class="app_item_icon" style="background-color: #ff8e28;"></view>
+    <view class="app_item_content" style="background-color: #ffba5a;">
+      <text class="app_item_time">2019-8-24</text>
+      <text class="app_item_title">作业-创作笑话</text>
+    </view>
+  </view>
+  <view class="app_item">
+    <view class="app_item_icon" style="background-color: #d16591;"></view>
+    <view class="app_item_content" style="background-color: #e880a7;">
+      <text class="app_item_time">2019-8-22</text>
+      <text class="app_item_title">知识库-P3-5篇关于提问的常识</text>
+    </view>
+  </view>
+</view>
+<text class="title2 mt20">3 活动活动，如一次讨论的示例</text>
+<view class="kuang column">
+  <text class="f16 bf bf1">创新1班</text>
+  <text class="bf bf2">请选择10种你今天看到的事物进行简单描述</text>
+  <view class="column hdFormTextArea">
+    <textarea name="content" maxlength="{{maxInputCount}}" bindinput="inputChange" placeholder="请输入你的想法" value="{{defaultText}}">
+    </textarea>
+    <text class="enable-input c9">{{inputCount}}/{{maxInputCount}}</text>
+  </view>
+  <button class="btnSubmit">提交</button>
+</view>
+<text style="width:100%;" class="mt20">舟道课玩，把学习变得简单，变得快乐~</text>
+<text class="mt20"></text>

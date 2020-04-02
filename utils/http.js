@@ -1,15 +1,18 @@
 module.exports = {
-  request(option) {
+  request(option, isOpenLoading, isCloseLoading) {
     var promise = new Promise((resolve, reject) => {
       //提示一下
-      wx.showLoading({
-        title: '加载中'
-      });
+      if (isOpenLoading || isOpenLoading == undefined) {
+        wx.showLoading({
+          title: '加载中...'
+        });
+      }
       //网络请求
       wx.request({
         ...option,
-        success: function (res) {
-          wx.hideLoading();
+        success: function(res) {
+          if (isCloseLoading || isCloseLoading == undefined)
+            wx.hideLoading();
           //服务器返回数据
           if (res.statusCode == 200) {
             resolve(res);
@@ -18,8 +21,9 @@ module.exports = {
             reject(res.data);
           }
         },
-        fail: function (e) {
-          wx.hideLoading();
+        fail: function(e) {
+          if (isCloseLoading || isCloseLoading == undefined)
+            wx.hideLoading();
           wx.showToast({
             title: '无法连接服务器',
             icon: 'loading',

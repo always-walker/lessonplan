@@ -44,7 +44,8 @@
     "pages/logs/logs",
     "pages/login/account",
     "pages/names/joindetail",
-    "pages/my/success"
+    "pages/my/success",
+    "pages/login/introduct"
   ],
   "tabBar": {
     "custom": true,

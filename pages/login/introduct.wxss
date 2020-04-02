@@ -1,0 +1,21 @@
+page{width: calc(100% - 40px); padding: 20px; display: flex; flex-direction: column; align-items: center; color: #666; font-size: 14px;}
+.title1{font-size: 20px;}
+.mt20{margin-top: 20px;}
+.text{ line-height: 24px;}
+.f16{font-size: 16px; line-height: 28px;}
+.title2{width:100%; font-weight: bold;}
+.kuang{width:calc(100% - 30px); margin-top: 10px; padding: 20px 15px; background: #f6f6f6;}
+.input-code{width: 80%; font-size: 12px; border: 1px solid #eee; text-align: center; padding: 6px 0px; border-radius: 20px; background-color: #fff; margin-top: 30px;}
+.button-confirm{background-color:#e05c99; color: #fff; font-size: 14px; border-radius: 20px; width: 80%; margin-top: 10px;}
+.app_item{margin-top: 10px; display: flex; flex-direction: row;}
+.app_item_icon{width: 12px; border-radius: 7px 0 0 7px;}
+.app_item_content{display: flex; flex-direction: column; color: #fff; line-height: 1.5; width: 100%; border-radius: 0 7px 7px 0; padding: 5px 15px;}
+.app_item_time{font-size: 12px;}
+.app_item_title{font-size: 15px;}
+.bf{width: calc(100% - 20px); background: #fff; padding: 10px; text-align: center;}
+.bf1{border-radius: 7px 7px 0px 0px; border-bottom: 1px solid #ddd;}
+.bf2{border-radius: 0px 0px 7px 7px;}
+.hdFormTextArea{border-radius: 5px; margin-top: 10px; padding: 10px; width: calc(100% - 20px); background: #fff;}
+.hdFormTextArea textarea{width:100%;}
+.hdFormTextArea .enable-input{width: 100%; text-align: right; line-height: 24px;}
+.btnSubmit{border-radius: 5px; width: 100%; margin-top: 10px; background: #f372d7; color: #fff; font-size: 16px; line-height: 44px;}

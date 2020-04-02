@@ -95,7 +95,8 @@
     </block>
     <view wx:if="{{courseList.length == 0 && courseList2.length == 0 && weCourseList.length == 0}}" class="no-push">
       <image mode="widthFix" src="/images/no-content.svg"></image>
-      <text>本班级还未推送任何内容</text>
+      <text wx:if="{{isLoading == false}}">本班级还未推送任何内容</text>
+      <text wx:if="{{isLoading}}">推送内容加载中...</text>
     </view>
   </block>
   <form bindsubmit="joinClass" wx:if="{{condition || hasClass == false}}">

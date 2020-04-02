@@ -5,7 +5,7 @@
     <text class="logo_title">开始快乐的学习吧</text>
     <button wx:if="{{canIUse}}" class="we-button" open-type="getUserInfo" bindgetuserinfo="welogin">微信登录</button>
     <button wx:if="{{!canIUse}}" class="we-button" open-type="getUserInfo" bindtap="welogin2">微信登录</button>
-    <button form-type="submit" class="le-button">了解一下</button>
+    <button bindtap="gointroduct" class="le-button">了解一下</button>
     <text bindtap="goAccountLogin" class="account-login">账号方式登录</text>
   </view>
 </form>

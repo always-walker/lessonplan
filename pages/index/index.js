@@ -12,8 +12,8 @@ Page({
   data: {
     condition: false,
     isSelectClass: false,
-    hasClass: false,
-    isInfo: false,
+    hasClass: true,
+    isInfo: true,
     classList: [],
     courseType: 1,
     currentClassName: '',
@@ -23,7 +23,8 @@ Page({
     weCourseList: [],
     pushCount: 0,
     pushCount2: 0,
-    scrollHeight: 0
+    scrollHeight: 0,
+    isLoading: true
   },
 
   courseOut: function() {
@@ -106,11 +107,11 @@ Page({
     let resCords = null;
     http.request({
       url: 'https://codeserver.lessonplan.cn/api/record/' + that.data.currentClassGuid
-    }).then(function(res) {
+    }, false, false).then(function(res) {
       resCords = res.data.data;
       return http.request({
         url: 'https://templateserver.lessonplan.cn/MyPacket/substance/' + that.data.currentClassGuid
-      });
+      }, false, false);
     }).then(function(res3) {
       var records = [];
       var MyCoursewareGuidList = [];
@@ -144,7 +145,7 @@ Page({
           data: {
             'MyCoursewareGuidList': MyCoursewareGuidListString
           }
-        }).then(function(res2) {
+        }, false, true).then(function(res2) {
           var courseList = res2.data.data;
           var pushCount = 0;
           var pushCount2 = 0;
@@ -177,10 +178,12 @@ Page({
             courseList2: courseList2,
             pushCount: pushCount,
             pushCount2: pushCount2,
-            weCourseList: res3.data.data
+            weCourseList: res3.data.data,
+            isLoading: false
           });
         });
       } else {
+        wx.hideLoading();
         var elseRecord = [];
         var pushCount2 = 0;
         for (var m = 0; m < records.length; m++) {
@@ -201,7 +204,8 @@ Page({
           courseList2: courseList2,
           pushCount2: pushCount2,
           courseType: 2,
-          weCourseList: res3.data.data
+          weCourseList: res3.data.data,
+          isLoading: false
         });
       }
     });
@@ -276,7 +280,7 @@ Page({
     var that = this;
     http.request({
       url: 'https://clientaccountserver.lessonplan.cn/user/joined/' + app.globalData.userGuid
-    }).then(function(res) {
+    }, true, false).then(function(res) {
       var hasClass = res.data.data.length > 0 ? true : false;
       that.setData({
         hasClass: hasClass
@@ -288,7 +292,7 @@ Page({
         }
         http.request({
           url: 'https://rosterserver.lessonplan.cn/class/private?classListString=' + classListString.join(',')
-        }).then(function(res2) {
+        }, false, false).then(function(res2) {
           let classList = res2.data.data;
           let currentClassName = null;
           let currentClassGuid = null;
@@ -312,6 +316,11 @@ Page({
           });
           that.getRecord();
         });
+      } else {
+        wx.hideLoading();
+        that.setData({
+          isLoading: false
+        });
       }
     });
   },
@@ -320,7 +329,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
 
-  userInfoReady: function(options){
+  userInfoReady: function(options) {
     var isInfo = app.checkInfo();
     this.setData({
       isInfo: isInfo,
@@ -376,9 +385,6 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function() {
-    wx.showLoading({
-      title: '加载中...',
-    });
     this.getClass();
     wx.stopPullDownRefresh();
   },

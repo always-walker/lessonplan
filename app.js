@@ -48,7 +48,6 @@ App({
                 withCredentials: true,
                 lang: 'zh_CN',
                 success: res => {
-                  wx.hideLoading();
                   // 可以将 res 发送给后台解码出 unionId
                   // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
                   // 所以此处加入 callback 以防止这种情况
@@ -65,13 +64,13 @@ App({
                         nickname: res.userInfo.nickName,
                         headimgurl: res.userInfo.avatarUrl
                       }
-                    }).then(function(res) {
+                    }, false, false).then(function(res) {
                       that.globalData.token = res.data.token
                       that.globalData.userGuid = res.data.userGuid;
                       that.globalData.code = null;
                       http.request({
                         url: 'https://clientaccountserver.lessonplan.cn/user/usermsg/' + res.data.userGuid
-                      }).then(infoRes => {
+                      }, false, false).then(infoRes => {
                         if (!infoRes.data.data.HeadPhotoPath)
                           infoRes.data.data.HeadPhotoPath = 'https://cdn.lessonplan.cn/Public/IMG/default-avatar.png';
                         if (infoRes.data.data.HeadPhotoPath.indexOf('http') == -1)
