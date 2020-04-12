@@ -15,6 +15,10 @@ Component({
     isinfo: {
       type: Boolean,
       value: true
+    },
+    ishome: {
+      type: String,
+      value: 0
     }
   },
 
@@ -24,7 +28,8 @@ Component({
   data: {
     index: 1,
     back: 1,
-    isinfo: true
+    isinfo: true,
+    ishome: 0
   },
 
   /**
@@ -37,43 +42,8 @@ Component({
     my: function (e) {
       wx.switchTab({ url: '/pages/my/index' })
     },
-    interaction1: function(e) {
-      if (this.data.index != 1) {
-        let pages = getCurrentPages().reverse();
-        let myIndex = 0;
-        for (var i = 0; i < pages.length; i++) {
-          if (pages[i].route == 'pages/index/index')
-            myIndex = i;
-        }
-        if (myIndex > 0) {
-          wx.navigateBack({
-            delta: myIndex
-          })
-        } else {
-          wx.navigateTo({
-            url: '/pages/index/index'
-          });
-        }
-      }
-    },
-    my1: function(e) {
-      if (this.data.index != 4) {
-        let pages = getCurrentPages().reverse();
-        let myIndex = 0;
-        for (var i = 0; i < pages.length; i++) {
-          if (pages[i].route == 'pages/my/index')
-            myIndex = i;
-        }
-        if (myIndex > 0) {
-          wx.navigateBack({
-            delta: myIndex
-          })
-        } else {
-          wx.navigateTo({
-            url: '/pages/my/index'
-          });
-        }
-      }
+    joinclass: function(e){
+      wx.switchTab({ url: '/pages/index/join' })
     },
     back: function(e) {
       if (this.data.back == 1) {

@@ -2,5 +2,5 @@
   "usingComponents": {
     "tabbar": "/utils/tabbar/tabbar"
   },
-  "enablePullDownRefresh": true
+  "pageOrientation": "auto"
 }

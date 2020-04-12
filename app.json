@@ -45,7 +45,8 @@
     "pages/login/account",
     "pages/names/joindetail",
     "pages/my/success",
-    "pages/login/introduct"
+    "pages/login/introduct",
+    "pages/index/join"
   ],
   "tabBar": {
     "custom": true,
@@ -59,15 +60,15 @@
         "text": "登录"
       },
       {
+        "pagePath": "pages/index/join",
+        "text": "邀请码"
+      },
+      {
         "pagePath": "pages/index/index",
-        "iconPath": "images/home.png",
-        "selectedIconPath": "images/home-red.png",
         "text": "互动列表"
       },
       {
         "pagePath": "pages/my/index",
-        "iconPath": "images/my.png",
-        "selectedIconPath": "images/my-red.png",
         "text": "我的"
       }
     ]
@@ -78,5 +79,10 @@
     "navigationBarTitleText": "课玩",
     "navigationBarTextStyle": "black"
   },
-  "sitemapLocation": "sitemap.json"
+  "sitemapLocation": "sitemap.json",
+  "permission": {
+    "scope.userLocation": {
+      "desc": "您的位置信息将用于获取您的签到地址"
+    }
+  }
 }

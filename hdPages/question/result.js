@@ -1,6 +1,7 @@
 // hdPages/Discuss/result.js
 
 const app = getApp()
+const http = require('../../utils/http.js')
 
 Page({
 
@@ -12,7 +13,8 @@ Page({
     currentIndex: 0,
     questionInfo: null,
     answer: null,
-    isInfo: true
+    isInfo: true,
+    triggered: false
   },
 
   /**
@@ -29,25 +31,21 @@ Page({
     this.getResult();
   },
 
-  getResult: function(){
+  getResult: function() {
     var that = this;
-    wx.showLoading({
-      title: '加载中...',
-    });
-    wx.request({
-      url: 'https://qrcodeserver.lessonplan.cn/' + that.data.id + '/QuestionAndAnswer',
-      success: function (res) {
-        wx.hideLoading();
-        var questionInfo = res.data.questionInfo;
-        for (var i = 0; i < questionInfo.length; i++){
-          questionInfo[i].content.reverse();
-        }
-        var answer = questionInfo[that.data.currentIndex].content;
-        that.setData({
-          questionInfo: questionInfo,
-          answer: answer
-        });
+    http.request({
+      url: 'https://qrcodeserver.lessonplan.cn/' + that.data.id + '/QuestionAndAnswer'
+    }, !this.data.triggered, !this.data.triggered).then(function(res) {
+      var questionInfo = res.data.questionInfo;
+      for (var i = 0; i < questionInfo.length; i++) {
+        questionInfo[i].content.reverse();
       }
+      var answer = questionInfo[that.data.currentIndex].content;
+      that.setData({
+        questionInfo: questionInfo,
+        answer: answer,
+        triggered: false
+      });
     });
   },
 
@@ -59,9 +57,11 @@ Page({
     });
   },
 
-  onPullDownRefresh: function () {
+  onRefresh: function () {
+    this.setData({
+      triggered: true
+    });
     this.getResult();
-    wx.stopPullDownRefresh();
   },
 
   /**

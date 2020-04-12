@@ -1,13 +1,13 @@
-.topbar{position: fixed; top: 0; display: flex; background: #ffffff; flex-direction: row; width: 100%; height: 50px; border-top: 1px solid #ccc; box-shadow: 0 5px 10px rgba(191,191,191,.35); align-items: center; justify-content: space-between; z-index: 10001;}
+.topbar{position: fixed; top: 0; display: flex; background: #ffffff; flex-direction: row; width: 100%; height: 50px; border-top: 1px solid #ccc; box-shadow: 0 5px 10px rgba(191,191,191,.35); align-items: center; justify-content: center; z-index: 10001;}
 .hanlder-item{display: flex; flex-direction: column; align-items: center;}
 .hanlder-item image{width: 28px;}
 .hanlder-item text{font-size: 12px; color: #999;}
-.choose-class{display: flex; flex-direction: row; justify-content: center; align-items: center; width: calc(100% - 148px);}
+.choose-class{display: flex; flex-direction: row; justify-content: center; align-items: center; width: calc(100% - 30px);}
 .choose-class text{font-size: 16px; color: #666; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; text-align: center; max-width: calc(100% - 23px);}
 .choose-class image{width: 20px; margin-left: 3px;}
 .class-item{display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding: 15px 30px; border-bottom: 1px solid #ccc;}
-.class-item .name{font-size: 18px; color: #333;}
-.class-item .desc{font-size: 12px; color: #999;}
+.class-item .name{font-size: 18px; color: #333; width: calc(100% - 110px); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+.class-item .desc{font-size: 12px; color: #999; width: 105px;}
 .app{margin: 20px 20px 0px; padding: 10px 15px 15px; background-color: #f0f0f0; border-radius: 5px;}
 .app_title{display: flex; flex-direction: row; justify-content: space-between; align-items: center;}
 .app_title_name{font-size: 15px;}
@@ -20,9 +20,7 @@
 .app_item_title{font-size: 15px;}
 page{height: 100%;}
 .class-search{background: #fff; width: 100%; height: 100%; position: fixed; top: 0px; left: 0px; z-index: 100; display: flex; flex-direction: column; align-items: center;}
-.close{height: 10%; width: 95%; display: flex; flex-direction: row-reverse; align-items: center;}
-.close image{width: 30px;}
-.search-content{display: flex; flex-direction: column; height: 70%; width: 70%; align-items: center; justify-content: center;}
+.search-content{display: flex; flex-direction: column; height: 90%; width: 70%; align-items: center; justify-content: center;}
 .search-content input{width: 100%; font-size: 12px; border: 1px solid #eee; text-align: center; padding: 6px 0px; border-radius: 20px;}
 .search-content button{background-color:#e05c99; color: #fff; font-size: 14px; border-radius: 20px; width: 100%; margin-top: 10px;}
 .notice{display: flex; flex-direction: column; padding: 30px 30px 0px 30px; font-size: 15px; color: #999;}
@@ -35,7 +33,9 @@ page{height: 100%;}
 .noinfo-tip text{margin-top: 10px;}
 .noinfo-tap navigator{padding: 10px 20px; background-color: #ff9898; border-radius: 8px; font-size: 16px; color: #fff;}
 .noinfo-tap text{border-bottom: 1px solid #666; font-size: 12px; padding: 20px 0px 3px;}
-.courseTitle{font-size: 14px; color: #333; padding: 20px 20px 0px 20px;}
+.courseTitle{font-size: 14px; color: #333; padding: 0px 20px 0px 20px; position: relative;}
+.refreshtips{position: absolute; left: 0px; top: 20px; width: 100%; text-align: center;}
+.refreshtips text{padding: 2px 20px; font-size: 14px; height: 18px; border-radius: 18px; color: #ff9898; border: 1px solid #ddd; box-shadow: 0px 2px 2px 0px rgba(221,221,221,0.9);}
 .course1{position: fixed; top: 50px; width: 100%; background: #fff; z-index: 10000;}
 .course2{position: fixed; bottom: 50px; width: 100%; background: #fff; z-index: 10000;}
 .course-btn{display: flex; flex-direction: row; justify-content: space-between; align-items: center; background: #7f7f77; color: #fff; border-radius: 5px; margin: 10px 20px 5px 20px; padding: 8px 15px; font-size: 12px; width: calc(100% - 70px);}
@@ -47,3 +47,4 @@ page{height: 100%;}
 .app_item_course image{width:60px; height: 40px;}
 .no-push{display: flex; flex-direction: column; color: #999; font-size: 14px; justify-content: center; align-items: center; height: calc(100% - 135px);}
 .no-push image{width: 100px;}
+.scrollbody{width: 100%;}

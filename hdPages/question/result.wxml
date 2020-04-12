@@ -6,9 +6,11 @@
   <text class="question-title">{{questionInfo[currentIndex].name}}</text>
 </view>
 <view style="height:100px;"></view>
-<view wx:for="{{answer}}" wx:key="ID" class="result-item">
-  <text class="item-name">{{item.Name}}</text>
-  <image mode="widthFix" src="/images/left.svg"></image>
-  <text class="item-content">{{item.Answer}}</text>
-</view>
+<scroll-view class="scrollbody" scroll-y style="height: calc(100% - 165px);" refresher-enabled="{{true}}" refresher-triggered="{{triggered}}" bindrefresherrefresh="onRefresh">
+  <view wx:for="{{answer}}" wx:key="ID" class="result-item">
+    <text class="item-name">{{item.Name}}</text>
+    <image mode="widthFix" src="/images/left.svg"></image>
+    <text class="item-content">{{item.Answer}}</text>
+  </view>
+</scroll-view>
 <view style="height:65px;"></view>

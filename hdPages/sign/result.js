@@ -1,5 +1,5 @@
 // hdPages/Discuss/result.js
-
+const http = require('../../utils/http.js')
 const app = getApp()
 
 Page({
@@ -10,7 +10,8 @@ Page({
     id: null,
     studentList: null,
     stat: null,
-    isInfo: true
+    isInfo: true,
+    triggered: false
   },
 
   /**
@@ -28,52 +29,48 @@ Page({
 
   getResult: function() {
     var that = this;
-    wx.showLoading({
-      title: '加载中...',
-    });
-    wx.request({
-      url: 'https://signinserver.lessonplan.cn/signinResult/' + that.data.id,
-      success: function(res) {
-        var signInfo = res.data.signinResultList;
-        wx.request({
-          url: 'https://clientaccountserver.lessonplan.cn/user/studentlist/letter/' + res.data.signinInfo.FK_ClassGuid,
-          success: function(res2) {
-            wx.hideLoading();
-            var studentList = res2.data.data;
-            var stat = [0, 0, 0, 0];
-            for (var i = 0; i < studentList.length; i++) {
-              for (var j = 0; j < signInfo.length; j++) {
-                if (studentList[i].PK_UserGuid == signInfo[j].FK_StudentGuid) {
-                  studentList[i]['state'] = signInfo[j]['SigninState'];
-                  break;
-                }
-              }
-              var studentNo = (i + 1).toString();
-              studentList[i]['studentNo'] = studentNo[1] ? studentNo : '0' + studentNo;
-              if (!studentList[i]['state']) {
-                studentList[i]['state'] = 'absent';
-                stat[2] = stat[2] + 1;
-              }
-              else if (studentList[i]['state'] == 'ontime')
-                stat[0] = stat[0] + 1;
-              else if (studentList[i]['state'] == 'late')
-                stat[1] = stat[1] + 1;
-              else if (studentList[i]['state'] == 'leave')
-                stat[3] = stat[3] + 1;
+    http.request({
+      url: 'https://signinserver.lessonplan.cn/signinResult/' + that.data.id
+    }, !that.data.triggered, false).then(function(res) {
+      var signInfo = res.data.signinResultList;
+      http.request({
+        url: 'https://clientaccountserver.lessonplan.cn/user/studentlist/letter/' + res.data.signinInfo.FK_ClassGuid
+      }, false, !that.data.triggered).then(function(res2) {
+        var studentList = res2.data.data;
+        var stat = [0, 0, 0, 0];
+        for (var i = 0; i < studentList.length; i++) {
+          for (var j = 0; j < signInfo.length; j++) {
+            if (studentList[i].PK_UserGuid == signInfo[j].FK_StudentGuid) {
+              studentList[i]['state'] = signInfo[j]['SigninState'];
+              break;
             }
-            that.setData({
-              studentList: studentList,
-              stat: stat
-            });
           }
+          var studentNo = (i + 1).toString();
+          studentList[i]['studentNo'] = studentNo[1] ? studentNo : '0' + studentNo;
+          if (!studentList[i]['state']) {
+            studentList[i]['state'] = 'absent';
+            stat[2] = stat[2] + 1;
+          } else if (studentList[i]['state'] == 'ontime')
+            stat[0] = stat[0] + 1;
+          else if (studentList[i]['state'] == 'late')
+            stat[1] = stat[1] + 1;
+          else if (studentList[i]['state'] == 'leave')
+            stat[3] = stat[3] + 1;
+        }
+        that.setData({
+          studentList: studentList,
+          stat: stat,
+          triggered: false
         });
-      }
+      });
     });
   },
 
-  onPullDownRefresh: function() {
+  onRefresh: function() {
+    this.setData({
+      triggered: true
+    });
     this.getResult();
-    wx.stopPullDownRefresh();
   },
 
   /**

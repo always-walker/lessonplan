@@ -2,6 +2,5 @@
   "usingComponents": {
     "tabbar": "/utils/tabbar/tabbar"
   },
-  "navigationBarTitleText": "扫码互动",
-  "enablePullDownRefresh": true
+  "navigationBarTitleText": "扫码互动"
 }

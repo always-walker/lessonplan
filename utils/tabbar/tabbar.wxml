@@ -1,8 +1,12 @@
 <!-- 底部切换菜单 -->
 <view class="tab-bar">
-  <view class="tab-item" bindtap="back">
+  <view wx:if="{{ishome != 1}}" class="tab-item" bindtap="back">
     <image class="icons" mode="widthFix" src="/images/{{back == 0 ? 'back-disabled' : 'back'}}.svg"></image>
     <text class="icon-text{{back == 0 ? ' disabled' : ''}}">返回</text>
+  </view>
+  <view wx:if="{{ishome == 1}}" class="tab-item{{index == 5 ? ' active': ''}}" bindtap="joinclass">
+    <view style="padding:4px; height:20px;"><image class="icons" mode="widthFix" style="width:20px" src="/images/{{(index == 5 || index == 6) ? 'join-red': 'join'}}.svg"></image></view>
+    <text class="icon-text">邀请码</text>
   </view>
   <view class="tab-item{{index == 1 ? ' active': ''}}" bindtap="interaction">
     <image class="icons" mode="widthFix" src="/images/{{(index == 1 || index == 3) ? 'home-red': 'home'}}.svg"></image>

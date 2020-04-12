@@ -1,5 +1,5 @@
 // hdPages/Discuss/result.js
-
+const http = require('../../utils/http.js')
 const app = getApp()
 
 Page({
@@ -15,7 +15,8 @@ Page({
     scrollLeft: 0,
     questionInfo: null,
     answer: null,
-    isInfo: true
+    isInfo: true,
+    triggered: false
   },
 
   /**
@@ -34,27 +35,23 @@ Page({
 
   getResult: function() {
     var that = this;
-    wx.showLoading({
-      title: '加载中...',
-    });
-    wx.request({
-      url: 'https://qrcodeserver.lessonplan.cn/' + that.data.id + '/StructuredDiscussAndAnswer',
-      success: function(res) {
-        wx.hideLoading();
-        var showType = 1;
-        if (res.data.interactInfo.Model == 'steamroller')
-          showType = 2;
-        var questionInfo = res.data.questionInfo;
-        for (var i = 0; i < questionInfo.length; i++) {
-          questionInfo[i].content.reverse();
-        }
-        var answer = questionInfo[that.data.currentIndex].content;
-        that.setData({
-          questionInfo: questionInfo,
-          showType: showType,
-          answer: answer
-        });
+    http.request({
+      url: 'https://qrcodeserver.lessonplan.cn/' + that.data.id + '/StructuredDiscussAndAnswer'
+    }, !this.data.triggered, !this.data.triggered).then(function(res) {
+      var showType = 1;
+      if (res.data.interactInfo.Model == 'steamroller')
+        showType = 2;
+      var questionInfo = res.data.questionInfo;
+      for (var i = 0; i < questionInfo.length; i++) {
+        questionInfo[i].content.reverse();
       }
+      var answer = questionInfo[that.data.currentIndex].content;
+      that.setData({
+        questionInfo: questionInfo,
+        showType: showType,
+        answer: answer,
+        triggered: false
+      });
     });
   },
 
@@ -68,15 +65,17 @@ Page({
     });
   },
 
-  changeChildQuestion: function (e) {
+  changeChildQuestion: function(e) {
     this.setData({
       childIndex: e.currentTarget.dataset.index
     });
   },
 
-  onPullDownRefresh: function() {
+  onRefresh: function () {
+    this.setData({
+      triggered: true
+    });
     this.getResult();
-    wx.stopPullDownRefresh();
   },
 
   /**

@@ -1,5 +1,6 @@
 // hdPages/Discuss/result.js
 const util = require('../../utils/util.js')
+const http = require('../../utils/http.js')
 const app = getApp()
 
 Page({
@@ -10,7 +11,8 @@ Page({
   data: {
     id: null,
     words: null,
-    isInfo: true
+    isInfo: true,
+    triggered: false
   },
 
   /**
@@ -28,43 +30,41 @@ Page({
 
   getResult: function() {
     var that = this;
-    wx.showLoading({
-      title: '加载中...',
-    });
     var obj = app.globalData.hdObj[that.data.id];
-    wx.request({
-      url: 'https://qrcodeserver.lessonplan.cn/' + that.data.id + '/' + obj.Type,
-      success: function(res) {
-        wx.hideLoading();
-        var words = [];
-        for (var i = 0; i < res.data.wordCloudInfo.length; i++) {
-          var isExists = false;
-          for (var j = 0; j < words.length; j++) {
-            if (res.data.wordCloudInfo[i].Content == words[j].Content) {
-              words[j].Count += 1;
-              isExists = true;
-              break;
-            }
-          }
-          if(isExists == false){
-            words.push({
-              'Content': res.data.wordCloudInfo[i].Content,
-              'Count': 1
-            });
+    http.request({
+      url: 'https://qrcodeserver.lessonplan.cn/' + that.data.id + '/' + obj.Type
+    }, !this.data.triggered, !this.data.triggered).then(function(res) {
+      var words = [];
+      for (var i = 0; i < res.data.wordCloudInfo.length; i++) {
+        var isExists = false;
+        for (var j = 0; j < words.length; j++) {
+          if (res.data.wordCloudInfo[i].Content == words[j].Content) {
+            words[j].Count += 1;
+            isExists = true;
+            break;
           }
         }
-        words.sort(util.compare('Count'));
-        words.reverse();
-        that.setData({
-          words: words,
-        });
+        if (isExists == false) {
+          words.push({
+            'Content': res.data.wordCloudInfo[i].Content,
+            'Count': 1
+          });
+        }
       }
-    })
+      words.sort(util.compare('Count'));
+      words.reverse();
+      that.setData({
+        words: words,
+        triggered: false
+      });
+    });
   },
 
-  onPullDownRefresh: function() {
+  onRefresh: function() {
+    this.setData({
+      triggered: true
+    });
     this.getResult();
-    wx.stopPullDownRefresh();
   },
 
   /**

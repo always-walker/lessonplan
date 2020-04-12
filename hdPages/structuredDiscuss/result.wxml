@@ -7,37 +7,40 @@
   </scroll-view>
   <text class="question-title">{{questionInfo[currentIndex].name}}</text>
 </view>
-
 <block wx:if="{{showType == 1}}">
   <view style="height:100px;"></view>
-  <view class="questionlist column">
-    <block wx:for="{{answer}}" wx:key="ID">
-      <text class="answer-name">{{item.Name}}</text>
-      <view class="answer-content">
-        <view class="answer-content-item column" wx:for="{{item.Answer}}" wx:key="idx" wx:for-index="idx" wx:for-item="row">
-          <text style="color:{{row.c == '#FFFFFF' ? '#333': row.c}}">{{row.q}}</text>
-          <text class="answer-content-item-content">{{row.a}}</text>
+  <scroll-view class="scrollbody" scroll-y style="height: calc(100% - 165px);" refresher-enabled="{{true}}" refresher-triggered="{{triggered}}" bindrefresherrefresh="onRefresh">
+    <view class="questionlist column">
+      <block wx:for="{{answer}}" wx:key="ID">
+        <text class="answer-name">{{item.Name}}</text>
+        <view class="answer-content">
+          <view class="answer-content-item column" wx:for="{{item.Answer}}" wx:key="idx" wx:for-index="idx" wx:for-item="row">
+            <text style="color:{{row.c == '#FFFFFF' ? '#333': row.c}}">{{row.q}}</text>
+            <text class="answer-content-item-content">{{row.a}}</text>
+          </view>
         </view>
-      </view>
-    </block>
-  </view>
+      </block>
+    </view>
+  </scroll-view>
   <view style="height:65px;"></view>
 </block>
 <block wx:if="{{showType == 2 && answer.length > 0}}">
   <view style="height:100px; width:100%; background:#fff"></view>
-  <scroll-view scroll-left="{{scrollLeft}}" class="question-child" scroll-x="true">
-    <view data-index="{{index}}" bindtap="changeChildQuestion" class="{{childIndex == index ? 'active' : ''}}" wx:for="{{answer[0].Answer}}" wx:key="index">
-      <text style="{{childIndex == index ? ('color:' + (item.c == '#FFFFFF' ? '#333': item.c)) : ''}}">{{item.q}}</text>
-    </view>
-  </scroll-view>
-  <view class="question-list-2">
-    <view class="question-list-2-title" style="background-color:{{answer[0].Answer[childIndex].c == '#FFFFFF' ? '#333': answer[0].Answer[childIndex].c}}">{{answer[0].Answer[childIndex].q}}</view>
-    <view class="question-list-2-item-content">
-      <view class="question-list-2-item" wx:for="{{answer}}" wx:key="ID">
-        <text class="question-list-2-item-name" style="color:{{item.Answer[childIndex].c == '#FFFFFF' ? '#333': item.Answer[childIndex].c}}">{{item.Name}}：</text>
-        <text class="question-list-2-item-text">{{item.Answer[childIndex].a}}</text>
+  <scroll-view class="scrollbody" scroll-y style="height: calc(100% - 150px);" refresher-enabled="{{true}}" refresher-triggered="{{triggered}}" bindrefresherrefresh="onRefresh">
+    <scroll-view scroll-left="{{scrollLeft}}" class="question-child" scroll-x="true">
+      <view data-index="{{index}}" bindtap="changeChildQuestion" class="{{childIndex == index ? 'active' : ''}}" wx:for="{{answer[0].Answer}}" wx:key="index">
+        <text style="{{childIndex == index ? ('color:' + (item.c == '#FFFFFF' ? '#333': item.c)) : ''}}">{{item.q}}</text>
+      </view>
+    </scroll-view>
+    <view class="question-list-2">
+      <view class="question-list-2-title" style="background-color:{{answer[0].Answer[childIndex].c == '#FFFFFF' ? '#333': answer[0].Answer[childIndex].c}}">{{answer[0].Answer[childIndex].q}}</view>
+      <view class="question-list-2-item-content">
+        <view class="question-list-2-item" wx:for="{{answer}}" wx:key="ID">
+          <text class="question-list-2-item-name" style="color:{{item.Answer[childIndex].c == '#FFFFFF' ? '#333': item.Answer[childIndex].c}}">{{item.Name}}：</text>
+          <text class="question-list-2-item-text">{{item.Answer[childIndex].a}}</text>
+        </view>
       </view>
     </view>
-  </view>
+  </scroll-view>
   <view style="height:50px;"></view>
 </block>

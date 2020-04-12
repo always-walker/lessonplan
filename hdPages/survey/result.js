@@ -1,5 +1,5 @@
 // hdPages/Discuss/result.js
-
+const http = require('../../utils/http.js')
 const app = getApp()
 
 Page({
@@ -12,7 +12,8 @@ Page({
     currentIndex: 0,
     surveyInfo: null,
     answer: null,
-    isInfo: true
+    isInfo: true,
+    triggered: false
   },
 
   /**
@@ -31,41 +32,36 @@ Page({
 
   getResult: function() {
     var that = this;
-    wx.showLoading({
-      title: '加载中...',
-    });
-    wx.request({
-      url: 'https://qrcodeserver.lessonplan.cn/' + that.data.id + '/SurveyAndAnswer',
-      success: function(res) {
-        wx.hideLoading();
-        var surveyInfo = res.data.surveyInfo;
-        for (var i = 0; i < surveyInfo.questions.length; i++) {
-          surveyInfo.questions[i]['answer'] = [];
-          for (var j = 1; j <= surveyInfo.questions[i].options.length; j++) {
-            var total = 0;
-            var currentOption = 0;
-            for (var k = 0; k < surveyInfo.answers.length; k++) {
-              if (surveyInfo.answers[k].id == surveyInfo.questions[i].questionGuid) {
-                total += surveyInfo.answers[k].count;
-                if (j == parseInt(surveyInfo.answers[k].option))
-                  currentOption = surveyInfo.answers[k].count;
-              }
+    http.request({
+      url: 'https://qrcodeserver.lessonplan.cn/' + that.data.id + '/SurveyAndAnswer'
+    }, !this.data.triggered, !this.data.triggered).then(function(res) {
+      var surveyInfo = res.data.surveyInfo;
+      for (var i = 0; i < surveyInfo.questions.length; i++) {
+        surveyInfo.questions[i]['answer'] = [];
+        for (var j = 1; j <= surveyInfo.questions[i].options.length; j++) {
+          var total = 0;
+          var currentOption = 0;
+          for (var k = 0; k < surveyInfo.answers.length; k++) {
+            if (surveyInfo.answers[k].id == surveyInfo.questions[i].questionGuid) {
+              total += surveyInfo.answers[k].count;
+              if (j == parseInt(surveyInfo.answers[k].option))
+                currentOption = surveyInfo.answers[k].count;
             }
-            surveyInfo.questions[i]['answer'].push({
-              'name': surveyInfo.questions[i].options[j-1],
-              'total': total,
-              'count': currentOption,
-              'percent': total == 0 ? 0 : (Math.round(parseFloat((currentOption * 100 / total).toFixed(2)) * 100) / 100)
-            });
           }
+          surveyInfo.questions[i]['answer'].push({
+            'name': surveyInfo.questions[i].options[j - 1],
+            'total': total,
+            'count': currentOption,
+            'percent': total == 0 ? 0 : (Math.round(parseFloat((currentOption * 100 / total).toFixed(2)) * 100) / 100)
+          });
         }
-        console.log(surveyInfo);
-        var answer = surveyInfo.questions[that.data.currentIndex].answer;
-        that.setData({
-          surveyInfo: surveyInfo,
-          answer: answer
-        });
       }
+      var answer = surveyInfo.questions[that.data.currentIndex].answer;
+      that.setData({
+        surveyInfo: surveyInfo,
+        answer: answer,
+        triggered: false
+      });
     });
   },
 
@@ -77,9 +73,11 @@ Page({
     });
   },
 
-  onPullDownRefresh: function() {
+  onRefresh: function() {
+    this.setData({
+      triggered: true
+    });
     this.getResult();
-    wx.stopPullDownRefresh();
   },
 
   /**

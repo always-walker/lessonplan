@@ -21,3 +21,5 @@ radio .wx-radio-input.wx-radio-input-checked::before {width: 60%; height: 60%; b
 checkbox .wx-checkbox-input {width: 40rpx; height: 40rpx; border: 4rpx solid #999; background: none;}
 checkbox .wx-checkbox-input.wx-checkbox-input-checked {border: 4rpx solid #df5b98!important; background: #df5b98!important;}
 checkbox .wx-checkbox-input.wx-checkbox-input-checked::before {width: 60%; height: 60%; background: #fff!important; content: ''; transform: translate(-50%, -50%) scale(1); -webkit-transform: translate(-50%, -50%) scale(1);}
+.scrollbody{width: 100%;}
+::-webkit-scrollbar{ width:0; height:0; color:transparent; }

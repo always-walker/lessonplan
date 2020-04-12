@@ -7,12 +7,14 @@
   </scroll-view>
   <text class="question-title">{{surveyInfo.questions[currentIndex].questionName}}</text>
 </view>
-<view style="height:120px;"></view>
-<view wx:for="{{answer}}" wx:key="index" class="result-item column">
-  <text class="item-name">【选项{{index + 1}}】{{item.name}}</text>
-  <view class="item-percent mt8">
-    <view style="width:{{item.percent}}%;"></view>
+<view style="height:115px;"></view>
+<scroll-view class="scrollbody" scroll-y style="height: calc(100% - 180px);" refresher-enabled="{{true}}" refresher-triggered="{{triggered}}" bindrefresherrefresh="onRefresh">
+  <view wx:for="{{answer}}" wx:key="index" class="result-item column">
+    <text class="item-name">【选项{{index + 1}}】{{item.name}}</text>
+    <view class="item-percent mt8">
+      <view style="width:{{item.percent}}%;"></view>
+    </view>
+    <text class="item-intro mt8">{{item.count}}{{item.percent == 0 ? '' : '(' + item.percent + '%)'}}</text>
   </view>
-  <text class="item-intro mt8">{{item.count}}{{item.percent == 0 ? '' : '(' + item.percent + '%)'}}</text>
-</view>
+</scroll-view>
 <view style="height:65px;"></view>

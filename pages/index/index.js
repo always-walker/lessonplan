@@ -10,8 +10,8 @@ Page({
    * 页面的初始数据
    */
   data: {
-    condition: false,
     isSelectClass: false,
+    isDayFirst: false,
     hasClass: true,
     isInfo: true,
     classList: [],
@@ -24,7 +24,8 @@ Page({
     pushCount: 0,
     pushCount2: 0,
     scrollHeight: 0,
-    isLoading: true
+    isLoading: true,
+    triggered: false
   },
 
   courseOut: function() {
@@ -37,18 +38,6 @@ Page({
     this.setData({
       courseType: 1
     });
-  },
-
-  searchClass: function(e) {
-    this.setData({
-      condition: true
-    })
-  },
-
-  closeSearchClass: function(e) {
-    this.setData({
-      condition: false
-    })
   },
 
   closeSelectClass: function() {
@@ -145,7 +134,7 @@ Page({
           data: {
             'MyCoursewareGuidList': MyCoursewareGuidListString
           }
-        }, false, true).then(function(res2) {
+        }, false, false).then(function(res2) {
           var courseList = res2.data.data;
           var pushCount = 0;
           var pushCount2 = 0;
@@ -173,17 +162,21 @@ Page({
               'records': elseRecord
             });
           }
+          if (!that.data.triggered)
+            wx.hideLoading();
           that.setData({
             courseList: courseList,
             courseList2: courseList2,
             pushCount: pushCount,
             pushCount2: pushCount2,
             weCourseList: res3.data.data,
-            isLoading: false
+            isLoading: false,
+            triggered: false
           });
         });
       } else {
-        wx.hideLoading();
+        if (!that.data.triggered)
+          wx.hideLoading();
         var elseRecord = [];
         var pushCount2 = 0;
         for (var m = 0; m < records.length; m++) {
@@ -205,7 +198,8 @@ Page({
           pushCount2: pushCount2,
           courseType: 2,
           weCourseList: res3.data.data,
-          isLoading: false
+          isLoading: false,
+          triggered: false
         });
       }
     });
@@ -278,9 +272,10 @@ Page({
 
   getClass: function() {
     var that = this;
+    let isStartLoading = !this.data.triggered;
     http.request({
       url: 'https://clientaccountserver.lessonplan.cn/user/joined/' + app.globalData.userGuid
-    }, true, false).then(function(res) {
+    }, isStartLoading, false).then(function(res) {
       var hasClass = res.data.data.length > 0 ? true : false;
       that.setData({
         hasClass: hasClass
@@ -317,9 +312,11 @@ Page({
           that.getRecord();
         });
       } else {
-        wx.hideLoading();
+        if (!that.data.triggered)
+          wx.hideLoading();
         that.setData({
-          isLoading: false
+          isLoading: false,
+          triggered: false
         });
       }
     });
@@ -337,8 +334,12 @@ Page({
     });
     this.getClass();
   },
+
   onLoad: function(options) {
     var that = this;
+    this.setData({
+      isDayFirst: app.globalData.isDayFirst
+    });
     if (!app.globalData.userInfo) {
       app.userInfoReadyCallback = res => {
         that.userInfoReady(options);
@@ -384,9 +385,14 @@ Page({
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function() {
+  onRefresh: function() {
+    if (app.globalData.isDayFirst)
+      app.globalData.isDayFirst = false;
+    this.setData({
+      triggered: true,
+      isDayFirst: false
+    });
     this.getClass();
-    wx.stopPullDownRefresh();
   },
 
   /**

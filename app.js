@@ -7,7 +7,7 @@ App({
       url: '/pages/login/index',
     });
   },
-  checkLogin: function(){
+  checkLogin: function() {
     if (!this.globalData.userGuid) {
       wx.switchTab({
         url: '/pages/login/index',
@@ -23,9 +23,38 @@ App({
   },
 
   onLaunch: function() {
-    wx.clearStorageSync()
-    //this.globalData.userInfo = wx.getStorageSync('userInfo')
-    //this.globalData.token = wx.getStorageSync('token')
+    let launch = wx.getStorageSync('launch');
+    if (launch) {
+      let today = new Date();
+      let date = new Date(launch.date);
+      if (today.getFullYear() == date.getFullYear() && today.getMonth() == date.getMonth() && today.getDate() == date.getDate()) {
+        this.globalData.isDayFirst = false;
+        launch.count += 1;
+        wx.setStorage({
+          key: 'launch',
+          data: launch,
+        });
+      }
+      else{
+        this.globalData.isDayFirst = true;
+        wx.setStorage({
+          key: 'launch',
+          data: {
+            date: today,
+            count: 1
+          },
+        });
+      }
+    } else {
+      this.globalData.isDayFirst = true;
+      wx.setStorage({
+        key: 'launch',
+        data: {
+          date: new Date(),
+          count: 1
+        },
+      });
+    }
     if (this.globalData.userInfo && this.globalData.token) {
       this.globalData.userGuid = this.globalData.userInfo.PK_UserGuid
     }
@@ -106,6 +135,7 @@ App({
     })
   },
   globalData: {
+    isDayFirst: false,
     code: null,
     userInfo: null,
     userGuid: null,

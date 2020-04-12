@@ -1,26 +1,30 @@
 <tabbar index="5" back="1" isinfo="{{isInfo}}"></tabbar>
 <block wx:if="{{showType == 1}}">
-  <view class="container">
-    <view class="result-item" wx:for="{{discussInfo}}" wx:key="ID">
-      <text class="item-name">{{item.Name}}</text>
-      <image mode="widthFix" src="/images/left.svg"></image>
-      <view class="item-content">
-        <text>{{item.Content}}</text>
-        <view>
-          <image bindtap="previewImage" wx:for="{{item.images}}" wx:for-index="imageId" wx:key="imageId" wx:for-item="imageUrl" data-url="{{imageUrl}}" mode="aspectFill" src="{{imageUrl}}"></image>
+  <scroll-view class="scrollbody" scroll-y style="height: calc(100% - 65px);" refresher-enabled="{{true}}" refresher-triggered="{{triggered}}" bindrefresherrefresh="onRefresh">
+    <view class="default-content">
+      <view class="result-item" wx:for="{{discussInfo}}" wx:key="ID">
+        <text class="item-name">{{item.Name}}</text>
+        <image mode="widthFix" src="/images/left.svg"></image>
+        <view class="item-content">
+          <text>{{item.Content}}</text>
+          <view>
+            <image bindtap="previewImage" wx:for="{{item.images}}" wx:for-index="imageId" wx:key="imageId" wx:for-item="imageUrl" data-url="{{imageUrl}}" mode="aspectFill" src="{{imageUrl}}"></image>
+          </view>
         </view>
       </view>
     </view>
-  </view>
+  </scroll-view>
   <view style="height:65px;"></view>
 </block>
 <block wx:if="{{showType == 2}}">
-  <view class="falls-content">
-    <view class="falls-item" wx:for="{{discussInfo}}" wx:key="ID">
-      <image wx:if="{{item.images.length > 0}}" bindtap="previewImage" mode="widthFix" src="{{item.images[0]}}"></image>
-      <text class="falls-item-name">{{item.Name}}</text>
-      <text class="falls-item-content">{{item.Content}}</text>
+  <scroll-view class="scrollbody" scroll-y style="height: calc(100% - 50px);" refresher-enabled="{{true}}" refresher-triggered="{{triggered}}" bindrefresherrefresh="onRefresh">
+    <view class="falls-content">
+      <view class="falls-item" wx:for="{{discussInfo}}" wx:key="ID">
+        <image wx:if="{{item.images.length > 0}}" bindtap="previewImage" mode="widthFix" src="{{item.images[0]}}"></image>
+        <text class="falls-item-name">{{item.Name}}</text>
+        <text class="falls-item-content">{{item.Content}}</text>
+      </view>
     </view>
-  </view>
+  </scroll-view>
   <view style="height:50px;"></view>
 </block>

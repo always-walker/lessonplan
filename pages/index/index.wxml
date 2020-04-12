@@ -1,43 +1,37 @@
-<tabbar index="1" back="0" isinfo="{{isInfo}}"></tabbar>
+<tabbar index="1" back="0" isinfo="{{isInfo}}" ishome="1"></tabbar>
 <block wx:if="{{isSelectClass == false}}">
-  <block wx:if="{{condition == false && hasClass}}">
+  <block wx:if="{{hasClass}}">
     <view class="topbar">
-      <view class="hanlder-item" style="margin-left:20px;" bindtap="searchClass">
-        <image mode="widthFix" src="/images/tijiao.svg"></image>
-        <text>输入邀请码</text>
-      </view>
       <view wx:if="{{hasClass}}" bindtap="openSelectClass" class="choose-class">
         <text>{{currentClassName}}</text>
         <image mode="widthFix" src="/images/down.svg"></image>
       </view>
-      <view wx:if="{{hasClass == false}}" class="choose-class">
-        <text>无班级</text>
-      </view>
-      <view class="hanlder-item refresh" style="margin-right:20px;" bindtap="getClass">
-        <image mode="widthFix" src="/images/refresh.svg"></image>
-        <text>刷新列表</text>
-      </view>
     </view>
     <block wx:if="{{courseType == 1 && courseList.length > 0}}">
-      <view style="height:51px;"></view>
-      <view class="courseTitle">
-        <text>课堂：</text>
-      </view>
-      <view wx:for="{{courseList}}" wx:key="PK_MyCoursewareGuid" wx:for-index="count" wx:for-item="row" class="app" wx:if="{{hasClass}}">
-        <view class="app_title">
-          <text class="app_title_name">{{row.Title}}</text>
-          <text class="app_title_status">{{row.records.length}}个推送</text>
+      <view style="height:71px;"></view>
+      <scroll-view class="scrollbody" scroll-y style="height: calc(100% - {{courseList2.length > 0 ? '171' : '131'}}px);" refresher-enabled="{{true}}" refresher-triggered="{{triggered}}" bindrefresherrefresh="onRefresh">
+        <view class="courseTitle">
+          <text>课堂：</text>
+          <view class="refreshtips" wx:if="{{isDayFirst}}">
+            <text>下拉刷新</text>
+          </view>
         </view>
-        <view class="app_list">
-          <view class="app_item" wx:for="{{row.records}}" wx:key="Guid" data-listindex="1" data-count="{{count}}" data-index="{{index}}" bindtap="goApp">
-            <view class="app_item_icon" style="background-color: {{item.Style.labelColor}};"></view>
-            <view class="app_item_content" style="background-color: {{item.Style.bgColor}};">
-              <text class="app_item_time">{{item.CreateTime}}</text>
-              <text class="app_item_title">{{item.itemName}}</text>
+        <view wx:for="{{courseList}}" wx:key="PK_MyCoursewareGuid" wx:for-index="count" wx:for-item="row" class="app" wx:if="{{hasClass}}">
+          <view class="app_title">
+            <text class="app_title_name">{{row.Title}}</text>
+            <text class="app_title_status">{{row.records.length}}个推送</text>
+          </view>
+          <view class="app_list">
+            <view class="app_item" wx:for="{{row.records}}" wx:key="Guid" data-listindex="1" data-count="{{count}}" data-index="{{index}}" bindtap="goApp">
+              <view class="app_item_icon" style="background-color: {{item.Style.labelColor}};"></view>
+              <view class="app_item_content" style="background-color: {{item.Style.bgColor}};">
+                <text class="app_item_time">{{item.CreateTime}}</text>
+                <text class="app_item_title">{{item.itemName}}</text>
+              </view>
             </view>
           </view>
         </view>
-      </view>
+      </scroll-view>
       <view style="height: {{courseList2.length > 0 ? '100' : '60'}}px;"></view>
       <view wx:if="{{courseList2.length > 0}}" class="course2">
         <view class="course-btn" bindtap="courseOut">
@@ -51,7 +45,7 @@
       </view>
     </block>
     <block wx:if="{{(courseList2.length > 0 || weCourseList.length > 0) && (courseType == 2 || courseList2.length == 0)}}">
-      <view style="height:{{courseList.length > 0 ? '90' : '50'}}px;"></view>
+      <view style="height:{{courseList.length > 0 ? '110' : '60'}}px;"></view>
       <view class="course1" wx:if="{{courseList.length > 0}}">
         <view class="course-btn" bindtap="courseOn">
           <text>课堂</text>
@@ -61,36 +55,38 @@
           </view>
         </view>
       </view>
-      <view class="courseTitle">
-        <text>课下：</text>
-      </view>
-      <view class="app" wx:if="{{weCourseList.length > 0}}">
-        <view class="app_title">
-          <text class="app_title_name">微课</text>
-          <text class="app_title_status">{{weCourseList.length}}个微课</text>
+      <scroll-view class="scrollbody" scroll-y style="height: calc(100% - {{courseList.length > 0 ? '170' : '120'}}px);" refresher-enabled="{{true}}" refresher-triggered="{{triggered}}" bindrefresherrefresh="onRefresh">
+        <view class="courseTitle">
+          <text>课下：</text>
         </view>
-        <view class="app_list">
-          <view class="app_item_course" wx:for="{{weCourseList}}" wx:key="PK_MyMicroLessonGuid" data-index="{{index}}" bindtap="goVideo">
-            <image mode="widthFix" src="https://img.lessonplan.cn{{item.Cover}}"></image>
-            <text>{{item.Title}}</text>
+        <view class="app" wx:if="{{weCourseList.length > 0}}">
+          <view class="app_title">
+            <text class="app_title_name">微课</text>
+            <text class="app_title_status">{{weCourseList.length}}个微课</text>
           </view>
-        </view>
-      </view>
-      <view wx:for="{{courseList2}}" wx:key="PK_MyCoursewareGuid" wx:for-index="count" wx:for-item="row" class="app" wx:if="{{hasClass}}">
-        <view class="app_title">
-          <text class="app_title_name">{{row.Title}}</text>
-          <text class="app_title_status">{{row.records.length}}个推送</text>
-        </view>
-        <view class="app_list">
-          <view class="app_item" wx:for="{{row.records}}" wx:key="Guid" data-listindex="2" data-count="{{count}}" data-index="{{index}}" bindtap="goApp">
-            <view class="app_item_icon" style="background-color: {{item.Style.labelColor}};"></view>
-            <view class="app_item_content" style="background-color: {{item.Style.bgColor}};">
-              <text class="app_item_time">{{item.CreateTime}}</text>
-              <text class="app_item_title">{{item.itemName}}</text>
+          <view class="app_list">
+            <view class="app_item_course" wx:for="{{weCourseList}}" wx:key="PK_MyMicroLessonGuid" data-index="{{index}}" bindtap="goVideo">
+              <image mode="widthFix" src="https://img.lessonplan.cn{{item.Cover}}"></image>
+              <text>{{item.Title}}</text>
             </view>
           </view>
         </view>
-      </view>
+        <view wx:for="{{courseList2}}" wx:key="PK_MyCoursewareGuid" wx:for-index="count" wx:for-item="row" class="app" wx:if="{{hasClass}}">
+          <view class="app_title">
+            <text class="app_title_name">{{row.Title}}</text>
+            <text class="app_title_status">{{row.records.length}}个推送</text>
+          </view>
+          <view class="app_list">
+            <view class="app_item" wx:for="{{row.records}}" wx:key="Guid" data-listindex="2" data-count="{{count}}" data-index="{{index}}" bindtap="goApp">
+              <view class="app_item_icon" style="background-color: {{item.Style.labelColor}};"></view>
+              <view class="app_item_content" style="background-color: {{item.Style.bgColor}};">
+                <text class="app_item_time">{{item.CreateTime}}</text>
+                <text class="app_item_title">{{item.itemName}}</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </scroll-view>
       <view style="height: 60px;"></view>
     </block>
     <view wx:if="{{courseList.length == 0 && courseList2.length == 0 && weCourseList.length == 0}}" class="no-push">
@@ -99,14 +95,11 @@
       <text wx:if="{{isLoading}}">推送内容加载中...</text>
     </view>
   </block>
-  <form bindsubmit="joinClass" wx:if="{{condition || hasClass == false}}">
+  <form bindsubmit="joinClass" wx:if="{{hasClass == false}}">
     <view class="class-search">
-      <view class="close">
-        <image wx:if="{{hasClass}}" bindtap="closeSearchClass" mode="widthFix" src="/images/close.svg"></image>
-      </view>
       <view class="search-content">
-        <text wx:if="{{hasClass == false}}" style="font-size:16px; font-weight:bold; color:#666;">请先加入一个班级</text>
-        <text wx:if="{{hasClass == false}}" style="font-size:12px; color:#666; margin-bottom:30px; margin-top:5px;">再开始快乐的学习吧</text>
+        <text style="font-size:16px; font-weight:bold; color:#666;">请先加入一个班级</text>
+        <text style="font-size:12px; color:#666; margin-bottom:30px; margin-top:5px;">再开始快乐的学习吧</text>
         <input name="Code" type="text" placeholder="输入邀请码加入班级"></input>
         <button form-type="submit">确　　定</button>
       </view>
@@ -115,23 +108,17 @@
 </block>
 <block wx:if="{{isSelectClass}}">
   <view class="topbar" style="box-shadow: none; border-bottom:1px solid #ccc;">
-    <view class="hanlder-item" style="width:60px; margin-left:20px;">
-    </view>
     <view bindtap="closeSelectClass" class="choose-class">
       <text>{{currentClassName}}</text>
       <image style="transform: rotateX(180deg);" mode="widthFix" src="/images/down.svg"></image>
     </view>
-    <view class="hanlder-item refresh" bindtap="getClass" style="margin-right:20px;">
-      <image mode="widthFix" src="/images/refresh.svg"></image>
-      <text>刷新班级</text>
-    </view>
   </view>
-  <view style="height:50px;"></view>
-  <block wx:for="{{classList}}" wx:key="{{PK_ClassGuid}}">
-    <view class="class-item" data-index="{{index}}" bindtap="changeClass">
-      <text class="name">{{item.ClassName}}</text>
-      <text class="desc">创建于{{item.CreateTime}}</text>
+  <view style="height:50px; "></view>
+  <scroll-view class="scrollbody" scroll-y style="height: calc(100% - 115px);" refresher-enabled="{{true}}" refresher-triggered="{{triggered}}" bindrefresherrefresh="onRefresh">
+    <view wx:for="{{classList}}" wx:key="{{PK_ClassGuid}}" class="class-item" data-index="{{index}}" bindtap="changeClass">
+      <text class="name ">{{item.ClassName}}</text>
+      <text class="desc ">创建于{{item.CreateTime}}</text>
     </view>
-  </block>
-  <view style="height:65px;"></view>
+  </scroll-view>
+  <view style="height:65px; "></view>
 </block>

@@ -1,5 +1,5 @@
 <tabbar index="5" back="1" isinfo="{{isInfo}}"></tabbar>
-<view class="container">
+<scroll-view class="scrollbody" scroll-y style="height: calc(100% - 65px);" refresher-enabled="{{true}}" refresher-triggered="{{triggered}}" bindrefresherrefresh="onRefresh">
   <view class="row word-title">
     <text>排名</text>
     <text>关键词</text>
@@ -10,5 +10,5 @@
     <text>{{item.Content}}</text>
     <text class="red">{{item.Count}}次</text>
   </view>
-</view>
+</scroll-view>
 <view style="height:65px;"></view>

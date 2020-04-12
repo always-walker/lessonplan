@@ -1,5 +1,5 @@
 <tabbar index="5" back="1" isinfo="{{isInfo}}"></tabbar>
-<view class="container">
+<scroll-view class="scrollbody" scroll-y style="height: calc(100% - 65px);" refresher-enabled="{{true}}" refresher-triggered="{{triggered}}" bindrefresherrefresh="onRefresh">
   <view class="table-title">
     <text class="item-no">编号</text>
     <text class="item-name">姓名</text>
@@ -32,5 +32,5 @@
       <image src="/images/time-qj-{{item.state == 'leave' ? 'on' : 'off'}}.svg" mode="widthFix"></image>
     </view>
   </view>
-</view>
+</scroll-view>
 <view style="height:65px;"></view>

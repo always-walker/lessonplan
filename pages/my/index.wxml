@@ -1,4 +1,4 @@
-<tabbar index="4" back="0" isinfo="{{isInfo}}"></tabbar>
+<tabbar index="4" back="0" isinfo="{{isInfo}}"  ishome="1"></tabbar>
 <view class="header">
   <image mode="scaleToFill" src="{{userInfo.HeadPhotoPath}}"></image>
   <text class="header_name">{{userInfo.NickName ? userInfo.NickName : '尚未填写'}}</text>
