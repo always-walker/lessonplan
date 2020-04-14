@@ -59,6 +59,7 @@ Page({
           FK_ClassGuid: that.data.curClass.PK_ClassGuid
         },
         success: function (res) {
+          app.globalData.classId = that.data.curClass.PK_ClassGuid;
           wx.hideLoading();
           if (res.data.status == 1) {
             wx.redirectTo({

@@ -23,6 +23,7 @@ App({
   },
 
   onLaunch: function() {
+    //wx.clearStorageSync();
     let launch = wx.getStorageSync('launch');
     if (launch) {
       let today = new Date();

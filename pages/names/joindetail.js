@@ -29,7 +29,7 @@ Page({
   },
 
   gostudy: function(){
-    app.globalData.classId = this.data.curClass.PK_ClassGuid;
+    //app.globalData.classId = this.data.curClass.PK_ClassGuid;
     wx.switchTab({
       url: '/pages/index/index',
     });

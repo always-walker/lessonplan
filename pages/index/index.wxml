@@ -3,7 +3,7 @@
   <block wx:if="{{hasClass}}">
     <view class="topbar">
       <view wx:if="{{hasClass}}" bindtap="openSelectClass" class="choose-class">
-        <text>{{currentClassName}}</text>
+        <view><text>{{currentClassName}}</text></view>
         <image mode="widthFix" src="/images/down.svg"></image>
       </view>
     </view>
@@ -100,7 +100,7 @@
       <view class="search-content">
         <text style="font-size:16px; font-weight:bold; color:#666;">请先加入一个班级</text>
         <text style="font-size:12px; color:#666; margin-bottom:30px; margin-top:5px;">再开始快乐的学习吧</text>
-        <input name="Code" type="text" placeholder="输入邀请码加入班级"></input>
+        <input name="Code" type="text" placeholder="输入邀请码加入"></input>
         <button form-type="submit">确　　定</button>
       </view>
     </view>
@@ -109,7 +109,7 @@
 <block wx:if="{{isSelectClass}}">
   <view class="topbar" style="box-shadow: none; border-bottom:1px solid #ccc;">
     <view bindtap="closeSelectClass" class="choose-class">
-      <text>{{currentClassName}}</text>
+      <view><text>{{currentClassName}}</text></view>
       <image style="transform: rotateX(180deg);" mode="widthFix" src="/images/down.svg"></image>
     </view>
   </view>

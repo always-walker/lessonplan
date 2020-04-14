@@ -194,6 +194,7 @@ Page({
           });
         }
         that.setData({
+          courseList: [],
           courseList2: courseList2,
           pushCount2: pushCount2,
           courseType: 2,
