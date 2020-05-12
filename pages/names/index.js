@@ -1,6 +1,6 @@
 // pages/names/index.js
-
 const app = getApp()
+const http = require('../../utils/http.js')
 
 Page({
 
@@ -17,40 +17,34 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-    wx.showLoading({
-      title: '加载中...',
-    })
     var isInfo = app.checkInfo();
     this.setData({
       isInfo: isInfo
     });
     var that = this;
-    wx.request({
-      url: 'https://clientaccountserver.lessonplan.cn/user/joined/' + app.globalData.userGuid,
-      success: function(res) {
-        if (res.data.data.length > 0) {
-          var classListString = [];
-          for (var row in res.data.data) {
-            classListString.push('"' + res.data.data[row].FK_ClassGuid + '"');
-          }
-          wx.request({
-            url: 'https://rosterserver.lessonplan.cn/class/private?classListString=' + classListString.join(','),
-            success: function(res2) {
-              wx.hideLoading();
-              that.setData({
-                classList: res2.data.data
-              });
-            }
-          })
-        } else {
-          wx.hideLoading();
+    http.request({
+      url: 'https://clientaccountserver.lessonplan.cn/user/joined/' + app.globalData.userGuid
+    }, true, false).then(function(res) {
+      if (res.data.data.length > 0) {
+        var classListString = [];
+        for (var row in res.data.data) {
+          classListString.push('"' + res.data.data[row].FK_ClassGuid + '"');
         }
-        var hasClass = res.data.data.length > 0 ? true : false;
-        that.setData({
-          hasClass: hasClass
+        http.request({
+          url: 'https://rosterserver.lessonplan.cn/class/private?classListString=' + classListString.join(',')
+        }, false, true).then(function(res2) {
+          that.setData({
+            classList: res2.data.data
+          });
         });
+      } else {
+        wx.hideLoading();
       }
-    })
+      var hasClass = res.data.data.length > 0 ? true : false;
+      that.setData({
+        hasClass: hasClass
+      });
+    });
   },
 
   /**

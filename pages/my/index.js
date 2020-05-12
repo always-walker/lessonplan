@@ -1,5 +1,4 @@
 // pages/my/index.js
-
 const app = getApp()
 
 Page({

@@ -1,6 +1,6 @@
 // pages/password/reset.js
-
 const app = getApp()
+const http = require('../../utils/http.js')
 
 Page({
 
@@ -39,26 +39,21 @@ Page({
         duration: 1000
       })
     } else {
-      wx.showLoading({
-        title: '重置中...',
-      });
-      wx.request({
+      http.request({
         url: 'https://clientaccountserver.lessonplan.cn/user/putPassWord',
         method: 'PUT',
         data: {
           'PK_UserGuid': app.globalData.userGuid,
           'Password': e.detail.value.password
-        },
-        success: function(res) {
-          wx.hideLoading();
-          wx.showToast({
-            title: '密码重置成功',
-          });
-          wx.navigateBack({
-            delta: 2
-          })
         }
-      })
+      }, true, true).then(function(res) {
+        wx.showToast({
+          title: '密码重置成功',
+        });
+        wx.navigateBack({
+          delta: 2
+        });
+      });
     }
   },
 

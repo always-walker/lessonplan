@@ -1,6 +1,6 @@
 // pages/my/basic.js
-
 const app = getApp()
+const http = require('../../utils/http.js')
 
 Page({
 
@@ -21,9 +21,9 @@ Page({
     app.checkLogin();
     var isInfo = app.checkInfo();
     var index = -1;
-    if (app.globalData.userInfo.Sex){
-      for (var i = 0; i < this.data.sexs.length; i++){
-        if (this.data.sexs[i] == app.globalData.userInfo.Sex){
+    if (app.globalData.userInfo.Sex) {
+      for (var i = 0; i < this.data.sexs.length; i++) {
+        if (this.data.sexs[i] == app.globalData.userInfo.Sex) {
           index = i;
           break;
         }
@@ -49,49 +49,39 @@ Page({
       data['Sex'] = null;
     else
       data['Sex'] = this.data.sexs[this.data.index];
-    if(data['Msg'] == '')
+    if (data['Msg'] == '')
       data['Msg'] = '尚未签名';
-    wx.showLoading({
-      title: '更新中...',
-    });
-    wx.request({
+    http.request({
       url: 'https://clientaccountserver.lessonplan.cn/user/info',
       data: data,
       method: 'PUT',
-      success: function(res2) {
-        if (res2.data.status == 1) {
-          wx.request({
-            url: 'https://clientaccountserver.lessonplan.cn/user/usermsg/' + app.globalData.userGuid,
-            success: function(res) {
-              if (!res.data.data.HeadPhotoPath)
-                res.data.data.HeadPhotoPath = 'https://cdn.lessonplan.cn/Public/IMG/default-avatar.png';
-              if (res.data.data.HeadPhotoPath.indexOf('http') == -1)
-                res.data.data.HeadPhotoPath = 'https://static.lessonplan.cn' + res.data.data.HeadPhotoPath;
-              if (!res.data.data.Msg)
-                res.data.data.Msg = '尚未签名';
-              app.globalData.userInfo = res.data.data;
-              // wx.setStorage({
-              //   key: 'userInfo',
-              //   data: res.data.data
-              // });
-              wx.hideLoading();
-              wx.showToast({
-                title: '更新成功',
-              }),
-              wx.navigateTo({
-                url: 'success',
-              })
-            }
-          })
-        } else {
-          wx.hideLoading();
+    }, true, false).then(function(res2) {
+      if (res2.data.status == 1) {
+        http.request({
+          url: 'https://clientaccountserver.lessonplan.cn/user/usermsg/' + app.globalData.userGuid
+        }, false, true).then(function(res) {
+          if (!res.data.data.HeadPhotoPath)
+            res.data.data.HeadPhotoPath = 'https://cdn.lessonplan.cn/Public/IMG/default-avatar.png';
+          if (res.data.data.HeadPhotoPath.indexOf('http') == -1)
+            res.data.data.HeadPhotoPath = 'https://static.lessonplan.cn' + res.data.data.HeadPhotoPath;
+          if (!res.data.data.Msg)
+            res.data.data.Msg = '尚未签名';
+          app.globalData.userInfo = res.data.data;
           wx.showToast({
-            title: '更新失败..',
-            icon: 'none',
-          })
-        }
+            title: '更新成功',
+          });
+          wx.navigateTo({
+            url: 'success',
+          });
+        });
+      } else {
+        wx.hideLoading();
+        wx.showToast({
+          title: '更新失败..',
+          icon: 'none',
+        })
       }
-    })
+    });
   },
 
   /**

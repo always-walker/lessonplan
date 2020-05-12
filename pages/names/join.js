@@ -1,5 +1,6 @@
 // pages/names/join.js
 const app = getApp()
+const http = require('../../utils/http.js')
 
 Page({
 
@@ -18,56 +19,52 @@ Page({
     this.setData({
       isInfo: isInfo
     });
-    wx.showLoading({
-      title: '加载中...',
-    })
-    wx.request({
-      url: 'https://rosterserver.lessonplan.cn/class/private?classListString="' + options.classId + '"',
-      success: function(res) {
-        wx.request({
-          url: 'https://clientaccountserver.lessonplan.cn/user/joined/' + app.globalData.userGuid,
-          success: function(res2) {
-            var isJoinClass = false;
-            for (var i = 0; i < res2.data.data.length; i++) {
-              if (res2.data.data[i].FK_ClassGuid == options.classId) {
-                isJoinClass = true;
-                break;
-              }
-            }
-            wx.hideLoading();
-            that.setData({
-              curClass: res.data.data[0],
-              isJoinClass: isJoinClass
-            });
-          }
-        });
+    let res = null;
+    http.request({
+      url: 'https://rosterserver.lessonplan.cn/class/private?classListString="' + options.classId + '"'
+    }, true, false).then(function(res1) {
+      res = res1;
+      return http.request({
+        url: 'https://clientaccountserver.lessonplan.cn/user/joined/' + app.globalData.userGuid
+      }, false, true);
+    }).then(function(res2) {
+      var isJoinClass = false;
+      for (var i = 0; i < res2.data.data.length; i++) {
+        if (res2.data.data[i].FK_ClassGuid == options.classId) {
+          isJoinClass = true;
+          break;
+        }
       }
+      that.setData({
+        curClass: res.data.data[0],
+        isJoinClass: isJoinClass
+      });
     });
   },
 
   joinClass: function() {
-    if(this.data.isJoinClass == false){
+    if (this.data.isJoinClass == false) {
       var that = this;
-      wx.showLoading({
-        title: '加载中...',
-      })
-      wx.request({
+      http.request({
         url: 'https://rosterserver.lessonplan.cn/class/join2',
         method: 'POST',
         data: {
           FK_UserGuid: app.globalData.userGuid,
           FK_ClassGuid: that.data.curClass.PK_ClassGuid
-        },
-        success: function (res) {
-          app.globalData.classId = that.data.curClass.PK_ClassGuid;
-          wx.hideLoading();
-          if (res.data.status == 1) {
-            wx.redirectTo({
-              url: '/pages/names/joindetail?classId=' + that.data.curClass.PK_ClassGuid,
-            });
-          }
         }
-      })
+      }).then(function(res) {
+        app.globalData.classId = that.data.curClass.PK_ClassGuid;
+        wx.hideLoading();
+        if (res.data.status == 1) {
+          wx.redirectTo({
+            url: '/pages/names/joindetail?classId=' + that.data.curClass.PK_ClassGuid,
+          });
+        } else {
+          wx.showToast({
+            title: res.data.err,
+          })
+        }
+      });
     }
   },
 

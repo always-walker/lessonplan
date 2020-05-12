@@ -1,7 +1,6 @@
 // pages/password/find.js
-
 const app = getApp()
-
+const http = require('../../utils/http.js')
 Page({
 
   /**
@@ -37,52 +36,46 @@ Page({
         icon: 'none'
       });
     } else {
-      wx.showLoading({
-        title: '加载中...',
-      });
       var that = this;
-      wx.request({
-        url: 'https://clientaccountserver.lessonplan.cn/user/getProblem?Name=' + e.detail.value.Name,
-        success: function(res) {
-          if (res.data.status == 1) {
-            if (res.data.data.Content == that.data.passwordProtection[that.data.index].Content) {
-              app.globalData.userGuid = res.data.data.PK_UserGuid;
-              wx.request({
-                url: 'https://clientaccountserver.lessonplan.cn/user/getAnswer',
-                data: {
-                  'Name': e.detail.value.Name,
-                  'Answer': e.detail.value.Answer
-                },
-                success: function(res2) {
-                  wx.hideLoading();
-                  wx.showToast({
-                    title: res2.data.data,
-                    icon: 'none'
-                  });
-                  if (res2.data.status == 1) {
-                    app.globalData.isFindPasswordVerfy = true;
-                    wx.navigateTo({
-                      url: 'reset'
-                    })
-                  }
-                }
-              })
-            } else {
-              wx.hideLoading();
+      http.request({
+        url: 'https://clientaccountserver.lessonplan.cn/user/getProblem?Name=' + e.detail.value.Name
+      }, true, false).then(function(res) {
+        if (res.data.status == 1) {
+          if (res.data.data.Content == that.data.passwordProtection[that.data.index].Content) {
+            app.globalData.userGuid = res.data.data.PK_UserGuid;
+            http.request({
+              url: 'https://clientaccountserver.lessonplan.cn/user/getAnswer',
+              data: {
+                'Name': e.detail.value.Name,
+                'Answer': e.detail.value.Answer
+              }
+            }, false, true).then(function(res2) {
               wx.showToast({
-                title: '验证失败',
+                title: res2.data.data,
                 icon: 'none'
               });
-            }
+              if (res2.data.status == 1) {
+                app.globalData.isFindPasswordVerfy = true;
+                wx.navigateTo({
+                  url: 'reset'
+                })
+              }
+            });
           } else {
             wx.hideLoading();
             wx.showToast({
-              title: res.data.err,
+              title: '验证失败',
               icon: 'none'
             });
           }
+        } else {
+          wx.hideLoading();
+          wx.showToast({
+            title: res.data.err,
+            icon: 'none'
+          });
         }
-      })
+      });
     }
   },
 
@@ -91,14 +84,13 @@ Page({
    */
   onLoad: function(options) {
     var that = this;
-    wx.request({
-      url: 'https://clientaccountserver.lessonplan.cn/user/problem',
-      success: function(res) {
-        that.setData({
-          passwordProtection: res.data.data
-        });
-      }
-    })
+    http.request({
+      url: 'https://clientaccountserver.lessonplan.cn/user/problem'
+    }, false, false).then(function(res) {
+      that.setData({
+        passwordProtection: res.data.data
+      });
+    });
   },
 
   /**

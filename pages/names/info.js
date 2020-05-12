@@ -1,7 +1,7 @@
 // pages/names/info.js
 const util = require('../../utils/util.js')
 const app = getApp()
-
+const http = require('../../utils/http.js')
 
 Page({
 
@@ -26,29 +26,28 @@ Page({
       isInfo: isInfo
     });
     var that = this;
-    wx.request({
-      url: 'https://clientaccountserver.lessonplan.cn/user/studentlist/letter/' + options.classId,
-      success: function(res) {
-        var studentList = res.data.data;
-        studentList.sort(util.compare('letter'));
-        var preLetter = '';
-        for (var i = 0; i < studentList.length; i++) {
-          if (studentList[i].letter != preLetter) {
-            preLetter = studentList[i].letter;
-            studentList[i]['isLetter'] = true;
-          } else {
-            studentList[i]['isLetter'] = false;
-          }
-          if (!studentList[i].HeadPhotoPath)
-            studentList[i].HeadPhotoPath = 'https://cdn.lessonplan.cn/Public/IMG/default-avatar.png';
-          else if (!(/^http.*$/.test(studentList[i].HeadPhotoPath)))
-            studentList[i].HeadPhotoPath = 'https://static.lessonplan.cn' + studentList[i].HeadPhotoPath;
+    http.request({
+      url: 'https://clientaccountserver.lessonplan.cn/user/studentlist/letter/' + options.classId
+    }, false, false).then(function(res) {
+      var studentList = res.data.data;
+      studentList.sort(util.compare('letter'));
+      var preLetter = '';
+      for (var i = 0; i < studentList.length; i++) {
+        if (studentList[i].letter != preLetter) {
+          preLetter = studentList[i].letter;
+          studentList[i]['isLetter'] = true;
+        } else {
+          studentList[i]['isLetter'] = false;
         }
-        that.setData({
-          studentList: studentList
-        });
+        if (!studentList[i].HeadPhotoPath)
+          studentList[i].HeadPhotoPath = 'https://cdn.lessonplan.cn/Public/IMG/default-avatar.png';
+        else if (!(/^http.*$/.test(studentList[i].HeadPhotoPath)))
+          studentList[i].HeadPhotoPath = 'https://static.lessonplan.cn' + studentList[i].HeadPhotoPath;
       }
-    })
+      that.setData({
+        studentList: studentList
+      });
+    });
   },
 
   /**

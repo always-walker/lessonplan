@@ -1,7 +1,6 @@
 // pages/safe/protect.js
-
 const app = getApp()
-
+const http = require('../../utils/http.js')
 Page({
 
   /**
@@ -40,24 +39,19 @@ Page({
     } else {
       var index = parseInt(e.detail.value.question_0);
       var PK_ProblemGuid = this.data.passwordProtection[index].PK_ProblemGuid;
-      wx.showLoading({
-        title: '更新中...',
-      });
-      wx.request({
+      http.request({
         url: 'https://clientaccountserver.lessonplan.cn/user/putSecurity',
         method: 'PUT',
         data: {
           'PK_UserGuid': app.globalData.userGuid,
           'PK_ProblemGuid': PK_ProblemGuid,
           'Answer': e.detail.value.answer_0
-        },
-        success: function(res) {
-          wx.hideLoading();
-          wx.showToast({
-            title: '密保修改成功',
-          });
         }
-      })
+      }, true, true).then(function(res) {
+        wx.showToast({
+          title: '密保修改成功',
+        });
+      });
     }
   },
 
@@ -71,30 +65,28 @@ Page({
       isInfo: isInfo
     });
     var that = this;
-    wx.request({
+    http.request({
       url: 'https://clientaccountserver.lessonplan.cn/user/info/problem?userGuid=' + app.globalData.userGuid,
-      success: function(res) {
-        wx.request({
-          url: 'https://clientaccountserver.lessonplan.cn/user/problem',
-          success: function(res2) {
-            var _protection = res.data.data;
-            var _passwordProtection = res2.data.data;
-            for (var j = 0; j < _protection.length; j++) {
-              for (var i = 0; i < _passwordProtection.length; i++) {
-                if (_protection[j].FK_ProblemGuid == _passwordProtection[i].PK_ProblemGuid) {
-                  _protection[j]['index'] = i;
-                }
-              }
+    }, false, false).then(function(res) {
+      http.request({
+        url: 'https://clientaccountserver.lessonplan.cn/user/problem',
+      }, false, false).then(function(res2) {
+        var _protection = res.data.data;
+        var _passwordProtection = res2.data.data;
+        for (var j = 0; j < _protection.length; j++) {
+          for (var i = 0; i < _passwordProtection.length; i++) {
+            if (_protection[j].FK_ProblemGuid == _passwordProtection[i].PK_ProblemGuid) {
+              _protection[j]['index'] = i;
             }
-            console.log(_protection);
-            that.setData({
-              protection: _protection,
-              passwordProtection: _passwordProtection
-            });
           }
-        })
-      }
-    })
+        }
+        console.log(_protection);
+        that.setData({
+          protection: _protection,
+          passwordProtection: _passwordProtection
+        });
+      });
+    });
   },
 
   /**

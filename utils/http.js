@@ -10,9 +10,8 @@ module.exports = {
       //网络请求
       wx.request({
         ...option,
+        timeout: 5000,
         success: function(res) {
-          if (isCloseLoading || isCloseLoading == undefined)
-            wx.hideLoading();
           //服务器返回数据
           if (res.statusCode == 200) {
             resolve(res);
@@ -22,14 +21,16 @@ module.exports = {
           }
         },
         fail: function(e) {
-          if (isCloseLoading || isCloseLoading == undefined)
-            wx.hideLoading();
           wx.showToast({
-            title: '无法连接服务器',
+            title: '请求网络出错',
             icon: 'loading',
             duration: 1000
-          })
-          reject('网络出错');
+          });
+          reject('请求网络出错');
+        },
+        complete: function(){
+          if (isCloseLoading || isCloseLoading == undefined)
+            wx.hideLoading();
         }
       })
     });

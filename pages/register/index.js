@@ -1,4 +1,5 @@
 // pages/register/index.js
+const http = require('../../utils/http.js')
 Page({
 
   /**
@@ -65,30 +66,25 @@ Page({
         data['Phone'] = data.Name;
       else if (/^\w+@[a-z0-9]+\.[a-z]{2,4}$/.test(data.Name))
         data['Email'] = data.Name;
-      wx.showLoading({
-        title: '加载中',
-      });
-      wx.request({
+      http.request({
         url: 'https://clientaccountserver.lessonplan.cn/user/register',
         method: 'POST',
-        data: data,
-        success: function(res) {
-          wx.hideLoading();
-          if (res.data.status == 0) {
-            wx.showToast({
-              title: res.data.err,
-              icon: 'none'
-            })
-          } else {
-            wx.showToast({
-              title: "注册成功",
-            });
-            wx.navigateBack({
-              delta: 1
-            })
-          }
+        data: data
+      }, true, true).then(function(res) {
+        if (res.data.status == 0) {
+          wx.showToast({
+            title: res.data.err,
+            icon: 'none'
+          })
+        } else {
+          wx.showToast({
+            title: "注册成功",
+          });
+          wx.navigateBack({
+            delta: 1
+          })
         }
-      })
+      });
     }
   },
 
@@ -123,14 +119,13 @@ Page({
    */
   onLoad: function(options) {
     var that = this;
-    wx.request({
-      url: 'https://clientaccountserver.lessonplan.cn/user/problem',
-      success: function(res) {
-        that.setData({
-          passwordProtection: res.data.data
-        });
-      }
-    })
+    http.request({
+      url: 'https://clientaccountserver.lessonplan.cn/user/problem'
+    }, false, false).then(function(res) {
+      that.setData({
+        passwordProtection: res.data.data
+      });
+    });
   },
 
   /**

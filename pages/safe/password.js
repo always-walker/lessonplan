@@ -1,7 +1,6 @@
 // pages/safe/password.js
-
 const app = getApp()
-
+const http = require('../../utils/http.js')
 Page({
 
   /**
@@ -17,7 +16,7 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
+  onLoad: function(options) {
     app.checkLogin();
     var isInfo = app.checkInfo();
     this.setData({
@@ -25,7 +24,7 @@ Page({
     });
   },
 
-  modify: function (e) {
+  modify: function(e) {
     var that = this;
     if (e.detail.value.oldPassword == "") {
       wx.showToast({
@@ -55,86 +54,89 @@ Page({
       wx.showLoading({
         title: '更新中...',
       });
-      wx.request({
+      http.request({
         url: 'https://clientaccountserver.lessonplan.cn/user/info/pass',
-        data: { 'userGuid': app.globalData.userGuid, 'password': e.detail.value.oldPassword},
-        success: function (res) {
-          if (res.data.data.length > 0) {
-            wx.request({
-              url: 'https://clientaccountserver.lessonplan.cn/user/putPassWord',
-              method: 'PUT',
-              data: { 'PK_UserGuid': app.globalData.userGuid, 'Password': e.detail.value.password},
-              success: function (res2) {
-                wx.hideLoading();
-                that.setData({
-                  password: '',
-                  oldPassword: '',
-                  confirmPassword: ''
-                });
-                wx.showToast({
-                  title: '密码修改成功',
-                });
-              }
-            })
-          } else {
-            wx.hideLoading()
-            wx.showToast({
-              title: '原始密码输入错误',
-              icon: 'none',
-              duration: 1000
-            })
-          }
+        data: {
+          'userGuid': app.globalData.userGuid,
+          'password': e.detail.value.oldPassword
         }
-      })
+      }, true, false).then(function(res) {
+        if (res.data.data.length > 0) {
+          http.request({
+            url: 'https://clientaccountserver.lessonplan.cn/user/putPassWord',
+            method: 'PUT',
+            data: {
+              'PK_UserGuid': app.globalData.userGuid,
+              'Password': e.detail.value.password
+            }
+          }, false, true).then(function(res2) {
+            that.setData({
+              password: '',
+              oldPassword: '',
+              confirmPassword: ''
+            });
+            wx.showToast({
+              title: '密码修改成功',
+            });
+          });
+        } else {
+          wx.hideLoading()
+          wx.showToast({
+            title: '原始密码输入错误',
+            icon: 'none',
+            duration: 1000
+          })
+        }
+      });
     }
   },
 
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function () {
+  onReady: function() {
 
   },
 
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function () {
+  onShow: function() {
 
   },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
-  onHide: function () {
+  onHide: function() {
 
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
-  onUnload: function () {
+  onUnload: function() {
 
   },
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function () {
+  onPullDownRefresh: function() {
 
   },
 
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function () {
+  onReachBottom: function() {
 
   },
 
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function () {
+  onShareAppMessage: function() {
 
   }
 })
